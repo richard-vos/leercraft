@@ -1,53 +1,24 @@
-name: Deploy naar STRATO
-
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
-
-concurrency:
-  group: strato-production
-  cancel-in-progress: true
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Repository ophalen
-        uses: actions/checkout@v4
-
-      - name: SFTP-tools installeren
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass rsync
-
-      - name: Websitebestanden voorbereiden
-        run: |
-          mkdir -p /tmp/leercraft-deploy
-
-          rsync -av \
-            --exclude=".git/" \
-            --exclude=".github/" \
-            --exclude=".gitlab-ci.yml" \
-            ./ /tmp/leercraft-deploy/
-
-      - name: Website uploaden naar STRATO
+      - name: SFTP-verbinding testen
         env:
           SFTP_HOST: ${{ secrets.STRATO_SFTP_HOST }}
           SFTP_PORT: ${{ secrets.STRATO_SFTP_PORT }}
           SFTP_USER: ${{ secrets.STRATO_SFTP_USER }}
           SSHPASS: ${{ secrets.STRATO_SFTP_PASSWORD }}
-          REMOTE_PATH: ${{ secrets.STRATO_REMOTE_PATH }}
         run: |
-          sshpass -e sftp \
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          ssh-keyscan -p "$SFTP_PORT" "$SFTP_HOST" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+          sshpass -v -e sftp -vvv \
             -o PubkeyAuthentication=no \
-            -o PreferredAuthentications=password,keyboard-interactive \
-            -o StrictHostKeyChecking=accept-new \
+            -o KbdInteractiveAuthentication=yes \
+            -o PasswordAuthentication=yes \
+            -o PreferredAuthentications=keyboard-interactive,password \
+            -o StrictHostKeyChecking=yes \
             -P "$SFTP_PORT" \
             "$SFTP_USER@$SFTP_HOST" <<EOF
-          cd "$REMOTE_PATH"
-          put -r /tmp/leercraft-deploy/*
+          pwd
           bye
           EOF
