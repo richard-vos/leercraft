@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeerCraft ⛏️</title>
+<link href="assets/fonts/fonts.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;background:#5DA9E9;}
+
+/* ── ACHTERGROND ── */
+.sky{position:fixed;inset:0;z-index:0;
+  background:linear-gradient(180deg,#4a9fd4 0%,#87CEEB 40%,#B8DEFF 58%,#6DB355 58%,#4A9A2A 100%);}
+
+/* Animerende wolken */
+.cloud{position:fixed;background:white;z-index:1;opacity:0.92;animation:drift linear infinite;}
+@keyframes drift{from{transform:translateX(0);}to{transform:translateX(110vw);}}
+
+/* Gras + aarde blokken onderaan */
+.ground-row{position:fixed;bottom:0;left:0;right:0;z-index:2;display:flex;flex-direction:column;}
+.grass-row{display:flex;height:20px;}
+.dirt-row {display:flex;height:16px;}
+.grass-block{flex:1;min-width:20px;background:#5D9E3A;border-top:3px solid #8ADE5A;border-left:2px solid #7BC847;border-right:2px solid #3A7A1A;}
+.grass-block:nth-child(even){background:#569438;}
+.dirt-block {flex:1;min-width:20px;background:#7A5230;border-top:2px solid #9A6840;border-left:1px solid #8A5E38;border-right:1px solid #5A3818;}
+.dirt-block:nth-child(even){background:#724C2A;}
+
+/* Sterren in de lucht (pixel dots) */
+.star-field{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* ── WRAPPER ── */
+.wrapper{position:relative;z-index:10;max-width:960px;margin:0 auto;padding:16px 14px 80px;}
+
+/* ── LOGO BLOK ── */
+.logo-block{
+  background:rgba(0,0,0,0.82);
+  border:4px solid #888;
+  border-bottom-color:#222;border-right-color:#222;
+  border-top-color:#bbb;border-left-color:#bbb;
+  padding:20px 24px 16px;
+  margin-bottom:16px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+/* Pickaxe decoraties links en rechts */
+.logo-block::before{content:'⛏️';position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:28px;opacity:0.3;}
+.logo-block::after {content:'⛏️';position:absolute;right:16px;top:50%;transform:translateY(-50%) scaleX(-1);font-size:28px;opacity:0.3;}
+
+.logo-title{
+  font-size:clamp(16px,4vw,28px);
+  color:#FFD700;
+  text-shadow:3px 3px #7A5A00, 5px 5px #000;
+  line-height:1.6;
+  letter-spacing:2px;
+}
+.logo-craft{color:#7CFC00;text-shadow:3px 3px #2A5A00,5px 5px #000;}
+.logo-sub{
+  font-size:clamp(5px,1.2vw,7px);
+  color:#aaffaa;
+  text-shadow:1px 1px #006600;
+  margin-top:10px;
+  line-height:2.2;
+  letter-spacing:1px;
+}
+
+/* XP balk */
+.xp-wrap{margin-top:14px;background:rgba(0,0,0,0.55);border:2px solid #444;padding:4px 6px;}
+.xp-lbl{font-size:5px;color:#666;letter-spacing:1px;margin-bottom:4px;text-align:left;}
+.xp-outer{background:#111;height:14px;border:2px solid #333;overflow:hidden;position:relative;}
+.xp-fill{height:100%;background:linear-gradient(90deg,#7CFC00,#aeff55);box-shadow:0 0 8px #7CFC00;transition:width 1.2s ease;width:0%;}
+.xp-text{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:5px;color:#444;line-height:1;}
+
+/* ── WELKOM ── */
+.welcome{
+  background:rgba(0,0,0,0.65);
+  border:2px solid #333;border-bottom-color:#111;border-right-color:#111;border-top-color:#555;border-left-color:#555;
+  padding:10px 14px;font-size:6px;color:#777;line-height:2.4;
+  margin-bottom:20px;text-align:center;
+}
+.welcome b{color:#aaffaa;}
+
+/* ── SUBJECT SECTIE ── */
+.subject{margin-bottom:20px;}
+
+.subject-header{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(0,0,0,0.78);
+  border:3px solid #555;border-bottom-color:#222;border-right-color:#222;border-top-color:#888;border-left-color:#888;
+  padding:11px 16px;margin-bottom:10px;
+}
+.subject-icon{font-size:22px;flex-shrink:0;}
+.subject-title{font-size:clamp(9px,2vw,14px);color:#FFD700;text-shadow:2px 2px #7A5A00;line-height:1.6;}
+.subject-badge{
+  margin-left:auto;font-size:5px;color:#FFD700;
+  background:rgba(255,215,0,0.12);border:1px solid #7A5A00;
+  padding:3px 7px;white-space:nowrap;
+}
+.subject.locked .subject-header{opacity:0.5;}
+.subject.locked .subject-title{color:#666;text-shadow:none;}
+
+/* ── KAARTEN GRID ── */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;}
+
+/* ── GAME KAART ── */
+.card{
+  background:rgba(0,0,0,0.78);
+  border:4px solid #555;border-bottom-color:#111;border-right-color:#111;border-top-color:#888;border-left-color:#888;
+  display:flex;flex-direction:column;
+  text-decoration:none;cursor:pointer;
+  position:relative;
+  transition:transform 0.08s,filter 0.1s;
+}
+.card:hover{filter:brightness(1.22);transform:translateY(-4px);}
+.card:active{transform:translateY(1px);border-top-color:#333;border-left-color:#333;border-bottom-color:#666;border-right-color:#666;}
+
+.card-banner{height:10px;width:100%;}
+.card-body{padding:14px 12px 12px;flex:1;display:flex;flex-direction:column;}
+
+.card-icon{font-size:30px;margin-bottom:10px;filter:drop-shadow(2px 2px 0 rgba(0,0,0,0.6));}
+.card-name{font-size:clamp(7px,1.8vw,9px);color:#fff;text-shadow:2px 2px #000;line-height:1.9;margin-bottom:6px;}
+.card-desc{font-size:5px;color:#777;line-height:2.1;margin-bottom:10px;flex:1;}
+
+.card-stars{display:flex;gap:3px;margin-bottom:12px;}
+.star{font-size:9px;}
+.star.on{color:#FFD700;text-shadow:1px 1px #7A5A00;}
+.star.off{color:#333;}
+
+.card-btn{
+  font-family:'Press Start 2P',monospace;font-size:7px;
+  padding:9px 10px;width:100%;
+  background:#5D9E3A;color:#fff;text-shadow:1px 1px #2A5A18;border:none;
+  border-bottom:3px solid #2A5A18;border-right:3px solid #2A5A18;
+  border-top:3px solid #8ADE5A;border-left:3px solid #8ADE5A;
+  cursor:pointer;letter-spacing:0.5px;transition:transform 0.08s;
+}
+.card-btn:active{transform:translateY(2px);border-bottom-width:1px;}
+
+/* NIEUW badge */
+.new-badge{
+  position:absolute;top:14px;right:10px;
+  font-size:5px;color:#000;background:#7CFC00;
+  padding:3px 6px;letter-spacing:1px;
+  text-shadow:none;
+}
+
+/* BINNENKORT */
+.card.soon{cursor:default;opacity:0.4;pointer-events:none;}
+.card.soon .card-btn{background:#333;border-color:#222;color:#555;text-shadow:none;}
+.lock-badge{position:absolute;top:14px;right:10px;font-size:14px;filter:drop-shadow(1px 1px 0 #000);}
+
+/* ── PIXEL DIVIDER ── */
+.divider{
+  height:6px;margin:8px 0 20px;
+  background:repeating-linear-gradient(90deg,#FFD700 0,#FFD700 8px,transparent 8px,transparent 16px);
+  opacity:0.2;
+}
+
+/* ── FOOTER ── */
+.footer{text-align:center;font-size:5px;color:#444;margin-top:10px;line-height:3;}
+.footer a{color:#555;text-decoration:none;}
+
+/* Pixel particle bij klik */
+@keyframes pixelPop{0%{opacity:1;transform:scale(1);}100%{opacity:0;transform:scale(2.5) translateY(-12px);}}
+.px-pop{position:fixed;pointer-events:none;font-size:12px;z-index:999;animation:pixelPop 0.5s ease-out forwards;}
+</style>
+</head>
+<body>
+
+<div class="sky"></div>
+
+<!-- Wolken met verschillende snelheden -->
+<div class="cloud" style="width:100px;height:26px;top:34px;left:-120px;box-shadow:10px 0 0 white,-10px 0 0 white,0 -10px 0 10px white;animation-duration:38s;animation-delay:0s;"></div>
+<div class="cloud" style="width:76px;height:20px;top:68px;left:-90px;box-shadow:8px 0 0 white,-8px 0 0 white,0 -8px 0 8px white;animation-duration:52s;animation-delay:12s;"></div>
+<div class="cloud" style="width:120px;height:30px;top:20px;left:-140px;box-shadow:12px 0 0 white,-12px 0 0 white,0 -12px 0 12px white;animation-duration:44s;animation-delay:6s;"></div>
+<div class="cloud" style="width:64px;height:18px;top:88px;left:-80px;box-shadow:6px 0 0 white,-6px 0 0 white,0 -6px 0 6px white;animation-duration:60s;animation-delay:22s;"></div>
+
+<!-- Grond -->
+<div class="ground-row">
+  <div class="grass-row" id="grass-row"></div>
+  <div class="dirt-row"  id="dirt-row"></div>
+</div>
+
+<div class="wrapper">
+
+  <!-- LOGO -->
+  <div class="logo-block">
+    <div class="logo-title">⛏️ Leer<span class="logo-craft">Craft</span></div>
+    <div class="logo-sub">Kies een vak en begin je avontuur! ⚔️</div>
+    <div class="xp-wrap">
+      <div class="xp-lbl">⚡ Voortgang</div>
+      <div class="xp-outer">
+        <div class="xp-fill" id="xp-fill"></div>
+        <span class="xp-text" id="xp-text">0 / 100 XP</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="welcome">
+    👋 Welkom, <b>Avonturier</b>! &nbsp;·&nbsp; Kies een vak hieronder om te spelen.
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TOPO
+  ══════════════════════════════════════════ -->
+  <div class="subject" id="subj-topo">
+    <div class="subject-header">
+      <span class="subject-icon">🗺️</span>
+      <span class="subject-title">Topografie</span>
+      <span class="subject-badge">2 spellen</span>
+    </div>
+    <div class="cards-grid">
+
+      <a class="card" href="games/topo/nederland-topografie-provincie-selectiespel.html">
+        <div class="card-banner" style="background:linear-gradient(90deg,#3A86FF,#8AC926);"></div>
+        <div class="card-body">
+          <span class="card-icon">🖱️</span>
+          <div class="card-name">Provincie<br>Klikspel</div>
+          <div class="card-desc">Klik de juiste provincie op de kaart van Nederland.</div>
+          <div class="card-stars">
+            <span class="star on">★</span><span class="star on">★</span><span class="star off">★</span>
+          </div>
+          <button class="card-btn">▶ Spelen</button>
+        </div>
+      </a>
+
+      <a class="card" href="games/topo/nederland-topografie-provincie-schrijfspel.html">
+        <div class="card-banner" style="background:linear-gradient(90deg,#FB5607,#FFBE0B);"></div>
+        <div class="card-body">
+          <span class="card-icon">✏️</span>
+          <div class="card-name">Provincie<br>Schrijfspel</div>
+          <div class="card-desc">Typ de naam van de uitgelichte provincie.</div>
+          <div class="card-stars">
+            <span class="star on">★</span><span class="star on">★</span><span class="star on">★</span>
+          </div>
+          <button class="card-btn">▶ Spelen</button>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════════
+       REKENEN
+  ══════════════════════════════════════════ -->
+  <div class="subject" id="subj-rekenen">
+    <div class="subject-header">
+      <span class="subject-icon">🔢</span>
+      <span class="subject-title">Rekenen</span>
+      <span class="subject-badge">2 spellen</span>
+    </div>
+    <div class="cards-grid">
+
+      <a class="card" href="games/rekenen/rekenen-race.html">
+        <div class="card-banner" style="background:linear-gradient(90deg,#E63946,#F4A261);"></div>
+        <div class="new-badge">NIEUW</div>
+        <div class="card-body">
+          <span class="card-icon">🏁</span>
+          <div class="card-name">Reken<br>Race 3D</div>
+          <div class="card-desc">Race tegen 4 tegenstanders! Rij langs het juiste antwoord.</div>
+          <div class="card-stars">
+            <span class="star on">★</span><span class="star on">★</span><span class="star off">★</span>
+          </div>
+          <button class="card-btn">▶ Spelen</button>
+        </div>
+      </a>
+
+      <a class="card" href="games/rekenen/rekencraft.html">
+        <div class="card-banner" style="background:#4f963c"></div>
+        <div class="card-body">
+          <span class="card-icon" aria-hidden="true">✦</span>
+          <div class="card-name">RekenCraft</div>
+          <div class="card-desc">Een blokkenwereld vol rekensommen. Kies je sommen, ontwijk obstakels en haal de finish!</div>
+          <span class="card-btn">Spelen</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════════
+       TAAL
+  ══════════════════════════════════════════ -->
+  <div class="subject locked" id="subj-taal">
+    <div class="subject-header">
+      <span class="subject-icon">📖</span>
+      <span class="subject-title">Taal</span>
+      <span class="subject-badge">Binnenkort</span>
+    </div>
+    <div class="cards-grid">
+
+      <div class="card soon">
+        <div class="card-banner" style="background:linear-gradient(90deg,#06D6A0,#457B9D);"></div>
+        <div class="lock-badge">🔒</div>
+        <div class="card-body">
+          <span class="card-icon">🔤</span>
+          <div class="card-name">Spelling<br>Quiz</div>
+          <div class="card-desc">Schrijf de woorden fout-loos op.</div>
+          <div class="card-stars">
+            <span class="star on">★</span><span class="star off">★</span><span class="star off">★</span>
+          </div>
+          <button class="card-btn">🔒 Binnenkort</button>
+        </div>
+      </div>
+
+      <div class="card soon">
+        <div class="card-banner" style="background:linear-gradient(90deg,#2A9D8F,#06D6A0);"></div>
+        <div class="lock-badge">🔒</div>
+        <div class="card-body">
+          <span class="card-icon">📝</span>
+          <div class="card-name">Dictee<br>Meester</div>
+          <div class="card-desc">Luister en schrijf het goede woord.</div>
+          <div class="card-stars">
+            <span class="star on">★</span><span class="star on">★</span><span class="star off">★</span>
+          </div>
+          <button class="card-btn">🔒 Binnenkort</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    ⛏️ LeerCraft &nbsp;·&nbsp; Versie 0.2 &nbsp;·&nbsp; Meer spellen komen eraan! 🚀
+  </div>
+
+</div>
+
+<script>
+// ── Gras + aarde blokken ──
+function fillRow(id, cls){
+  const row = document.getElementById(id);
+  const n   = Math.ceil(window.innerWidth / 20) + 2;
+  for(let i=0;i<n;i++){
+    const b = document.createElement('div');
+    b.className = cls;
+    row.appendChild(b);
+  }
+}
+fillRow('grass-row','grass-block');
+fillRow('dirt-row', 'dirt-block');
+
+// ── XP balk ──
+setTimeout(()=>{
+  document.getElementById('xp-fill').style.width = '12%';
+  document.getElementById('xp-text').textContent  = '12 / 100 XP';
+}, 400);
+
+// ── Pixel-pop effect bij klik ──
+document.querySelectorAll('.card:not(.soon)').forEach(card=>{
+  card.addEventListener('click', function(e){
+    const emojis = ['⭐','✨','💎','⚡','🌟'];
+    for(let i=0;i<5;i++){
+      const el = document.createElement('div');
+      el.className = 'px-pop';
+      el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      el.style.left  = (e.clientX + (Math.random()-0.5)*60)+'px';
+      el.style.top   = (e.clientY + (Math.random()-0.5)*40)+'px';
+      el.style.animationDelay = (Math.random()*0.15)+'s';
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(), 600);
+    }
+  });
+});
+</script>
+</body>
+</html>
