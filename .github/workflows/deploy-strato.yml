@@ -1,13 +1,17 @@
-name: STRATO SFTP-test
+name: Deploy naar STRATO
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+concurrency:
+  group: strato-production
+  cancel-in-progress: true
 
 jobs:
-  test-sftp:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,22 +21,37 @@ jobs:
       - name: Benodigdheden installeren
         run: |
           sudo apt-get update
-          sudo apt-get install -y sshpass openssh-client
+          sudo apt-get install -y sshpass openssh-client rsync
 
-      - name: SFTP-verbinding testen
+      - name: Websitebestanden voorbereiden
+        run: |
+          mkdir -p /tmp/leercraft-deploy
+
+          rsync -av \
+            --exclude=".git/" \
+            --exclude=".github/" \
+            --exclude=".gitlab-ci.yml" \
+            ./ /tmp/leercraft-deploy/
+
+      - name: SSH-hostsleutel toevoegen
+        env:
+          SFTP_HOST: ${{ secrets.STRATO_SFTP_HOST }}
+          SFTP_PORT: ${{ secrets.STRATO_SFTP_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan -p "$SFTP_PORT" "$SFTP_HOST" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Website uploaden naar STRATO
         env:
           SFTP_HOST: ${{ secrets.STRATO_SFTP_HOST }}
           SFTP_PORT: ${{ secrets.STRATO_SFTP_PORT }}
           SFTP_USER: ${{ secrets.STRATO_SFTP_USER }}
           SSHPASS: ${{ secrets.STRATO_SFTP_PASSWORD }}
+          REMOTE_PATH: ${{ secrets.STRATO_REMOTE_PATH }}
         run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-
-          ssh-keyscan -p "$SFTP_PORT" "$SFTP_HOST" >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-
-          sshpass -v -e sftp -vvv \
+          sshpass -e sftp \
             -o PubkeyAuthentication=no \
             -o KbdInteractiveAuthentication=yes \
             -o PasswordAuthentication=yes \
@@ -40,6 +59,7 @@ jobs:
             -o StrictHostKeyChecking=yes \
             -P "$SFTP_PORT" \
             "$SFTP_USER@$SFTP_HOST" <<EOF
-          pwd
+          cd "$REMOTE_PATH"
+          put -r /tmp/leercraft-deploy/*
           bye
           EOF
