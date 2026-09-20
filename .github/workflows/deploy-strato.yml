@@ -18,30 +18,36 @@ jobs:
       - name: Repository ophalen
         uses: actions/checkout@v4
 
-      - name: LFTP installeren
-        run: sudo apt-get update && sudo apt-get install -y lftp
+      - name: SFTP-tools installeren
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass rsync
+
+      - name: Websitebestanden voorbereiden
+        run: |
+          mkdir -p /tmp/leercraft-deploy
+
+          rsync -av \
+            --exclude=".git/" \
+            --exclude=".github/" \
+            --exclude=".gitlab-ci.yml" \
+            ./ /tmp/leercraft-deploy/
 
       - name: Website uploaden naar STRATO
         env:
           SFTP_HOST: ${{ secrets.STRATO_SFTP_HOST }}
           SFTP_PORT: ${{ secrets.STRATO_SFTP_PORT }}
           SFTP_USER: ${{ secrets.STRATO_SFTP_USER }}
-          SFTP_PASSWORD: ${{ secrets.STRATO_SFTP_PASSWORD }}
+          SSHPASS: ${{ secrets.STRATO_SFTP_PASSWORD }}
           REMOTE_PATH: ${{ secrets.STRATO_REMOTE_PATH }}
         run: |
-          lftp -u "$SFTP_USER","$SFTP_PASSWORD" \
-            "sftp://$SFTP_HOST:$SFTP_PORT" <<EOF
-          set net:max-retries 2
-          set net:timeout 30
-          set sftp:auto-confirm yes
-
-          mirror --reverse --verbose \
-            --exclude-glob=".git/" \
-            --exclude-glob=".git/**" \
-            --exclude-glob=".github/" \
-            --exclude-glob=".github/**" \
-            --exclude-glob=".gitlab-ci.yml" \
-            ./ "$REMOTE_PATH"
-
+          sshpass -e sftp \
+            -o PubkeyAuthentication=no \
+            -o PreferredAuthentications=password,keyboard-interactive \
+            -o StrictHostKeyChecking=accept-new \
+            -P "$SFTP_PORT" \
+            "$SFTP_USER@$SFTP_HOST" <<EOF
+          cd "$REMOTE_PATH"
+          put -r /tmp/leercraft-deploy/*
           bye
           EOF
