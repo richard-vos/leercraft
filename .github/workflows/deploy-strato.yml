@@ -1,3 +1,24 @@
+name: STRATO SFTP-test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-sftp:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository ophalen
+        uses: actions/checkout@v7
+
+      - name: Benodigdheden installeren
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass openssh-client
+
       - name: SFTP-verbinding testen
         env:
           SFTP_HOST: ${{ secrets.STRATO_SFTP_HOST }}
