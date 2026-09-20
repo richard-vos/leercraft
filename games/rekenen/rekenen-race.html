@@ -74,12 +74,24 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
 .btn:active{transform:translateY(2px);border-bottom-width:2px;}
 .btn.red{background:#C85A20;border-bottom-color:#7A2A08;border-right-color:#7A2A08;border-top-color:#F07A40;border-left-color:#F07A40;text-shadow:2px 2px #7A2A08;}
 .btnrow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+#race-touch{position:fixed;inset:auto 12px max(14px,env(safe-area-inset-bottom));z-index:20;display:flex;justify-content:space-between;pointer-events:none;}
+#race-touch>div{display:flex;gap:10px;}
+#race-touch button{pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;width:64px;height:64px;border:3px solid #b8db8d;border-radius:3px;background:#416e2e;color:white;font:bold 22px sans-serif;box-shadow:inset 3px 3px #6a9b4c,0 4px #223b18;}
+#race-touch button.held{background:#82b955;transform:translateY(3px);}
+#race-touch button:focus-visible{outline:3px solid white;outline-offset:3px;}
+@media(hover:hover) and (pointer:fine){#race-touch{display:none;}}
+@media(any-pointer:coarse){#race-touch{display:flex;}#minimap{bottom:94px;width:110px;height:110px;}#minimap canvas{width:100%;height:100%;}#speedo{bottom:100px;}#bigpos{bottom:100px;}}
+@media(max-width:480px){#race-touch button{width:54px;height:60px;font-size:18px;}#race-touch>div{gap:6px;}}
 </style>
 <link rel="stylesheet" href="../../assets/navigation.css">
 </head>
 <body>
 <a class="site-menu" href="../../index.html" aria-label="Terug naar alle spellen">Menu</a>
 <canvas id="c"></canvas>
+<div id="race-touch" aria-label="Touchbesturing">
+  <div><button type="button" data-drive="left" aria-label="Stuur links">◀</button><button type="button" data-drive="right" aria-label="Stuur rechts">▶</button></div>
+  <div><button type="button" data-drive="brake" aria-label="Remmen">Rem</button><button type="button" data-drive="gas" aria-label="Gas geven">Gas</button></div>
+</div>
 
 <div id="hud">
   <div id="top">
@@ -673,6 +685,19 @@ function spawnObjects(){
 // INPUT
 // ═══════════════════════════════════════════
 const K={gas:false,brake:false,left:false,right:false};
+const touchDrive={gas:false,brake:false,left:false,right:false};
+document.querySelectorAll('[data-drive]').forEach(button=>{
+  const pointers=new Set(),key=button.dataset.drive;
+  const update=()=>{touchDrive[key]=pointers.size>0;button.classList.toggle('held',touchDrive[key]);};
+  button.addEventListener('pointerdown',e=>{
+    e.preventDefault();pointers.add(e.pointerId);button.setPointerCapture(e.pointerId);update();
+  });
+  for(const event of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(event,e=>{pointers.delete(e.pointerId);update();});
+  button.addEventListener('contextmenu',e=>e.preventDefault());
+  window.addEventListener('blur',()=>{pointers.clear();update();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){pointers.clear();update();}});
+});
+window.addEventListener('blur',()=>Object.keys(K).forEach(key=>K[key]=false));
 window.addEventListener('keydown',e=>{
   if(e.code==='ArrowUp'||e.code==='KeyW'){K.gas=true;e.preventDefault();}
   if(e.code==='ArrowDown'||e.code==='KeyS'){K.brake=true;e.preventDefault();}
@@ -891,12 +916,12 @@ function loop(ts){
     player.spin-=dt; player.spinAng+=0.18*dt; player.spd*=0.88;
   } else {
     const eff=player.slow>0 ? player.maxSpd*0.25 : player.maxSpd;
-    if(K.gas)   player.spd=Math.min(eff, player.spd+0.000055*dt);
+    if(K.gas||touchDrive.gas)   player.spd=Math.min(eff, player.spd+0.000055*dt);
     else        player.spd=Math.max(0,   player.spd-0.000030*dt);
-    if(K.brake) player.spd=Math.max(0,   player.spd-0.000080*dt);
+    if(K.brake||touchDrive.brake) player.spd=Math.max(0,   player.spd-0.000080*dt);
     const steer=Math.min(1,player.spd/player.maxSpd)*0.26*dt;
-    if(K.left)  player.off=Math.max(-ROAD_W*0.82, player.off-steer);
-    if(K.right) player.off=Math.min( ROAD_W*0.82, player.off+steer);
+    if(K.left||touchDrive.left)  player.off=Math.max(-ROAD_W*0.82, player.off-steer);
+    if(K.right||touchDrive.right) player.off=Math.min( ROAD_W*0.82, player.off+steer);
   }
   if(player.slow>0) player.slow-=dt;
   player.t=(player.t+player.spd*dt+1)%1;
