@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>De Atlascode - De Verdwenen Kaart</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07121b;font-family:Arial,sans-serif;touch-action:none}
+canvas{display:block;width:100%;height:100%}
+#ui{position:fixed;inset:0;pointer-events:none;color:#fff;text-shadow:2px 2px 0 #000}
+#mission{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:min(760px,92vw);background:#162b1ddd;border:4px solid #78b84f;border-right-color:#29491f;border-bottom-color:#29491f;padding:10px 14px;text-align:center}
+#mission b{display:block;color:#ffe25a;font-size:clamp(18px,3vw,28px)}#mission span{font-size:clamp(13px,2vw,18px);line-height:1.4}
+#score{position:absolute;top:12px;right:12px;background:#172118dd;border:3px solid #879b82;padding:9px 12px;font-weight:bold}
+#toast{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%) scale(.8);font-weight:900;font-size:clamp(30px,7vw,72px);opacity:0;transition:.18s;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#bar{position:absolute;left:50%;top:103px;transform:translateX(-50%);width:min(520px,76vw);height:18px;background:#101710;border:3px solid #677368}
+#fill{height:100%;width:0;background:#7fd34e;transition:.3s}
+#controls{position:absolute;left:16px;bottom:16px;display:grid;grid-template-columns:64px 64px 64px;gap:6px;pointer-events:auto}
+.btn{width:64px;height:58px;border:3px solid #9cc88a;border-right-color:#2a4b24;border-bottom-color:#2a4b24;background:#497c3c;color:#fff;font-size:25px;font-weight:bold}
+#jump{position:absolute;right:18px;bottom:20px;width:90px;height:70px;pointer-events:auto;font-size:16px}
+#start,#overlay{position:fixed;inset:0;z-index:10;background:radial-gradient(circle,#2e6439,#07121b);display:flex;align-items:center;justify-content:center;padding:20px}
+.card{width:min(780px,95vw);background:#132019;border:5px solid #75a858;border-right-color:#24391e;border-bottom-color:#24391e;padding:24px;text-align:center;color:#fff;box-shadow:0 15px 40px #0008}
+h1{margin:0;color:#ffe15b;font-size:clamp(30px,6vw,55px);text-shadow:4px 4px #735800}p{font-size:clamp(15px,2.2vw,20px);line-height:1.5}
+.play{pointer-events:auto;border:4px solid #a8d68c;border-right-color:#294a21;border-bottom-color:#294a21;background:#4e8b3e;color:#fff;font-size:20px;font-weight:900;padding:15px 24px;margin:6px}
+.hidden{display:none!important}.choices{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.choice{min-width:160px}
+#hint{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);font-weight:bold;background:#101810b9;padding:7px 12px;border-radius:8px}
+@media(max-width:700px){#score{top:112px;font-size:12px}#bar{top:112px;width:50vw;left:34%}#hint{bottom:92px;font-size:12px}.btn{width:58px;height:54px}#controls{grid-template-columns:58px 58px 58px}}
+</style>
+<link rel="stylesheet" href="../../assets/navigation.css">
+</head>
+<body>
+<a class="site-menu" href="../../index.html" aria-label="Terug naar alle spellen">Menu</a>
+<canvas id="game"></canvas>
+<div id="ui">
+ <div id="mission"><b id="title">MISSIE</b><span id="text"></span></div>
+ <div id="bar"><div id="fill"></div></div>
+ <div id="score">★ <span id="stars">0</span> &nbsp; 🗺 <span id="pieces">0</span>/5</div>
+ <div id="toast"></div><div id="hint">▲ vooruit · ▼ achteruit · ◀ ▶ draaien · SPRING · Verzamel sterren!</div>
+ <div id="controls"><button class="btn" data-k="left">◀</button><button class="btn" data-k="up">▲</button><button class="btn" data-k="right">▶</button><span></span><button class="btn" data-k="down">▼</button></div>
+ <button class="btn" id="jump">SPRING</button>
+</div>
+<div id="start"><div class="card">
+ <h1>DE ATLASCODE</h1><h2>De verdwenen kaart</h2>
+ <p>O nee! De kaart van Nederland is in vijf stukken uit de magische Bosatlas gevlogen. Ren door het Atlaslokaal, vang sterren en kraak vijf actieve atlasmissies.</p>
+ <p><b>Computer:</b> WASD/pijlen + spatie. <b>iPad:</b> gebruik de grote knoppen.</p>
+ <button class="play" id="go">START AVONTUUR</button>
+</div></div>
+<div id="overlay" class="hidden"><div class="card"><h1 id="ovTitle"></h1><p id="ovText"></p><div class="choices" id="choices"></div></div></div>
+
+<script type="module">
+import * as THREE from '../../assets/vendor/three-r128.module.js';
+const R=new THREE.WebGLRenderer({canvas:document.querySelector('#game'),antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));R.setSize(innerWidth,innerHeight);R.shadowMap.enabled=true;
+const S=new THREE.Scene();S.background=new THREE.Color(0x77bce4);S.fog=new THREE.Fog(0x9fc7cf,58,125);
+const C=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,150);
+S.add(new THREE.HemisphereLight(0xe6f6ff,0x315528,1.15));const sun=new THREE.DirectionalLight(0xfff0ca,1.7);sun.position.set(-20,30,15);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-35;sun.shadow.camera.right=35;sun.shadow.camera.top=45;sun.shadow.camera.bottom=-45;S.add(sun);
+R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;
+const M=c=>new THREE.MeshLambertMaterial({color:c}), floorM=M(0xb99a6c), green=M(0x4f8b3d), wood=M(0x704629), paper=M(0xe9dfbd);
+const brick=M(0xb97855), trim=M(0xf0e5cf), metal=M(0x555e61), leaf=M(0x4e8a42), leaf2=M(0x6ca653), pathM=M(0x9b8665), waterM=new THREE.MeshLambertMaterial({color:0x4a9fca,transparent:true,opacity:.8});
+const obstacles=[];
+function block(x,z,w,d){obstacles.push({x,z,w,d})}
+function box(x,y,z,w,h,d,m){let o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;S.add(o);return o}
+/* A real Atlas Discovery Hall instead of one empty box */
+box(0,-.2,0,54,.4,70,floorM);
+box(-27,4,0,.5,8,70,brick); box(27,4,0,.5,8,70,brick); box(0,4,-35,54,8,.5,brick);
+box(0,7.8,0,54,.3,70,M(0xd9d0bb));
+
+/* timber/stone wall rhythm, tall windows and daylight */
+for(let z=-30;z<=26;z+=8){
+  box(-26.65,3.7,z,.18,5.1,5.4,M(0x86c9e5)); box(26.65,3.7,z,.18,5.1,5.4,M(0x86c9e5));
+  for(let y of [1.2,6.2]){box(-26.35,y,z,.28,.22,5.8,trim);box(26.35,y,z,.28,.22,5.8,trim)}
+  box(-26.32,3.7,z,.25,5.5,.18,trim); box(26.32,3.7,z,.25,5.5,.18,trim);
+}
+for(let z=-31;z<31;z+=7){box(-26.3,.15,z,.35,.35,5.5,trim);box(26.3,.15,z,.35,.35,5.5,trim)}
+for(let x=-22;x<=22;x+=11){box(x,2.7,-34.55,7,3.7,.25,M(0x315c39))}
+
+/* warm hanging lamps */
+for(let x=-20;x<=20;x+=10)for(let z=-28;z<=25;z+=13){
+  box(x,7.2,z,.08,1.1,.08,metal);
+  let shade=new THREE.Mesh(new THREE.CylinderGeometry(.25,.75,.55,16),M(0x3c4a3e));shade.position.set(x,6.5,z);shade.castShadow=true;S.add(shade);
+  let glow=new THREE.PointLight(0xffd98a,.45,11);glow.position.set(x,6.15,z);S.add(glow);
+}
+
+/* central green runner that visually guides the child through the hall */
+for(let z=-31;z<=30;z+=4)box(0,.025,z,5.2,.035,3.75,M(0x587f48));
+
+/* planters and blocky indoor trees */
+function tree(x,z,s=1){
+  box(x,.7*s,z,.55*s,1.4*s,.55*s,M(0x69452d));
+  box(x,2.05*s,z,2.0*s,1.45*s,1.8*s,leaf);
+  box(x+.55*s,2.8*s,z-.25*s,1.25*s,1.1*s,1.25*s,leaf2);
+}
+for(let z of [-27,-17,-7,5,16,27]){tree(-22.8,z,.72);tree(22.8,z,.72);block(-22.8,z,1.1,1.1);block(22.8,z,1.1,1.1)}
+
+/* low museum rope barriers and benches */
+for(let z of [-20,-7,7,20]){
+  box(-8,.5,z,5,.55,1.2,wood);box(8,.5,z,5,.55,1.2,wood);block(-8,z,5,1.2);block(8,z,5,1.2);
+  for(let x of [-8,8]){box(x,1,z+.47,4.7,.85,.22,wood);for(let dx of [-2,2])box(x+dx,.24,z,.22,.48,1,metal)}
+  for(let x of [-11,-5,5,11]){box(x,.65,z,.16,1.3,.16,metal)}
+}
+
+/* raised thematic platforms for each activity */
+const platformData=[[-17,11,0x7c9b55],[17,-1,0xc99b3f],[-17,-14,0x6c8fa8],[0,-29,0x4e7850]];
+for(const [x,z,c] of platformData){
+  box(x,.12,z,8,.25,7,M(c)); box(x,.3,z+3.35,8,.35,.3,trim);
+}
+
+/* decorative river running beside the scale expedition */
+for(let z=-18;z<-9;z+=1.5) box(-10,.035,z,3.5,.04,1.45,waterM);
+
+/* directional floor arrows */
+for(let z=26;z>-29;z-=8){
+  let a=new THREE.Mesh(new THREE.ConeGeometry(.55,1.5,3),new THREE.MeshBasicMaterial({color:0xf0d24c}));
+  a.rotation.x=Math.PI/2;a.rotation.z=Math.PI;a.position.set(0,.07,z);S.add(a);
+}
+
+for(let z=-28;z<30;z+=11){for(let x of [-15,15]){
+  box(x,1,z,10,.7,5,wood);block(x,z,10,5);
+  for(let dx of [-4,4])for(let dz of [-2,2])box(x+dx,.4,z+dz,.4,1,.4,wood);
+  box(x,1.38,z-2.25,9.8,.09,.14,metal);
+  for(let i=0;i<4;i++){
+    let px=x-3.5+i*2.2;
+    box(px,1.42,z+(.7+(i%2)*.7),1.35,.08,.95,paper);
+    box(px,1.5,z+(.7+(i%2)*.7),.95,.07,.72,M([0x498b9c,0x85a855,0xd3a34d,0xc76d53][i]));
+    box(px,1.52,z-1,.7,.3,.5,M([0xb47151,0x4a865d,0x5268a0,0x9674a3][i]));
+  }
+}}
+function canvasMat(txt,bg='#28572d'){let c=document.createElement('canvas');c.width=512;c.height=160;let g=c.getContext('2d');g.fillStyle=bg;g.fillRect(0,0,512,160);g.strokeStyle='#a7d77f';g.lineWidth=14;g.strokeRect(7,7,498,146);g.fillStyle='white';g.font='bold 48px Arial';g.textAlign='center';g.textBaseline='middle';g.fillText(txt,256,80);return new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c)})}
+function sign(txt,x,y,z,w=7){let q=new THREE.Mesh(new THREE.PlaneGeometry(w,2),canvasMat(txt));q.position.set(x,y,z);S.add(q);return q}
+sign('MAGISCH ATLASLOKAAL',0,6.3,-34.7,13);
+/* atlas library wall */
+for(let z of [-25,-12,2,15,27]){
+  box(-25.8,2.25,z,1.15,4.35,6.6,M(0x4f3321));block(-25.8,z,1.6,6.6);
+  for(let y=.65;y<4.2;y+=.78) box(-25.15,y,z,.18,.13,6.15,M(0xc69b5a));
+  for(let i=0;i<18;i++) box(-25.02,.88+(i%5)*.76,z-2.55+(i%4)*1.65,.3,.58,.42,M([0x9b3e32,0x355f9b,0xd19b35,0x4b824c,0x754e91][i%5]));
+}
+/* giant globe corner */
+let globe=new THREE.Mesh(new THREE.SphereGeometry(1.65,28,20),M(0x3b8ec2));globe.position.set(21,2.7,-25);globe.castShadow=true;S.add(globe);
+let land1=new THREE.Mesh(new THREE.SphereGeometry(1.67,12,8,0,.9,.6,.65),M(0x6aa456));land1.position.copy(globe.position);S.add(land1);
+block(21,-25,3,1.5);box(21,.8,-25,.4,2.3,.4,M(0x55412e));box(21,.2,-25,3,.25,1.2,M(0x55412e));
+
+/* oversized relief map at finale */
+let map=box(0,3.7,-34.35,17,5.5,.16,M(0xe9dca7));
+const landCols=[0x6ca653,0xd5b34c,0x79a4ba,0xb57a5a];
+for(let i=0;i<28;i++){let q=box(-7.2+Math.random()*14.4,2+Math.random()*3.5,-34.20,.35+.65*Math.random(),.3+.9*Math.random(),.08,M(landCols[i%4]));}
+
+/* mission props: legend icons, compass rose, scale blocks */
+sign('LEGENDA LAB',-17,4.1,7.55,7);
+for(let i=0;i<4;i++)box(-19.7+i*1.8,1.25,8.1,1.15,1.15,.25,M([0x4a9fca,0x5d9146,0xcaa34d,0x777777][i]));
+sign('KOMPAS ARENA',17,4.1,-4.45,7);
+let compassRing=new THREE.Mesh(new THREE.RingGeometry(2.2,2.55,32),new THREE.MeshBasicMaterial({color:0xf4d14e,side:THREE.DoubleSide}));compassRing.rotation.x=-Math.PI/2;compassRing.position.set(17,.28,-1);S.add(compassRing);
+for(let a=0;a<4;a++){let n=new THREE.Mesh(new THREE.ConeGeometry(.38,2.2,3),new THREE.MeshBasicMaterial({color:a===0?0xd64a42:0xf0e2b0}));n.rotation.x=Math.PI/2;n.rotation.z=-a*Math.PI/2;n.position.set(17+Math.sin(a*Math.PI/2)*1.15,.31,-1+Math.cos(a*Math.PI/2)*1.15);S.add(n)}
+sign('SCHAAL EXPEDITIE',-17,4.1,-17.45,7);
+for(let i=0;i<5;i++)box(-20.2+i*1.6,.38,-14,1.45,.22,.7,M(i%2?0xeeeeee:0x222222));
+
+/* The first mission stays on the clear center path; the atlas desk is beside it. */
+box(14,1,23,8,.8,4,wood);box(14,1.55,23,7,.3,3.5,green);box(14,1.77,23,6.5,.12,3,paper);block(14,23,8,4);
+for(let i=0;i<7;i++){box(11.5+i*.8,1.92,22.2,.65,.1,.75,M(i%2?0xe8dcad:0x92b17d))}
+/* wall exhibits, frames, plaques, and small ceiling beams */
+for(let z=-29;z<=28;z+=9){
+  for(let x of [-26.25,26.25]){
+    box(x,4.2,z,.2,2.4,3.4,wood);box(x+(x<0?.12:-.12),4.2,z,.06,2.05,3.05,paper);
+    box(x+(x<0?.18:-.18),3.75,z,.07,.2,2.45,M(0x5d9951));
+    box(x+(x<0?.18:-.18),4.45,z-.45,.07,.65,.65,waterM);
+  }
+  box(0,7.56,z,53,.22,.25,wood);
+}
+for(let z of [-24,-11,2,15,28]){
+  for(let x of [-20,20]){
+    box(x,.35,z,1.6,.7,1.5,M(0x83694c));block(x,z,1.6,1.5);
+    for(let dx of [-.34,.34])box(x+dx,.79,z,.22,.24,.22,M(0xd3b36d));
+  }
+}
+const player=new THREE.Group();S.add(player);player.position.set(0,0,30);
+function part(w,h,d,c){let o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),M(c));o.castShadow=true;player.add(o);return o}
+const body=part(.92,1.15,.52,0x3c9b57);body.position.y=1.55;
+const shirt2=part(.94,.25,.54,0x2f7f49);shirt2.position.y=1.22;
+const head=part(.78,.78,.78,0xd7a071);head.position.y=2.53;
+const hair=part(.8,.18,.8,0x5a3825);hair.position.set(0,2.86,.02);
+const leg1=part(.34,.88,.4,0x344d87),leg2=part(.34,.88,.4,0x344d87);leg1.position.set(-.23,.5,0);leg2.position.set(.23,.5,0);
+const armL=part(.25,.95,.3,0xd7a071),armR=part(.25,.95,.3,0xd7a071);armL.position.set(-.62,1.5,0);armR.position.set(.62,1.5,0);
+const shoeL=part(.36,.22,.62,0x292929),shoeR=part(.36,.22,.62,0x292929);shoeL.position.set(-.23,.12,-.09);shoeR.position.set(.23,.12,-.09);
+/* simple face */
+const eyeMat=new THREE.MeshBasicMaterial({color:0x202020});for(let x of [-.17,.17]){let e=new THREE.Mesh(new THREE.BoxGeometry(.09,.11,.03),eyeMat);e.position.set(x,2.58,-.405);player.add(e)}
+
+const stars=[];function star(x,z){let m=new THREE.Mesh(new THREE.OctahedronGeometry(.35),new THREE.MeshBasicMaterial({color:0xffdf3e}));m.position.set(x,1.1,z);S.add(m);stars.push(m)}
+for(let i=0;i<32;i++)star((Math.random()-.5)*44,28-i*1.8+(Math.random()-.5)*4);
+const checkpoints=[
+ {p:[0,23],name:'VANG DE ATLAS!',task:'book'},
+ {p:[-17,11],name:'LEGENDA-JACHT',task:'legend'},
+ {p:[17,-1],name:'KOMPAS-RACE',task:'compass'},
+ {p:[-17,-14],name:'SCHAAL-EXPEDITIE',task:'scale'},
+ {p:[0,-29],name:'RED NEDERLAND!',task:'final'}
+];
+const beams=[];checkpoints.forEach((q,i)=>{let g=new THREE.Group();let b=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,7,16,1,true),new THREE.MeshBasicMaterial({color:0xffe151,transparent:true,opacity:.28}));b.position.y=3.5;g.add(b);let gem=new THREE.Mesh(new THREE.OctahedronGeometry(.65),new THREE.MeshBasicMaterial({color:0xffdf3e}));gem.position.y=1.2;g.add(gem);g.position.set(q.p[0],0,q.p[1]);S.add(g);beams.push(g)});
+let stage=0,score=0,pieces=0,active=false,vy=0,onGround=true,keys={};
+const title=document.querySelector('#title'),text=document.querySelector('#text'),toast=document.querySelector('#toast');
+const missions=[
+ ['MISSIE 1 · VANG DE ATLAS!','Ren naar de grote atlas. Pak onderweg zoveel mogelijk sterren.'],
+ ['MISSIE 2 · LEGENDA-JACHT','Ren naar de legenda. Daar moet je symbolen aan de juiste plek koppelen.'],
+ ['MISSIE 3 · KOMPAS-RACE','Sprint naar het kompas en kies razendsnel de juiste richting.'],
+ ['MISSIE 4 · SCHAAL-EXPEDITIE','Bereik de schaaltafel en meet welke reis ongeveer 10 km is.'],
+ ['FINALE · RED NEDERLAND!','Breng de vier kaartstukken naar de grote kaart en voltooi de Atlascode!']
+];
+function mission(){title.textContent=missions[stage][0];text.textContent=missions[stage][1];document.querySelector('#fill').style.width=(stage/5*100)+'%';beams.forEach((b,i)=>b.visible=i===stage)}
+function pop(t,c='#ffe45b'){toast.textContent=t;toast.style.color=c;toast.classList.add('on');setTimeout(()=>toast.classList.remove('on'),750)}
+function overlay(h,p,opts,correct){active=false;document.querySelector('#overlay').classList.remove('hidden');document.querySelector('#ovTitle').textContent=h;document.querySelector('#ovText').textContent=p;let c=document.querySelector('#choices');c.innerHTML='';opts.forEach((o,i)=>{let b=document.createElement('button');b.className='play';b.textContent=o;b.onclick=()=>{if(i===correct){pop('GOED!','#72ff65');document.querySelector('#overlay').classList.add('hidden');piece();active=true}else pop('PROBEER NOG EENS','#ff6868')};c.appendChild(b)})}
+function piece(){pieces++;document.querySelector('#pieces').textContent=pieces;pop('KAARTSTUK GEVONDEN!');stage++;if(stage>=5){finish();return}mission()}
+/* Each area has fifteen prompts. A shuffled deck persists across reloads, so
+   replaying gives a fresh prompt until that area's full set has appeared. */
+const questions=[
+ [
+  ['Waar vind je de pagina van Noord-Nederland?',['INHOUD','LEGENDA','SCHAAL'],0],
+  ['Je zoekt de kaart van Zeeland. Wat gebruik je eerst?',['INHOUD','KOMPAS','SCHAALSTOK'],0],
+  ['Je ziet een onbekend teken op de kaart. Waar zoek je de betekenis?',['LEGENDA','INHOUD','KAFT'],0],
+  ['Welke atlaspagina kies je voor een kaart van heel Nederland?',['NEDERLAND','EUROPA','WERELD'],0],
+  ['De atlas verwijst naar kaart 22. Wat zoek je op?',['KAART 22','PAGINA 2','LEGENDA 22'],0],
+  ['Je wilt het IJsselmeer op een kaart vinden. Welke kaart helpt het best?',['NEDERLAND','AZIË','WERELD'],0],
+  ['Waar lees je welk kaartnummer bij Friesland hoort?',['INHOUD','SCHAAL','WINDROOS'],0],
+  ['Je wilt weten hoe ver twee plaatsen uit elkaar liggen. Wat zoek je?',['SCHAALSTOK','INHOUD','TITEL'],0],
+  ['Wat vertelt de titel boven een kaart?',['WAT DE KAART TOONT','HOE ZWAAR DE ATLAS IS','HOE OUD JE BENT'],0],
+  ['Wat gebruik je om het noorden op de kaart te vinden?',['WINDROOS','INHOUD','PAGINANUMMER'],0],
+  ['Je zoekt een kaart van Groningen. Welk tabblad past?',['NOORD-NEDERLAND','ZUID-NEDERLAND','BUITEN EUROPA'],0],
+  ['Waar kijk je om te weten wat een blauwe lijn betekent?',['LEGENDA','KAFT','PAGINANUMMER'],0],
+  ['Een atlas heeft heel veel kaarten. Wat helpt je de juiste te vinden?',['INHOUDSOPGAVE','KLEUR VAN DE KAFT','DIKTE VAN HET BOEK'],0],
+  ['Je wilt op de kaart zien waar plaatsen liggen. Welke kaart kies je?',['TOPOGRAFISCHE KAART','WEERKAART','STERRENKAART'],0],
+  ['Op de kaart staat een teken dat je niet kent. Wat doe je?',['ZOEK IN DE LEGENDA','KIES ZOMAAR EEN PLAATS','TEL DE PAGINA’S'],0]
+ ],
+ [
+  ['Wat betekent een blauw vlak meestal?',['WATER','BOS','STAD'],0],
+  ['Wat betekent een groene vlek vaak?',['BOS OF NATUUR','ZEE','SPOORWEG'],0],
+  ['Een blauwe kronkelende lijn loopt door de kaart. Wat kan dat zijn?',['RIVIER','SNELWEG','GRENSPAAL'],0],
+  ['Een ankertekentje staat bij een plaats. Wat zoek je daar?',['HAVEN','BERG','VLIEGVELD'],0],
+  ['Een vliegtuigje staat op de kaart. Wat is daar?',['VLIEGVELD','BOS','BRUG'],0],
+  ['Welke kleur zie je vaak bij water?',['BLAUW','BRUIN','ROOD'],0],
+  ['Wat vertelt de legenda je?',['WAT SYMBOLEN BETEKENEN','HOEVEEL BLADZIJDEN ER ZIJN','WIE DE KAART TEKENDE'],0],
+  ['Een dunne lijn met dwarsstreepjes staat in de legenda. Wat kan het zijn?',['SPOORLIJN','RIVIER','BOSRAND'],0],
+  ['Een gestippelde lijn staat bij “provinciegrens”. Wat wijst die aan?',['GRENS TUSSEN PROVINCIES','WANDELPAD','WATERDIEPTE'],0],
+  ['Een rood rondje staat bij “grote stad”. Wat zoek je op de kaart?',['ROOD RONDJE','BLAUW VLAK','GROENE LIJN'],0],
+  ['Je zoekt een bos. Welk symbool kies je?',['BOOMPJE','BOOTJE','VLIEGTUIG'],0],
+  ['Je zoekt een rivier. Welke lijn past het best?',['BLAUWE LIJN','RODE STIP','GROEN VLAK'],0],
+  ['Wat kan een zwarte stip met een plaatsnaam voorstellen?',['PLAATS','ZEE','PROVINCIEGRENS'],0],
+  ['Wat doe je als twee kaarten andere symbolen gebruiken?',['BEKIJK DE LEGENDA VAN DIE KAART','GEBRUIK ALTIJD DE OUDE LEGENDA','NEGEER DE SYMBOLEN'],0],
+  ['Waar zie je op een kaart wat de kleuren betekenen?',['LEGENDA','KOMPAS','KAARTNUMMER'],0]
+ ],
+ [
+  ['De poort staat in het oosten. Welke letter kies je?',['O','N','W','Z'],0],
+  ['De poort staat in het noorden. Welke letter kies je?',['N','O','Z','W'],0],
+  ['De poort staat in het zuiden. Welke letter kies je?',['Z','N','O','W'],0],
+  ['De poort staat in het westen. Welke letter kies je?',['W','O','N','Z'],0],
+  ['Je gaat op de kaart omhoog. Welke windrichting is dat meestal?',['NOORD','ZUID','OOST','WEST'],0],
+  ['Je gaat op de kaart naar rechts. Welke windrichting is dat meestal?',['OOST','WEST','NOORD','ZUID'],0],
+  ['Je gaat op de kaart naar links. Welke windrichting is dat meestal?',['WEST','OOST','ZUID','NOORD'],0],
+  ['Je gaat op de kaart omlaag. Welke windrichting is dat meestal?',['ZUID','NOORD','WEST','OOST'],0],
+  ['Wat ligt tegenover het noorden?',['ZUID','OOST','WEST'],0],
+  ['Wat ligt tegenover het oosten?',['WEST','NOORD','ZUID'],0],
+  ['Je staat in het midden en loopt eerst noord, dan oost. Waar ben je?',['NOORDOOST','ZUIDOOST','NOORDWEST'],0],
+  ['Je loopt eerst zuid en dan west. Waar ben je?',['ZUIDWEST','NOORDOOST','ZUIDOOST'],0],
+  ['Welk kompaswoord hoort bij N?',['NOORD','NOORDZEE','NEDERLAND'],0],
+  ['Welk kompaswoord hoort bij W?',['WEST','WATER','WEG'],0],
+  ['Als het noorden bovenaan ligt, waar ligt het westen?',['LINKS','RECHTS','ONDER'],0]
+ ],
+ [
+  ['Eén schaalstok is 10 km. De route is één schaalstok lang. Hoe ver?',['10 KM','5 KM','20 KM'],0],
+  ['Eén schaalstok is 5 km. De route is twee stokjes lang. Hoe ver?',['10 KM','5 KM','15 KM'],0],
+  ['Eén schaalstok is 10 km. De route is twee stokjes lang. Hoe ver?',['20 KM','10 KM','30 KM'],0],
+  ['Eén schaalstok is 20 km. De route is een halve stok lang. Hoe ver?',['10 KM','20 KM','40 KM'],0],
+  ['Eén schaalstok is 4 km. De route is drie stokjes lang. Hoe ver?',['12 KM','7 KM','16 KM'],0],
+  ['Eén schaalstok is 2 km. De route is vier stokjes lang. Hoe ver?',['8 KM','6 KM','10 KM'],0],
+  ['Eén schaalstok is 10 km. De route is een halve stok lang. Hoe ver?',['5 KM','10 KM','15 KM'],0],
+  ['Eén schaalstok is 25 km. De route is twee stokjes lang. Hoe ver?',['50 KM','25 KM','75 KM'],0],
+  ['Eén schaalstok is 3 km. De route is drie stokjes lang. Hoe ver?',['9 KM','6 KM','12 KM'],0],
+  ['Eén schaalstok is 15 km. De route is twee stokjes lang. Hoe ver?',['30 KM','15 KM','45 KM'],0],
+  ['De schaalstok geeft 10 km aan. Welke route is het verst?',['DRIE STOKJES','TWEE STOKJES','ÉÉN STOKJE'],0],
+  ['Welke afstand hoort bij drie schaalstokjes van 5 km?',['15 KM','10 KM','20 KM'],0],
+  ['Een route van 6 km past twee keer op de schaalstok. Hoeveel km is één stok?',['3 KM','6 KM','12 KM'],0],
+  ['Je verdubbelt een route van 10 km. Hoe lang wordt de route?',['20 KM','10 KM','30 KM'],0],
+  ['Waarmee kun je afstanden op de kaart schatten?',['SCHAALSTOK','LEGENDA','KAFT'],0]
+ ],
+ [
+  ['Aan welke kant van Nederland liggen de Waddeneilanden?',['NOORD','ZUID','OOST'],0],
+  ['Welke kaart kies je om de Waddeneilanden te zoeken?',['NOORD-NEDERLAND','ZUID-EUROPA','WERELDZEEËN'],0],
+  ['De Noordzee is blauw getekend. Wat betekent blauw hier?',['WATER','BOS','STAD'],0],
+  ['Welke windrichting brengt je van Utrecht ongeveer naar Groningen?',['NOORD','ZUID','WEST'],0],
+  ['Je zoekt de Veluwe. In welke provincie kijk je?',['GELDERLAND','ZEELAND','GRONINGEN'],0],
+  ['Je zoekt het IJsselmeer. Welk symbool of kleur helpt?',['BLAUW VLAK','BOOMPJE','RODE STIP'],0],
+  ['Waar ligt Zeeland ongeveer op de kaart van Nederland?',['ZUIDWEST','NOORDOOST','MIDDEN'],0],
+  ['Van Friesland naar Limburg reis je vooral naar het...',['ZUIDEN','NOORDEN','WESTEN'],0],
+  ['Welk hulpmiddel gebruik je om de afstand tussen twee plaatsen te schatten?',['SCHAALSTOK','KAFT','INHOUD'],0],
+  ['Waar vind je wat een spoorlijnsymbool betekent?',['LEGENDA','TITEL','PAGINANUMMER'],0],
+  ['Je zoekt de hoofdstad van Overijssel. Welke plaats is dat?',['ZWOLLE','ARNHEM','ASSEN'],0],
+  ['Welke zee ligt ten westen van Nederland?',['NOORDZEE','WADDENZEE','IJSSELMEER'],0],
+  ['Je reist van Noord-Holland naar Friesland. Welke grote plas kun je oversteken?',['IJSSELMEER','NOORDZEE','GREVELINGEN'],0],
+  ['Je wilt kaart 18 snel vinden. Waar kijk je naar?',['KAARTNUMMER','SCHAALSTOK','WINDROOS'],0],
+  ['Je ziet een onbekend symbool op de kaart van Limburg. Wat raadpleeg je?',['LEGENDA','INHOUD','KAFT'],0]
+ ]
+];
+function shuffledIndices(n){let a=Array.from({length:n},(_,i)=>i);for(let i=n-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function nextQuestion(area){
+ const key='atlascode-v6-vragen-'+area;
+ let deck;
+ try{deck=JSON.parse(localStorage.getItem(key));if(!Array.isArray(deck)||deck.some(i=>!Number.isInteger(i)||i<0||i>=questions[area].length)||new Set(deck).size!==deck.length)deck=[]}catch{deck=[]}
+ if(!deck.length)deck=shuffledIndices(questions[area].length);
+ const chosen=deck.pop();
+ try{localStorage.setItem(key,JSON.stringify(deck))}catch{}
+ return questions[area][chosen];
+}
+function challenge(){
+ const [prompt,answers,right]=nextQuestion(stage);
+ const choices=answers.map((label,i)=>({label,correct:i===right}));
+ for(let i=choices.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]]}
+ overlay(['De atlas vliegt open!','Legenda-jacht','KOMPAS-RACE','Schaal-expeditie','De laatste code'][stage],prompt,choices.map(c=>c.label),choices.findIndex(c=>c.correct));
+}
+function finish(){active=false;document.querySelector('#fill').style.width='100%';document.querySelector('#overlay').classList.remove('hidden');document.querySelector('#ovTitle').textContent='NEDERLAND IS GERED!';document.querySelector('#ovText').textContent=`Je vond alle 5 kaartstukken en verzamelde ${score} sterren. De magische atlas is weer compleet!`;document.querySelector('#choices').innerHTML='<button class="play" onclick="location.reload()">NOG EEN KEER</button><button class="play" onclick="history.back()">TERUG</button>'}
+document.querySelector('#go').onclick=()=>{document.querySelector('#start').classList.add('hidden');active=true;mission()};
+addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space')jump()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+document.querySelectorAll('[data-k]').forEach(b=>{let k=b.dataset.k;b.onpointerdown=e=>{e.preventDefault();keys[k]=true};b.onpointerup=()=>keys[k]=false;b.onpointerleave=()=>keys[k]=false});document.querySelector('#jump').onpointerdown=jump;
+function jump(){if(onGround&&active){vy=7;onGround=false}}
+/* Horizontal circle against furniture footprints, with independent axes for smooth sliding.
+   Jumping cannot bypass tables. Decorative floor markings and platforms stay walkable. */
+const playerRadius=.42;
+function freeAt(x,z){
+ if(x < -26.25+playerRadius || x > 26.25-playerRadius || z < -34.25+playerRadius || z > 34.25-playerRadius)return false;
+ for(const o of obstacles){
+   let dx=x-Math.max(o.x-o.w/2,Math.min(x,o.x+o.w/2));
+   let dz=z-Math.max(o.z-o.d/2,Math.min(z,o.z+o.d/2));
+   if(dx*dx+dz*dz < playerRadius*playerRadius)return false;
+ }
+ return true;
+}
+function moveWithCollision(dx,dz){
+ const steps=Math.max(1,Math.ceil(Math.hypot(dx,dz)/.18));
+ for(let i=0;i<steps;i++){
+   if(freeAt(player.position.x+dx/steps,player.position.z))player.position.x+=dx/steps;
+   if(freeAt(player.position.x,player.position.z+dz/steps))player.position.z+=dz/steps;
+ }
+}
+let last=performance.now();
+function loop(now){requestAnimationFrame(loop);let dt=Math.min((now-last)/1000,.04);last=now;
+ if(active){
+  /* character-relative controls:
+     up/down move forward/backward; left/right turn the character through a full 360 degrees */
+  const turnSpeed=2.65;
+  if(keys.a||keys.left) player.rotation.y+=turnSpeed*dt;
+  if(keys.d||keys.right) player.rotation.y-=turnSpeed*dt;
+
+  let drive=0;
+  if(keys.w||keys.up) drive=1;
+  if(keys.s||keys.down) drive=-1;
+
+  let forwardMove=new THREE.Vector3(-Math.sin(player.rotation.y),0,-Math.cos(player.rotation.y));
+  if(drive){
+    moveWithCollision(forwardMove.x*drive*8*dt,forwardMove.z*drive*8*dt);
+  }
+  let moving=drive!==0;
+  vy-=17*dt;player.position.y+=vy*dt;if(player.position.y<=0){player.position.y=0;vy=0;onGround=true}
+  let gait=moving&&onGround?Math.sin(now*.014)*.65*(drive<0?-1:1):0;leg1.rotation.x=gait;leg2.rotation.x=-gait;armL.rotation.x=-gait*.75;armR.rotation.x=gait*.75;
+  if(moving&&onGround)body.position.y=1.55+Math.abs(Math.sin(now*.014))*.035;else body.position.y+=(1.55-body.position.y)*.15;
+  stars.forEach(s=>{if(!s.visible)return;s.rotation.y+=dt*3;s.position.y=1.1+Math.sin(now*.004+s.position.x)*.15;if(s.position.distanceTo(player.position)<1.4){s.visible=false;score++;document.querySelector('#stars').textContent=score;pop('+1 ★')}})
+  let q=checkpoints[stage];if(q&&Math.hypot(player.position.x-q.p[0],player.position.z-q.p[1])<2.2)challenge();
+ }
+ /* chase camera uses exactly the same forward direction as movement.
+   Camera therefore stays behind the character: the player sees its back, not its face. */
+let forward=new THREE.Vector3(-Math.sin(player.rotation.y),0,-Math.cos(player.rotation.y));
+let desired=player.position.clone()
+  .addScaledVector(forward,-8.5)
+  .add(new THREE.Vector3(0,5.2,0));
+C.position.lerp(desired,1-Math.pow(0.001,dt));
+let cameraTarget=player.position.clone()
+  .add(new THREE.Vector3(0,1.65,0))
+  .addScaledVector(forward,4.5);
+C.lookAt(cameraTarget);
+ beams.forEach(b=>{b.rotation.y+=dt;b.children[1].rotation.y+=dt*3});
+ R.render(S,C)
+}requestAnimationFrame(loop);
+addEventListener('resize',()=>{R.setSize(innerWidth,innerHeight);C.aspect=innerWidth/innerHeight;C.updateProjectionMatrix()});
+</script></body></html>

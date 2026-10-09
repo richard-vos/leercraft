@@ -30,7 +30,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
 .star-field{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
 /* ── WRAPPER ── */
-.wrapper{position:relative;z-index:10;max-width:960px;margin:0 auto;padding:16px 14px 80px;}
+.wrapper{position:relative;z-index:10;max-width:1180px;margin:0 auto;padding:16px 14px 80px;}
 
 /* ── LOGO BLOK ── */
 .logo-block{
@@ -41,9 +41,18 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
   padding:20px 24px 16px;
   margin-bottom:16px;
   text-align:center;
-  position:relative;
-  overflow:hidden;
+  position:sticky;top:0;z-index:30;
+  transition:padding .2s ease,box-shadow .2s ease;
 }
+.logo-block.compact{padding:6px 14px;box-shadow:0 6px 18px #0008}
+.logo-block.compact .logo-title{font-size:clamp(15px,3vw,21px)}
+.logo-block.compact .logo-sub{display:none}
+.logo-block.compact .xp-wrap{display:block;margin:4px auto 0;max-width:720px;padding:2px 5px}
+.logo-block.compact .xp-lbl{display:none}
+.logo-block.compact .xp-outer{height:12px}
+.logo-block.compact .xp-text{font-size:10px;color:#fff;text-shadow:1px 1px #000}
+@media(max-width:600px){.logo-block.compact .xp-outer{height:15px}}
+@media(max-width:600px){.logo-block{padding:12px}.logo-block::before,.logo-block::after{display:none}.subject-badge{font-size:10px}.cards-grid{grid-template-columns:1fr}}
 /* Pickaxe decoraties links en rechts */
 .logo-block::before{content:'⛏️';position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:28px;opacity:0.3;}
 .logo-block::after {content:'⛏️';position:absolute;right:16px;top:50%;transform:translateY(-50%) scaleX(-1);font-size:28px;opacity:0.3;}
@@ -100,8 +109,11 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
 .subject.locked .subject-header{opacity:0.5;}
 .subject.locked .subject-title{color:#666;text-shadow:none;}
 
+/* ── HOOFDSTUKKEN ── */
+.chapter-title{font-size:clamp(12px,1.35vw,16px);color:#fff;background:#183323e8;padding:13px 16px;margin:12px 0 10px;line-height:1.5}
+
 /* ── KAARTEN GRID ── */
-.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:10px;}
 
 /* ── GAME KAART ── */
 .card{
@@ -119,8 +131,8 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
 .card-body{padding:14px 12px 12px;flex:1;display:flex;flex-direction:column;}
 
 .card-icon{font-size:30px;margin-bottom:10px;filter:drop-shadow(2px 2px 0 rgba(0,0,0,0.6));}
-.card-name{font-size:clamp(7px,1.8vw,9px);color:#fff;text-shadow:2px 2px #000;line-height:1.9;margin-bottom:6px;}
-.card-desc{font-size:5px;color:#777;line-height:2.1;margin-bottom:10px;flex:1;}
+.card-name{font-size:clamp(13px,1.5vw,17px);color:#fff;text-shadow:2px 2px #000;line-height:1.9;margin-bottom:6px;}
+.card-desc{font-size:clamp(12px,1.15vw,14px);color:#ddd;line-height:1.65;margin-bottom:10px;flex:1;}
 
 .card-stars{display:flex;gap:3px;margin-bottom:12px;}
 .star{font-size:9px;}
@@ -128,8 +140,8 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
 .star.off{color:#333;}
 
 .card-btn{
-  font-family:'Press Start 2P',monospace;font-size:7px;
-  padding:9px 10px;width:100%;
+  font-family:'Press Start 2P',monospace;font-size:clamp(11px,1vw,13px);
+  padding:14px 10px;width:100%;
   background:#5D9E3A;color:#fff;text-shadow:1px 1px #2A5A18;border:none;
   border-bottom:3px solid #2A5A18;border-right:3px solid #2A5A18;
   border-top:3px solid #8ADE5A;border-left:3px solid #8ADE5A;
@@ -160,6 +172,26 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
 /* ── FOOTER ── */
 .footer{text-align:center;font-size:5px;color:#444;margin-top:10px;line-height:3;}
 .footer a{color:#555;text-decoration:none;}
+
+/* Leesbare teksten op desktop, tablet en telefoon */
+.logo-sub,.welcome,.subject-badge,.card-desc,.card-btn,.new-badge,.footer,.xp-lbl,.xp-text{
+  font-family:Arial,Helvetica,sans-serif;
+  letter-spacing:normal;
+}
+.logo-sub{font-size:clamp(15px,1.5vw,18px);line-height:1.4;color:#e1ffe0}
+.welcome{font-size:clamp(16px,1.5vw,19px);line-height:1.5;color:#f0f4f0;padding:14px 18px}
+.subject-title{font-size:clamp(17px,2vw,23px)}
+.subject-badge{font-size:clamp(12px,1.2vw,15px);padding:7px 10px}
+.chapter-title{font-size:clamp(15px,1.45vw,19px)}
+.card-name{font-size:clamp(16px,1.6vw,20px);line-height:1.5}
+.card-desc{font-size:clamp(17px,1.5vw,19px);line-height:1.5;color:#f0f0f0}
+.card-btn{font-size:clamp(16px,1.4vw,18px);font-weight:700}
+.new-badge{font-size:13px;padding:5px 8px}
+.xp-lbl{font-size:13px;color:#e8f2e5;margin-bottom:5px}
+.xp-outer{height:23px}
+.xp-text{font-size:12px;color:#fff;text-shadow:1px 1px #000}
+.footer{font-size:14px;color:#eff7e9}
+@media(max-width:600px){.subject-header{flex-wrap:wrap}.subject-badge{margin-left:0}.card-body{padding:18px}.logo-block.compact{padding:5px 10px}}
 
 /* Pixel particle bij klik */
 @keyframes pixelPop{0%{opacity:1;transform:scale(1);}100%{opacity:0;transform:scale(2.5) translateY(-12px);}}
@@ -208,8 +240,9 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
     <div class="subject-header">
       <span class="subject-icon">🗺️</span>
       <span class="subject-title">Topografie</span>
-      <span class="subject-badge">2 spellen</span>
+      <span class="subject-badge">2 hoofdstukken · 3 spellen</span>
     </div>
+    <h3 class="chapter-title">Hoofdstuk 1 · Provincies</h3>
     <div class="cards-grid">
 
       <a class="card" href="games/topo/nederland-topografie-provincie-selectiespel.html">
@@ -238,6 +271,19 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         </div>
       </a>
 
+    </div>
+    <h3 class="chapter-title">Hoofdstuk 2 · De Atlascode</h3>
+    <div class="cards-grid">
+      <a class="card" href="games/topo/atlascode-avontuur-3d.html">
+        <div class="card-banner" style="background:linear-gradient(90deg,#6bbf79,#ffe275);"></div>
+        <div class="new-badge">NIEUW</div>
+        <div class="card-body">
+          <span class="card-icon" aria-hidden="true">🧭</span>
+          <div class="card-name">De Atlascode 3D</div>
+          <div class="card-desc">Ren door de atlaswereld, ontdek hoe kaarten werken en vind de verdwenen kaartstukken.</div>
+          <span class="card-btn">▶ Spelen</span>
+        </div>
+      </a>
     </div>
   </div>
 
@@ -338,14 +384,15 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
   </div>
 
   <div class="footer">
-    LeerCraft &nbsp;·&nbsp; Versie 0.2 &nbsp;·&nbsp; Bezoekers: <span id="visitor-count">laden...</span><br>
-    Gemaakt door Pepijn Vos &nbsp;·&nbsp; 2026
+    ⛏️ LeerCraft &nbsp;·&nbsp; Versie 0.2 &nbsp;·&nbsp; Meer spellen komen eraan! 🚀
   </div>
 
 </div>
 
-<script src="assets/visitor-counter.js" data-root="."></script>
 <script>
+const logo=document.querySelector('.logo-block');
+function updateHeader(){logo.classList.toggle('compact',window.scrollY>90)}
+window.addEventListener('scroll',updateHeader,{passive:true});updateHeader();
 // ── Gras + aarde blokken ──
 function fillRow(id, cls){
   const row = document.getElementById(id);
