@@ -240,7 +240,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
     <div class="subject-header">
       <span class="subject-icon">🗺️</span>
       <span class="subject-title">Topografie</span>
-      <span class="subject-badge">2 hoofdstukken · 3 spellen</span>
+      <span class="subject-badge">2 hoofdstukken · 9 spellen</span>
     </div>
     <h3 class="chapter-title">Hoofdstuk 1 · Provincies</h3>
     <div class="cards-grid">
@@ -281,6 +281,72 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
           <span class="card-icon" aria-hidden="true">🧭</span>
           <div class="card-name">De Atlascode 3D</div>
           <div class="card-desc">Ren door de atlaswereld, ontdek hoe kaarten werken en vind de verdwenen kaartstukken.</div>
+          <span class="card-btn">▶ Spelen</span>
+        </div>
+      </a>
+
+      <a class="card" href="games/topo/europa-landen-klikspel-3d.html">
+        <div class="card-banner" style="background:linear-gradient(90deg,#4a7a3c,#d6b24a);"></div>
+        <div class="new-badge">NIEUW</div>
+        <div class="card-body">
+          <span class="card-icon" aria-hidden="true">🌍</span>
+          <div class="card-name">Zoek het Land</div>
+          <div class="card-desc">Klik het juiste land aan op de zwevende kaart van Europa.</div>
+          <span class="card-btn">▶ Spelen</span>
+        </div>
+      </a>
+
+      <a class="card" href="games/topo/europa-landen-schrijfspel-3d.html">
+        <div class="card-banner" style="background:linear-gradient(90deg,#4a7a3c,#d6b24a);"></div>
+        <div class="new-badge">NIEUW</div>
+        <div class="card-body">
+          <span class="card-icon" aria-hidden="true">✏️</span>
+          <div class="card-name">Schrijf het Land</div>
+          <div class="card-desc">Typ de naam van het land waar de gouden pijl naar wijst.</div>
+          <span class="card-btn">▶ Spelen</span>
+        </div>
+      </a>
+
+      <a class="card" href="games/topo/europa-hoofdsteden-klikspel-3d.html">
+        <div class="card-banner" style="background:linear-gradient(90deg,#3f6fa8,#6bbf79);"></div>
+        <div class="new-badge">NIEUW</div>
+        <div class="card-body">
+          <span class="card-icon" aria-hidden="true">🏛️</span>
+          <div class="card-name">Zoek de Hoofdstad</div>
+          <div class="card-desc">Klik op het land waar de genoemde hoofdstad bij hoort.</div>
+          <span class="card-btn">▶ Spelen</span>
+        </div>
+      </a>
+
+      <a class="card" href="games/topo/europa-hoofdsteden-schrijfspel-3d.html">
+        <div class="card-banner" style="background:linear-gradient(90deg,#3f6fa8,#6bbf79);"></div>
+        <div class="new-badge">NIEUW</div>
+        <div class="card-body">
+          <span class="card-icon" aria-hidden="true">🖊️</span>
+          <div class="card-name">Schrijf de Hoofdstad</div>
+          <div class="card-desc">Typ de hoofdstad van het land waar de gouden pijl naar wijst.</div>
+          <span class="card-btn">▶ Spelen</span>
+        </div>
+      </a>
+
+      <a class="card" href="games/topo/europa-raster-landen-3d.html">
+        <div class="card-banner" style="background:linear-gradient(90deg,#1d3b52,#4a9fd6);"></div>
+        <div class="new-badge">NIEUW</div>
+        <div class="card-body">
+          <span class="card-icon" aria-hidden="true">📐</span>
+          <div class="card-name">Raster:<br>Zoek het Land</div>
+          <div class="card-desc">Klik of typ in welk rastervak (bijv. D5) een land ligt.</div>
+          <span class="card-btn">▶ Spelen</span>
+        </div>
+      </a>
+
+      <a class="card" href="games/topo/europa-raster-hoofdsteden-3d.html">
+        <div class="card-banner" style="background:linear-gradient(90deg,#1d3b52,#4a9fd6);"></div>
+        <div class="new-badge">NIEUW</div>
+        <div class="card-body">
+          <span class="card-icon" aria-hidden="true">📍</span>
+          <div class="card-name">Raster:<br>Zoek de Hoofdstad</div>
+          <div class="card-desc">Klik of typ in welk rastervak de hoofdstad van een land ligt.</div>
           <span class="card-btn">▶ Spelen</span>
         </div>
       </a>
@@ -384,7 +450,8 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
   </div>
 
   <div class="footer">
-    ⛏️ LeerCraft &nbsp;·&nbsp; Versie 0.2 &nbsp;·&nbsp; Meer spellen komen eraan! 🚀
+    ⛏️ LeerCraft &nbsp;·&nbsp; Versie 0.2 &nbsp;·&nbsp; Meer spellen komen eraan! 🚀<br>
+    👀 Bezoekers: <span id="visitor-count">...</span>
   </div>
 
 </div>
@@ -429,5 +496,6 @@ document.querySelectorAll('.card:not(.soon)').forEach(card=>{
   });
 });
 </script>
+<script src="assets/visitor-counter.js" data-root="."></script>
 </body>
 </html>
