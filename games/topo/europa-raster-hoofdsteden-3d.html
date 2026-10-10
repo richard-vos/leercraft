@@ -75,11 +75,13 @@ canvas{display:block;width:100%;height:100%}
 import {
   THREE, createRenderer, createSceneAndCamera, buildGrid, loadCountries, buildCountryMeshes,
   spawnTreasure, flashWrongCell, pickGroundPoint, shuffle, colIndex, rowIndex, gridRef, parseGridRef,
+  buildClouds, updateClouds, updateCountryBob,
 } from '../../assets/js/europa-kaart-engine.js';
 
 const R=createRenderer(document.querySelector('#game'));
 const {scene:S, camera:C}=createSceneAndCamera(R);
 buildGrid(S,R);
+const clouds=buildClouds(S);
 
 const MAX_ATTEMPTS=3;
 let countries=[], pool=[], currentTarget=null, found=0, startTime=0, timerInt=null;
@@ -176,8 +178,10 @@ document.getElementById('goBtn').addEventListener('click',()=>{
 let clock=new THREE.Clock();
 function loop(){
   requestAnimationFrame(loop);
-  const t=clock.getElapsedTime();
+  const dt=clock.getDelta(), t=clock.elapsedTime;
   waveFlags.forEach((f,i)=>{ f.rotation.y=Math.sin(t*3+i)*0.18; f.rotation.z=Math.sin(t*2.2+i*1.3)*0.06; });
+  updateClouds(clouds,dt);
+  updateCountryBob(countries,t);
   R.render(S,C);
 }
 loop();

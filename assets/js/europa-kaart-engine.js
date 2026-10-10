@@ -43,7 +43,9 @@ export function flagTex(def){
   return new THREE.CanvasTexture(c);
 }
 
-export const LAND_PALETTE=[0xb98a4a,0x6fa84f,0xc06a7a,0x4a9aa8,0x9a6ab8,0xc2a62f,0x5a8a4a,0xb84f78,0x5a7fb8,0xc2893a,0x3f9a78,0x9a5ab8,0x7a6ac9,0xc97a4f,0x4fae8a,0xae4f6a];
+// Felle, verzadigde kleuren in Minecraft-wol-stijl (i.p.v. ingetogen pastel) —
+// elk land is een duidelijk herkenbaar, geblokt "wolblok"-kleurtje.
+export const LAND_PALETTE=[0xe8c547,0x5bb452,0xd4574a,0x4a9fd6,0xa855c7,0xd68a3a,0x3f9e6e,0xc74f8a,0x5a7fd6,0xd6b23a,0x47a89e,0x9e4fa8,0x8ab43a,0xd65a5a,0x4a6fa8,0xb4854f];
 
 // ═══════════════════════════════════════════
 // RASTER-CONFIGURATIE
@@ -81,7 +83,7 @@ const chestWood=M(0x7a5230), chestDark=M(0x3f2a18), chestGold=M(0xd4af37);
 export function createRenderer(canvas){
   const R=new THREE.WebGLRenderer({canvas,antialias:true});
   R.setPixelRatio(Math.min(devicePixelRatio,2));R.setSize(innerWidth,innerHeight);R.shadowMap.enabled=true;
-  R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=0.95;
+  R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.NoToneMapping;
   window.addEventListener('resize',()=>{R.setSize(innerWidth,innerHeight);});
   return R;
 }
@@ -106,11 +108,12 @@ function fitCamera(camera){
 }
 
 export function createSceneAndCamera(renderer){
-  const S=new THREE.Scene();S.background=new THREE.Color(0x4a5a66);S.fog=new THREE.Fog(0x4a5a66,35,95);
+  // Zelfde heldere Minecraft-hemel als De Atlascode 3D, i.p.v. een donkere lucht
+  const S=new THREE.Scene();S.background=new THREE.Color(0x77bce4);S.fog=new THREE.Fog(0x9fc7cf,35,95);
   const C=new THREE.PerspectiveCamera(44,innerWidth/innerHeight,.1,150);
   fitCamera(C);
-  S.add(new THREE.HemisphereLight(0xdfe8f0,0x2a3a30,0.65));
-  const sun=new THREE.DirectionalLight(0xfff4e0,0.9);sun.position.set(-10,22,10);sun.castShadow=true;
+  S.add(new THREE.HemisphereLight(0xe6f6ff,0x315528,0.6));
+  const sun=new THREE.DirectionalLight(0xfff0ca,0.85);sun.position.set(-10,22,10);sun.castShadow=true;
   sun.shadow.mapSize.set(1536,1536);
   sun.shadow.camera.left=-16;sun.shadow.camera.right=16;sun.shadow.camera.top=16;sun.shadow.camera.bottom=-16;
   S.add(sun);
@@ -188,8 +191,77 @@ function buildCountryMesh(country, paletteIdx){
 export function buildCountryMeshes(scene, countries){
   countries.forEach((c,i)=>{
     c.mesh=buildCountryMesh(c,(i*5)%LAND_PALETTE.length);
+    c.mesh.userData.bobPhase=Math.random()*Math.PI*2;
     scene.add(c.mesh);
   });
+}
+
+// Zachte deinende beweging, zodat de "zwevende" kaart ook echt een beetje zweeft
+// in plaats van stil te staan. Elk land heeft een eigen fase, dus het beweegt
+// niet als één star geheel.
+export function updateCountryBob(countries, t){
+  countries.forEach(c=>{
+    if(!c.mesh) return;
+    c.mesh.position.y = Math.sin(t*0.8 + c.mesh.userData.bobPhase) * 0.07;
+  });
+}
+
+// ═══════════════════════════════════════════
+// DRIJVENDE WOLKEN (vult de lucht met rustige beweging)
+// ═══════════════════════════════════════════
+export function buildClouds(scene){
+  const cloudMat=new THREE.MeshLambertMaterial({color:0xffffff});
+  const clouds=[];
+  for(let i=0;i<7;i++){
+    const g=new THREE.Group();
+    const parts=3+Math.floor(Math.random()*3);
+    for(let j=0;j<parts;j++){
+      const s=1.1+Math.random()*1.2;
+      const b=new THREE.Mesh(new THREE.BoxGeometry(s*2.2,s*0.85,s*1.5),cloudMat);
+      b.position.set((j-parts/2)*1.5, Math.random()*0.3, (Math.random()-0.5)*0.8);
+      b.castShadow=false;
+      g.add(b);
+    }
+    g.position.set(-32+Math.random()*64, 6+Math.random()*4, -18+Math.random()*20);
+    g.userData.speed=0.25+Math.random()*0.35;
+    scene.add(g);
+    clouds.push(g);
+  }
+  return clouds;
+}
+export function updateClouds(clouds, dt){
+  clouds.forEach(c=>{
+    c.position.x += c.userData.speed*dt;
+    if(c.position.x>34) c.position.x=-34;
+  });
+}
+
+// ═══════════════════════════════════════════
+// CONFETTI (korte feestelijke uitbarsting bij een juist antwoord)
+// ═══════════════════════════════════════════
+const CONFETTI_COLORS=[0xff5555,0xffe25a,0x5bb452,0x4a9fd6,0xd68a3a,0xa855c7];
+export function spawnConfetti(scene, x, z){
+  const bits=[];
+  for(let i=0;i<16;i++){
+    const m=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.12,0.12), new THREE.MeshBasicMaterial({color:CONFETTI_COLORS[i%CONFETTI_COLORS.length]}));
+    const ang=Math.random()*Math.PI*2, speed=1.4+Math.random()*2;
+    m.position.set(x,0.6,z);
+    m.userData.vel=new THREE.Vector3(Math.cos(ang)*speed, 2.6+Math.random()*1.4, Math.sin(ang)*speed);
+    scene.add(m);
+    bits.push(m);
+  }
+  let life=0;
+  function anim(){
+    life+=0.016;
+    bits.forEach(b=>{
+      b.userData.vel.y-=5*0.016;
+      b.position.addScaledVector(b.userData.vel,0.016);
+      b.rotation.x+=0.25; b.rotation.y+=0.18;
+    });
+    if(life<1.1) requestAnimationFrame(anim);
+    else bits.forEach(b=>scene.remove(b));
+  }
+  anim();
 }
 
 export function pointInRing(x,z,ring){
@@ -234,8 +306,9 @@ export function pickGroundPoint(event, {camera}){
 // SCHATKIST + VLAG
 // ═══════════════════════════════════════════
 export function spawnTreasure(scene, country, waveFlags){
-  country.mesh.userData.mat.color.set(LAND_PALETTE[country.mesh.userData.paletteIdx%LAND_PALETTE.length]).offsetHSL(0,0.35,0.2);
+  country.mesh.userData.mat.color.set(LAND_PALETTE[country.mesh.userData.paletteIdx%LAND_PALETTE.length]).offsetHSL(0,0.1,0.15);
   const [cx,cz]=country.center;
+  spawnConfetti(scene,cx,cz+0.3);
   const flagTexture=flagTex(country.flag);
   const g=new THREE.Group();g.position.set(cx,0.42,cz);scene.add(g);
 
@@ -269,24 +342,52 @@ export function flashWrong(country){
   const orig=mat.color.getHex();
   mat.color.set(0x8a2a2a);
   setTimeout(()=>{ if(mat.color.getHex()===0x8a2a2a) mat.color.set(orig); },260);
+  shakeMesh(country.mesh);
+}
+
+// Korte schudbeweging op een mesh (fout antwoord voelt dan ook echt "fout" aan)
+export function shakeMesh(mesh){
+  const base=mesh.userData.baseX ?? mesh.position.x;
+  mesh.userData.baseX=base;
+  let t=0;
+  function anim(){
+    t+=0.045;
+    mesh.position.x=base+Math.sin(t*30)*0.12*Math.max(0,1-t*2.2);
+    if(t<0.45) requestAnimationFrame(anim); else mesh.position.x=base;
+  }
+  anim();
 }
 
 // Tijdelijke rode markering op een (fout) rastervak — voor de rastergerichte spellen
 export function flashWrongCell(scene,x,z){
   const m=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.5,0.1,24),new THREE.MeshBasicMaterial({color:0xcc3322,transparent:true,opacity:0.75}));
   m.position.set(x,0.5,z);scene.add(m);
-  setTimeout(()=>scene.remove(m),400);
+  let t=0;
+  function anim(){
+    t+=0.045;
+    m.scale.setScalar(1+Math.sin(t*10)*0.15*Math.max(0,1-t*2));
+    if(t<0.45) requestAnimationFrame(anim);
+  }
+  anim();
+  setTimeout(()=>scene.remove(m),450);
 }
 
 // Pulserende markering boven een land (voor de "schrijf"-spellen: wijst een plek aan zonder de naam te verklappen)
 export function createPulseMarker(scene, country){
   const [cx,cz]=country.center;
-  const ring=new THREE.Mesh(new THREE.RingGeometry(0.5,0.68,28),new THREE.MeshBasicMaterial({color:0xffe25a,side:THREE.DoubleSide,transparent:true}));
+  // Felrood met een donkere rand eromheen, zodat het altijd goed opvalt tegen elke landkleur
+  const outline=new THREE.Mesh(new THREE.RingGeometry(0.46,0.76,28),new THREE.MeshBasicMaterial({color:0x2a0a0a,side:THREE.DoubleSide,transparent:true,opacity:0.8}));
+  outline.rotation.x=-Math.PI/2;outline.position.set(cx,0.48,cz);scene.add(outline);
+  const ring=new THREE.Mesh(new THREE.RingGeometry(0.5,0.68,28),new THREE.MeshBasicMaterial({color:0xff2b1e,side:THREE.DoubleSide}));
   ring.rotation.x=-Math.PI/2;ring.position.set(cx,0.5,cz);scene.add(ring);
-  const arrow=new THREE.Mesh(new THREE.ConeGeometry(0.22,0.5,8),new THREE.MeshBasicMaterial({color:0xffe25a}));
+  const arrow=new THREE.Mesh(new THREE.ConeGeometry(0.24,0.55,8),new THREE.MeshBasicMaterial({color:0xff2b1e}));
   arrow.position.set(cx,1.3,cz);arrow.rotation.x=Math.PI;scene.add(arrow);
   return {
-    update(t){ ring.scale.setScalar(1+Math.sin(t*3)*0.12); arrow.position.y=1.15+Math.sin(t*3)*0.12; arrow.rotation.y=t*1.5; },
-    dispose(){ scene.remove(ring); scene.remove(arrow); }
+    update(t){
+      const s=1+Math.sin(t*3)*0.12;
+      ring.scale.setScalar(s); outline.scale.setScalar(s);
+      arrow.position.y=1.15+Math.sin(t*3)*0.12; arrow.rotation.y=t*1.5;
+    },
+    dispose(){ scene.remove(ring); scene.remove(outline); scene.remove(arrow); }
   };
 }
