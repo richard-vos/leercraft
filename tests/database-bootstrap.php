@@ -8,10 +8,11 @@ function check(bool $condition, string $message): void
     if (!$condition) throw new RuntimeException($message);
 }
 
-// Always use a new disposable database, never the production configuration.
-$name = 'leercraft_test_' . bin2hex(random_bytes(8));
+// CI provisions this disposable database; the application may not create one.
+$name = getenv('TEST_DB_NAME') ?: '';
+if ($name !== 'leercraft_ci_test') throw new RuntimeException('Only the dedicated CI database is allowed.');
 $host = getenv('TEST_DB_HOST') ?: '127.0.0.1';
-$user = getenv('TEST_DB_USER') ?: 'root';
+$user = getenv('TEST_DB_USER') ?: 'leercraft_ci';
 $password = getenv('TEST_DB_PASS') ?: '';
 $pdo = connect_leercraft_mysql($host, $name, $user, $password);
 try {
@@ -27,9 +28,15 @@ try {
     check(leercraft_schema_ready($pdo), 'Old schema was not upgraded.');
     check((int)$pdo->query('SELECT score FROM scores')->fetchColumn() === 7, 'Migration changed an existing score.');
     $pdo->exec('DROP TABLE sessions');
-    ensure_leercraft_schema($pdo);
-    check(leercraft_schema_ready($pdo), 'Missing table was not restored.');
-    echo "Passed: database creation, tables, repeat initialization, old schema upgrade, missing table and data preservation.\n";
+    $output = [];
+    $status = 0;
+    exec(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(__DIR__ . '/../api/auth/me.php'), $output, $status);
+    $response = json_decode(implode("\n", $output), true);
+    check($status === 0 && ($response['ok'] ?? false) === true && ($response['loggedIn'] ?? null) === false,
+        'Guest account request failed.');
+    check(leercraft_schema_ready($pdo), 'Guest account request did not restore the missing table.');
+    check((string)$pdo->query('SELECT DATABASE()')->fetchColumn() === $name, 'Wrong database selected.');
+    echo "Passed: tables in configured database, repeat initialization, old schema upgrade, missing table and data preservation.\n";
 } finally {
-    $pdo->exec('DROP DATABASE `' . $name . '`');
+    // Leave disposal of the database to the isolated CI service container.
 }

@@ -8,10 +8,11 @@ beschikbaar op de startpagina en in het provincieklikspel.
 1. Gebruik PHP 8 met PDO MySQL, een MySQL-database en werkende PHP `mail()`.
 2. De eerste account-aanvraag maakt automatisch ontbrekende tabellen en de huidige
    score- en beveiligingsindexen aan. Bestaande gebruikers en scores blijven bewaard.
-   Handmatig SQL importeren is niet nodig. Ontbreekt de database zelf, dan probeert
-   de app `DB_NAME` aan te maken; hiervoor moet de databasegebruiker CREATE-rechten
-   hebben. Een nieuw STRATO-databaseaccount maak je via het STRATO-klantenpaneel aan.
-   De app maakt geen databasegebruikers aan en kent zichzelf geen rechten toe.
+   Handmatig SQL importeren is niet nodig. De database uit `DB_NAME` moet al bestaan.
+   De app schrijft uitsluitend in deze database en maakt geen databases of gebruikers
+   aan. Open na deployment de startpagina: de accountcontrole initialiseert de
+   database ook zonder inlogcookie. Bij verbindings- of rechtenproblemen verschijnt
+   een accountfout; de app wijkt nooit uit naar een andere database.
 3. Stel de GitHub Actions secrets `db_host`, `db_name`, `db_user`, `db_pass` en
    `otp_pepper` in. Gebruik voor `otp_pepper` een willekeurig geheim van minimaal
    32 tekens dat je bij volgende deployments behoudt. Optioneel: `mail_from`
@@ -71,7 +72,8 @@ spelcode en validatie toe aan de score-API voordat ze resultaten gaan versturen.
 
 GitHub Actions controleert de PHP-syntax en voert `tests/database-bootstrap.php`
 uit tegen een tijdelijke MariaDB 11.8-service voordat de deployment begint.
-De test gebruikt een willekeurige testdatabase en geen productiecredentials.
-Hij controleert databasecreatie, herhaalde initialisatie, schema-upgrades,
+De CI-service maakt vooraf een aparte testdatabase en testgebruiker aan, zonder
+productiecredentials. De app maakt zelf geen database aan.
+De test controleert tabellen, herhaalde initialisatie, schema-upgrades,
 ontbrekende tabellen en behoud van bestaande resultaten. Lokaal is hiervoor
 PHP met PDO MySQL en een aparte testsserver nodig.

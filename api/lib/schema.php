@@ -61,15 +61,10 @@ function connect_leercraft_mysql(string $host, string $name, string $user, strin
     }
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_EMULATE_PREPARES => false];
-    $serverDsn = 'mysql:host=' . $host . ';charset=utf8mb4';
-    try {
-        $connection = new PDO($serverDsn . ';dbname=' . $name, $user, $password, $options);
-    } catch (PDOException $error) {
-        // Only an unknown database triggers creation; login/network errors must propagate.
-        if ((int)($error->errorInfo[1] ?? 0) !== 1049) throw $error;
-        $server = new PDO($serverDsn, $user, $password, $options);
-        $server->exec('CREATE DATABASE IF NOT EXISTS `' . str_replace('`', '``', $name) . '` CHARACTER SET utf8mb4');
-        $connection = new PDO($serverDsn . ';dbname=' . $name, $user, $password, $options);
+    // Connect only to the configured, existing database. Never create databases.
+    $connection = new PDO('mysql:host=' . $host . ';charset=utf8mb4;dbname=' . $name, $user, $password, $options);
+    if ((string)$connection->query('SELECT DATABASE()')->fetchColumn() !== $name) {
+        throw new RuntimeException('De geselecteerde database komt niet overeen met DB_NAME.');
     }
     ensure_leercraft_schema($connection);
     return $connection;

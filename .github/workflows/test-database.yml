@@ -13,7 +13,9 @@ jobs:
         image: mariadb:11.8
         env:
           MARIADB_ROOT_PASSWORD: leercraft-ci-only
-          MARIADB_ROOT_HOST: '%'
+          MARIADB_DATABASE: leercraft_ci_test
+          MARIADB_USER: leercraft_ci
+          MARIADB_PASSWORD: leercraft-ci-user-only
         ports:
           - 3306:3306
         options: >-
@@ -24,9 +26,18 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y php-cli php-mysql
       - name: PHP-syntax controleren
         run: find api tests -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Configuratie voor gast-accounttest maken
+        env:
+          DB_HOST: 127.0.0.1
+          DB_NAME: leercraft_ci_test
+          DB_USER: leercraft_ci
+          DB_PASS: leercraft-ci-user-only
+          OTP_PEPPER: leercraft-ci-only-pepper-not-for-production
+        run: python3 scripts/build-server-config.py api/config.php
       - name: Automatische initialisatie op MariaDB 11.8 testen
         env:
           TEST_DB_HOST: 127.0.0.1
-          TEST_DB_USER: root
-          TEST_DB_PASS: leercraft-ci-only
+          TEST_DB_NAME: leercraft_ci_test
+          TEST_DB_USER: leercraft_ci
+          TEST_DB_PASS: leercraft-ci-user-only
         run: php tests/database-bootstrap.php

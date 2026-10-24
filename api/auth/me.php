@@ -7,6 +7,8 @@ require_once __DIR__ . '/../lib/auth.php';
 
 require_method('GET');
 
+// Initialize DB_NAME even for visitors who do not yet have a session cookie.
+db();
 $user = current_user();
 
 if ($user) {
