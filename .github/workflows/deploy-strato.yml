@@ -83,13 +83,28 @@ jobs:
       - name: SSH-hostsleutel toevoegen
         env:
           SFTP_HOST: ${{ secrets.STRATO_SFTP_HOST }}
+          SFTP_PORT: ${{ secrets.STRATO_SFTP_PORT }}
           SFTP_KNOWN_HOSTS: ${{ secrets.STRATO_SFTP_KNOWN_HOSTS }}
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           test -n "$SFTP_KNOWN_HOSTS" || { echo 'Secret STRATO_SFTP_KNOWN_HOSTS ontbreekt'; exit 1; }
-          printf '%s\n' "$SFTP_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          printf '%s\n' "$SFTP_KNOWN_HOSTS" | tr -d '\r' > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
+          lookup="$SFTP_HOST"
+          if [ "$SFTP_PORT" != "22" ]; then
+            lookup="[$SFTP_HOST]:$SFTP_PORT"
+          fi
+          if ! ssh-keygen -F "$lookup" -f ~/.ssh/known_hosts > /tmp/leercraft-matched-hostkeys; then
+            echo 'STRATO_SFTP_KNOWN_HOSTS bevat geen sleutel voor STRATO_SFTP_HOST en STRATO_SFTP_PORT.'
+            echo 'Gebruik de volledige known_hosts-regel voor exact dezelfde servernaam en poort, niet alleen de fingerprint.'
+            exit 1
+          fi
+          if ! ssh-keygen -l -f /tmp/leercraft-matched-hostkeys > /dev/null 2>&1; then
+            echo 'De passende known_hosts-regel bevat geen geldige openbare SSH-hostsleutel.'
+            exit 1
+          fi
+          echo 'Geldige hostsleutel gevonden voor de ingestelde SFTP-host en poort.'
 
       - name: Website uploaden naar STRATO
         env:
@@ -105,6 +120,7 @@ jobs:
             -o PasswordAuthentication=yes \
             -o PreferredAuthentications=keyboard-interactive,password \
             -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
             -P "$SFTP_PORT" \
             "$SFTP_USER@$SFTP_HOST" <<EOF
           cd "$REMOTE_PATH"
