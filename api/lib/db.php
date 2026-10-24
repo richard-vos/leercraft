@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/schema.php';
 
 /**
  * Geeft een gedeelde PDO-verbinding terug. Gebruikt MySQL in productie en
@@ -21,10 +22,7 @@ function db(): PDO
         $pdo = new PDO('sqlite:' . DB_SQLITE_PATH);
         $pdo->exec('PRAGMA foreign_keys = ON');
     } else {
-        $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', DB_HOST, DB_NAME);
-        $pdo = new PDO($dsn, DB_USER, DB_PASS, [
-            PDO::ATTR_EMULATE_PREPARES => false,
-        ]);
+        $pdo = connect_leercraft_mysql(DB_HOST, DB_NAME, DB_USER, DB_PASS);
     }
 
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

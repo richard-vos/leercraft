@@ -14,7 +14,11 @@ permissions:
   contents: read
 
 jobs:
+  database-check:
+    uses: ./.github/workflows/test-database.yml
+
   deploy:
+    needs: database-check
     runs-on: ubuntu-latest
 
     steps:

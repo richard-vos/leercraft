@@ -6,8 +6,12 @@ beschikbaar op de startpagina en in het provincieklikspel.
 ## Accounts installeren op de server
 
 1. Gebruik PHP 8 met PDO MySQL, een MySQL-database en werkende PHP `mail()`.
-2. Voer `api/schema.mysql.sql` uit voor een nieuwe database. Heeft de database
-   al de account- en scoretabellen? Voer dan eenmalig `api/migrate-scores.sql` uit.
+2. De eerste account-aanvraag maakt automatisch ontbrekende tabellen en de huidige
+   score- en beveiligingsindexen aan. Bestaande gebruikers en scores blijven bewaard.
+   Handmatig SQL importeren is niet nodig. Ontbreekt de database zelf, dan probeert
+   de app `DB_NAME` aan te maken; hiervoor moet de databasegebruiker CREATE-rechten
+   hebben. Een nieuw STRATO-databaseaccount maak je via het STRATO-klantenpaneel aan.
+   De app maakt geen databasegebruikers aan en kent zichzelf geen rechten toe.
 3. Stel de GitHub Actions secrets `db_host`, `db_name`, `db_user`, `db_pass` en
    `otp_pepper` in. Gebruik voor `otp_pepper` een willekeurig geheim van minimaal
    32 tekens dat je bij volgende deployments behoudt. Optioneel: `mail_from`
@@ -26,7 +30,10 @@ beschikbaar op de startpagina en in het provincieklikspel.
   voor de SFTP-server (bij een afwijkende poort inclusief `[host]:poort`). Controleer
   de sleutel/fingerprint via STRATO of een al vertrouwde verbinding voordat je hem
   opslaat. Een onbevestigde `ssh-keyscan`-uitkomst is geen identiteitscontrole.
-- Voer bij een bestaande database ook `api/migrate-security.sql` eenmalig uit.
+- De huidige migraties worden automatisch toegepast; CREATE-, ALTER- en INDEX-rechten
+  zijn nodig zolang het schema nog niet compleet is. Gelijktijdige initialisaties
+  worden met een databaselock geserialiseerd. Bij fouten wordt geen data verwijderd;
+  een volgende aanvraag probeert de ontbrekende onderdelen opnieuw aan te maken.
 - De Apache `.htaccess`-bestanden moeten actief zijn. Controleer na deployment dat
   `/api/config.php`, `/api/schema.mysql.sql`, `/data/visitor-count.json` en
   `/api/lib/auth.php` een 403/404 opleveren, terwijl de spellen en API werken.
@@ -59,3 +66,12 @@ configuratie. Zet nooit productiegeheimen in de repository.
 
 Nieuwe spellen kunnen later de gedeelde `assets/account.js` gebruiken. Voeg hun
 spelcode en validatie toe aan de score-API voordat ze resultaten gaan versturen.
+
+## Database-initialisatie testen
+
+GitHub Actions controleert de PHP-syntax en voert `tests/database-bootstrap.php`
+uit tegen een tijdelijke MariaDB 11.8-service voordat de deployment begint.
+De test gebruikt een willekeurige testdatabase en geen productiecredentials.
+Hij controleert databasecreatie, herhaalde initialisatie, schema-upgrades,
+ontbrekende tabellen en behoud van bestaande resultaten. Lokaal is hiervoor
+PHP met PDO MySQL en een aparte testsserver nodig.

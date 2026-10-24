@@ -1,0 +1,32 @@
+name: Database-initialisatie testen
+on:
+  push:
+  pull_request:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  database:
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:11.8
+        env:
+          MARIADB_ROOT_PASSWORD: leercraft-ci-only
+          MARIADB_ROOT_HOST: '%'
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v7
+      - run: sudo apt-get update && sudo apt-get install -y php-cli php-mysql
+      - name: PHP-syntax controleren
+        run: find api tests -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Automatische initialisatie op MariaDB 11.8 testen
+        env:
+          TEST_DB_HOST: 127.0.0.1
+          TEST_DB_USER: root
+          TEST_DB_PASS: leercraft-ci-only
+        run: php tests/database-bootstrap.php

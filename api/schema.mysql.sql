@@ -1,5 +1,5 @@
 -- LeerCraft: accounts, inlogcodes, sessies en scores
--- Eenmalig uitvoeren op de Strato-MySQL-database (bijv. via phpMyAdmin).
+-- Wordt automatisch toegepast bij een ontbrekend databaseschema.
 
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
