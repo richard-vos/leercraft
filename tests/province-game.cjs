@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const html = fs.readFileSync('games/topo/nederland-topografie-provincie-selectiespel.html','utf8');
+const html = fs.readFileSync('spellen/topografie/groep-6/provincie-klik/index.php','utf8');
 const source = html.match(/<script>\s*([\s\S]*?)<\/script>/)[1];
 const elements = new Map(), timers = new Map(), submissions = [];
 let timerId=0;

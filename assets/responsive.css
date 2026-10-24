@@ -35,6 +35,9 @@ input:not([type=checkbox]):not([type=range]),select,textarea{font-size:18px;min-
 .site-home .card-desc{font-size:17px;line-height:1.6}
 .site-home .card-btn{display:block;min-height:52px;padding:14px;text-align:center}
 .site-home .welcome{font-size:17px;line-height:1.6}
+.site-home .learning-path{font:16px/1.6 Arial,sans-serif;color:#fff;background:#163421ed;padding:14px 16px;margin-bottom:12px;border-left:4px solid #b2d887}
+.site-home .didactic-level{display:grid;gap:6px;font:15px/1.5 Arial,sans-serif;color:#e5efd9;background:#ffffff09;border-left:3px solid #a9d47d;padding:10px 12px;margin:0 0 16px}
+.site-home .didactic-level strong{font-size:16px;color:#ffe36b}
 /* Province map: show the question before the map on compact screens. */
 .game-province .header h1{font-size:18px;line-height:1.6}
 .game-province .header h1 small{font:16px/1.5 Arial,sans-serif;margin-top:8px}
@@ -43,6 +46,7 @@ input:not([type=checkbox]):not([type=range]),select,textarea{font-size:18px;min-
 .game-province .xp-wrap{grid-column:1/-1}
 .game-province :is(.sc-label,.xp-lbl,.map-title,.quest-eyebrow,.prov-list-title,.type-prompt){font:14px/1.5 Arial,sans-serif;color:#dbe8d4}
 .game-province .sc-val{font-size:18px}
+.game-province #round-disp{font:700 18px/1.4 Arial,sans-serif;white-space:nowrap}
 .game-province .xp-track{height:16px}
 .game-province .game-area{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:'question' 'feedback' 'map' 'provinces' 'restart';gap:12px}
 .game-province .side{display:contents}

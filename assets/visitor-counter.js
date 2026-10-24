@@ -1,6 +1,6 @@
 (() => {
   const script = document.currentScript;
-  const root = script?.dataset.root || '.';
+  const root = (script?.dataset.root || '.').replace(/\/$/, '');
   const endpoint = `${root}/api/visitor-counter.php`;
   const sessionKey = 'leercraft_visit_counted';
   let method = 'GET';

@@ -17,33 +17,85 @@ RewriteCond %{THE_REQUEST} "\s/+index\.html(?:[?\s])" [NC]
 RewriteRule ^index\.html$ / [R=301,L]
 
 RewriteCond %{THE_REQUEST} "\s/+games/" [NC]
-RewriteRule ^games/topo/nederland\-topografie\-provincie\-selectiespel\.html$ /spellen/provincie-klik/ [R=301,L]
+RewriteRule ^games/topo/nederland\-topografie\-provincie\-selectiespel\.html$ /spellen/topografie/groep-6/provincie-klik/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+games/" [NC]
-RewriteRule ^games/topo/nederland\-topografie\-provincie\-schrijfspel\.html$ /spellen/provincie-schrijf/ [R=301,L]
+RewriteRule ^games/topo/nederland\-topografie\-provincie\-schrijfspel\.html$ /spellen/topografie/groep-6/provincie-schrijf/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+games/" [NC]
-RewriteRule ^games/topo/atlascode\-avontuur\-3d\.html$ /spellen/atlascode/ [R=301,L]
+RewriteRule ^games/topo/atlascode\-avontuur\-3d\.html$ /spellen/topografie/groep-6/atlascode/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+games/" [NC]
-RewriteRule ^games/topo/europa\-landen\-klikspel\-3d\.html$ /spellen/europa-landen-klik/ [R=301,L]
+RewriteRule ^games/topo/europa\-landen\-klikspel\-3d\.html$ /spellen/topografie/groep-6/europa-landen-klik/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+games/" [NC]
-RewriteRule ^games/topo/europa\-landen\-schrijfspel\-3d\.html$ /spellen/europa-landen-schrijf/ [R=301,L]
+RewriteRule ^games/topo/europa\-landen\-schrijfspel\-3d\.html$ /spellen/topografie/groep-6/europa-landen-schrijf/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+games/" [NC]
-RewriteRule ^games/topo/europa\-hoofdsteden\-klikspel\-3d\.html$ /spellen/europa-hoofdsteden-klik/ [R=301,L]
+RewriteRule ^games/topo/europa\-hoofdsteden\-klikspel\-3d\.html$ /spellen/topografie/groep-6/europa-hoofdsteden-klik/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+games/" [NC]
-RewriteRule ^games/topo/europa\-hoofdsteden\-schrijfspel\-3d\.html$ /spellen/europa-hoofdsteden-schrijf/ [R=301,L]
+RewriteRule ^games/topo/europa\-hoofdsteden\-schrijfspel\-3d\.html$ /spellen/topografie/groep-6/europa-hoofdsteden-schrijf/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+games/" [NC]
-RewriteRule ^games/topo/europa\-raster\-landen\-3d\.html$ /spellen/europa-raster-landen/ [R=301,L]
+RewriteRule ^games/topo/europa\-raster\-landen\-3d\.html$ /spellen/topografie/groep-6/europa-raster-landen/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+games/" [NC]
-RewriteRule ^games/topo/europa\-raster\-hoofdsteden\-3d\.html$ /spellen/europa-raster-hoofdsteden/ [R=301,L]
+RewriteRule ^games/topo/europa\-raster\-hoofdsteden\-3d\.html$ /spellen/topografie/groep-6/europa-raster-hoofdsteden/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+games/" [NC]
-RewriteRule ^games/rekenen/rekenen\-race\.html$ /spellen/reken-race/ [R=301,L]
+RewriteRule ^games/rekenen/rekenen\-race\.html$ /spellen/rekenen/groep-6/reken-race/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+games/" [NC]
-RewriteRule ^games/rekenen/rekencraft\.html$ /spellen/rekencraft/ [R=301,L]
+RewriteRule ^games/rekenen/rekencraft\.html$ /spellen/rekenen/groep-6/rekencraft/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+games/" [NC]
-RewriteRule ^games/rekenen/getallenzee\.html$ /spellen/getallenzee/ [R=301,L]
+RewriteRule ^games/rekenen/getallenzee\.html$ /spellen/rekenen/groep-6/getallenzee/ [R=301,L]
 
 # Normalize the trailing slash before serving the underlying file.
 RewriteRule ^spellen/(provincie-klik|provincie-schrijf|atlascode|europa-landen-klik|europa-landen-schrijf|europa-hoofdsteden-klik|europa-hoofdsteden-schrijf|europa-raster-landen|europa-raster-hoofdsteden|reken-race|rekencraft|getallenzee)$ /spellen/$1/ [R=301,L]
 
 
-# Real game directories serve their PHP entry point without an internal rewrite.
+# Each directory contains the complete game page; no forwarding loader is needed.
 DirectoryIndex index.php index.html
+
+RewriteRule ^spellen/getallenzee/?$ /spellen/rekenen/groep-6/getallenzee/ [R=301,L]
+
+RewriteRule ^spellen/reken-race/?$ /spellen/rekenen/groep-6/reken-race/ [R=301,L]
+
+RewriteRule ^spellen/rekencraft/?$ /spellen/rekenen/groep-6/rekencraft/ [R=301,L]
+
+RewriteRule ^spellen/atlascode/?$ /spellen/topografie/groep-6/atlascode/ [R=301,L]
+
+RewriteRule ^spellen/europa-hoofdsteden-klik/?$ /spellen/topografie/groep-6/europa-hoofdsteden-klik/ [R=301,L]
+
+RewriteRule ^spellen/europa-hoofdsteden-schrijf/?$ /spellen/topografie/groep-6/europa-hoofdsteden-schrijf/ [R=301,L]
+
+RewriteRule ^spellen/europa-landen-klik/?$ /spellen/topografie/groep-6/europa-landen-klik/ [R=301,L]
+
+RewriteRule ^spellen/europa-landen-schrijf/?$ /spellen/topografie/groep-6/europa-landen-schrijf/ [R=301,L]
+
+RewriteRule ^spellen/europa-raster-hoofdsteden/?$ /spellen/topografie/groep-6/europa-raster-hoofdsteden/ [R=301,L]
+
+RewriteRule ^spellen/europa-raster-landen/?$ /spellen/topografie/groep-6/europa-raster-landen/ [R=301,L]
+
+RewriteRule ^spellen/provincie-klik/?$ /spellen/topografie/groep-6/provincie-klik/ [R=301,L]
+
+RewriteRule ^spellen/provincie-schrijf/?$ /spellen/topografie/groep-6/provincie-schrijf/ [R=301,L]
+
+RewriteRule ^spellen/(rekenen|topografie|taal)/([a-z0-9-]+)$ /spellen/$1/$2/ [R=301,L]
+
+RewriteRule ^spellen/topografie/atlascode/?$ /spellen/topografie/groep-6/atlascode/ [R=301,L]
+
+RewriteRule ^spellen/topografie/europa-hoofdsteden-klik/?$ /spellen/topografie/groep-6/europa-hoofdsteden-klik/ [R=301,L]
+
+RewriteRule ^spellen/topografie/europa-hoofdsteden-schrijf/?$ /spellen/topografie/groep-6/europa-hoofdsteden-schrijf/ [R=301,L]
+
+RewriteRule ^spellen/topografie/europa-landen-klik/?$ /spellen/topografie/groep-6/europa-landen-klik/ [R=301,L]
+
+RewriteRule ^spellen/topografie/europa-landen-schrijf/?$ /spellen/topografie/groep-6/europa-landen-schrijf/ [R=301,L]
+
+RewriteRule ^spellen/topografie/europa-raster-hoofdsteden/?$ /spellen/topografie/groep-6/europa-raster-hoofdsteden/ [R=301,L]
+
+RewriteRule ^spellen/topografie/europa-raster-landen/?$ /spellen/topografie/groep-6/europa-raster-landen/ [R=301,L]
+
+RewriteRule ^spellen/topografie/provincie-klik/?$ /spellen/topografie/groep-6/provincie-klik/ [R=301,L]
+
+RewriteRule ^spellen/topografie/provincie-schrijf/?$ /spellen/topografie/groep-6/provincie-schrijf/ [R=301,L]
+
+RewriteRule ^spellen/rekenen/getallenzee/?$ /spellen/rekenen/groep-6/getallenzee/ [R=301,L]
+
+RewriteRule ^spellen/rekenen/reken-race/?$ /spellen/rekenen/groep-6/reken-race/ [R=301,L]
+
+RewriteRule ^spellen/rekenen/rekencraft/?$ /spellen/rekenen/groep-6/rekencraft/ [R=301,L]
+
+RewriteRule ^spellen/(rekenen|topografie|taal)/groep-([4-8])/([a-z0-9-]+)$ /spellen/$1/groep-$2/$3/ [R=301,L]

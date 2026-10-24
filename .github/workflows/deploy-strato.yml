@@ -137,17 +137,45 @@ jobs:
           bye
           EOF
 
-      - name: Publieke spelroute na upload controleren
+      - name: Alle publieke spelroutes na upload controleren
         run: |
           python3 - <<'PY'
           import urllib.request
-          url = 'https://leercraft.nl/spellen/provincie-klik/'
-          with urllib.request.urlopen(url, timeout=30) as response:
-              html = response.read().decode('utf-8')
-              if response.status != 200 or '<title>Nederland Ontdekker</title>' not in html:
-                  raise SystemExit('De provincieklik-route levert niet de verwachte spelpagina op.')
-          print('Spelroute bereikbaar en juiste spelpagina ontvangen.')
+          from pathlib import Path
+          entries = sorted(Path('spellen').rglob('index.php'))
+          if not entries:
+              raise SystemExit('Geen spelpaginas gevonden voor de routecontrole.')
+          for entry in entries:
+              url = 'https://leercraft.nl/' + entry.parent.as_posix() + '/'
+              with urllib.request.urlopen(url, timeout=30) as response:
+                  html = response.read().decode('utf-8')
+                  if response.status != 200 or '<title>' not in html or '<?php' in html:
+                      raise SystemExit('Spelroute levert geen spelpagina op: ' + entry.parent.name)
+              print('Spelroute bereikbaar: ' + entry.parent.name)
           PY
+
+      - name: Vervallen spelbestanden opruimen na geslaagde routecontrole
+        env:
+          SFTP_HOST: ${{ secrets.STRATO_SFTP_HOST }}
+          SFTP_PORT: ${{ secrets.STRATO_SFTP_PORT }}
+          SFTP_USER: ${{ secrets.STRATO_SFTP_USER }}
+          SSHPASS: ${{ secrets.STRATO_SFTP_PASSWORD }}
+          REMOTE_PATH: ${{ secrets.STRATO_REMOTE_PATH }}
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          remote = os.environ['REMOTE_PATH']
+          if any(c in remote for c in '\r\n'):
+              raise SystemExit('Ongeldige doelmap.')
+          quoted = remote.replace('\\', '\\\\').replace('"', '\\"')
+          commands = Path('scripts/cleanup-legacy-games.sftp').read_text()
+          Path('/tmp/leercraft-cleanup.sftp').write_text('cd "' + quoted + '"\n' + commands + '\nbye\n')
+          PY
+          sshpass -e sftp -b /tmp/leercraft-cleanup.sftp \
+            -o BatchMode=no -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
+            -P "$SFTP_PORT" "$SFTP_USER@$SFTP_HOST"
 
       - name: Tijdelijke serverconfiguratie opruimen
         if: always()

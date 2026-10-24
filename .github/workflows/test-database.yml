@@ -28,6 +28,10 @@ jobs:
         run: find api tests spellen -name '*.php' -print0 | xargs -0 -n1 php -l
       - name: Spel-startpaginas controleren
         run: php tests/game-routes.php
+      - name: OTP-invoer en spellogica controleren
+        run: |
+          node tests/account-otp.cjs
+          node tests/province-game.cjs
       - name: Configuratie voor gast-accounttest maken
         env:
           DB_HOST: 127.0.0.1

@@ -1,5 +1,5 @@
 (() => {
-  const root = document.currentScript.dataset.root || '.';
+  const root = (document.currentScript.dataset.root || '.').replace(/\/$/, '');
   const style = document.createElement('link');
   style.rel = 'stylesheet'; style.href = `${root}/assets/account.css`; document.head.append(style);
   const host = document.querySelector('[data-leercraft-account]');
@@ -13,7 +13,11 @@
       <label>E-mailadres<input name="email" type="email" autocomplete="email" maxlength="255" required></label>
       <button>Stuur inlogcode</button></form>
       <form data-code-form hidden><h2>Vul je inlogcode in</h2><p data-code-recipient></p>
-      <label>Code van 4 cijfers<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4}" minlength="4" maxlength="4" required></label>
+      <fieldset class="otp-fieldset"><legend>Je code van 4 cijfers</legend>
+        <div class="otp-grid">
+          ${[1,2,3,4].map(n=>`<input data-otp-digit aria-label="Cijfer ${n} van 4" type="text" inputmode="numeric" autocomplete="${n===1?'one-time-code':'off'}" pattern="[0-9]" maxlength="4" required>`).join('')}
+        </div>
+      </fieldset>
       <button>Inloggen</button><button type="button" data-change-email>Andere e-mail / nieuwe code</button></form>
       <p data-login-message role="status"></p><button type="button" data-close aria-label="Inlogscherm sluiten">&times;</button>
     </dialog></section>`;
@@ -53,6 +57,36 @@
     } catch(error) { $('[data-account-status]').textContent = error.message; }
   }
   const dialog = $('dialog');
+  const digits = [...host.querySelectorAll('[data-otp-digit]')];
+  function fillDigits(text, start) {
+    const numbers = text.replace(/[^0-9]/g, '').slice(0, 4);
+    if (!numbers) return;
+    if (numbers.length === 4) start = 0;
+    for (let n = 0; n < numbers.length && start + n < 4; n++) digits[start+n].value = numbers[n];
+    digits[Math.min(start + numbers.length, 3)].focus();
+    digits[Math.min(start + numbers.length, 3)].select();
+  }
+  digits.forEach((input, index) => {
+    input.addEventListener('focus', () => input.select());
+    input.addEventListener('input', () => {
+      const value = input.value;
+      input.value = '';
+      fillDigits(value, index);
+    });
+    input.addEventListener('paste', event => {
+      event.preventDefault();
+      fillDigits(event.clipboardData.getData('text'), index);
+    });
+    input.addEventListener('keydown', event => {
+      if (event.key === 'Backspace' && !input.value && index > 0) {
+        event.preventDefault();digits[index-1].value='';digits[index-1].focus();
+      } else if (event.key === 'ArrowLeft' && index > 0) {
+        event.preventDefault();digits[index-1].focus();
+      } else if (event.key === 'ArrowRight' && index < 3) {
+        event.preventDefault();digits[index+1].focus();
+      }
+    });
+  });
   $('[data-login]').onclick = () => dialog.showModal();
   $('[data-close]').onclick = () => dialog.close();
   $('[data-change-email]').onclick = () => { $('[data-email-form]').hidden=false; $('[data-code-form]').hidden=true; $('[data-login-message]').textContent=''; $('[name=email]').focus(); };
@@ -68,12 +102,12 @@
       await request('auth/request-otp.php',{email:pendingEmail});
       $('[data-email-form]').hidden=true;$('[data-code-form]').hidden=false;
       $('[data-code-recipient]').textContent=`Bekijk de inbox en spammap van ${pendingEmail}. De code is 10 minuten geldig.`;
-      $('[name=code]').value='';$('[name=code]').focus();$('[data-login-message]').textContent='Code aangevraagd. Maximaal 3 aanvragen per 15 minuten.';
+      digits.forEach(input=>input.value='');digits[0].focus();$('[data-login-message]').textContent='Code aangevraagd. Maximaal 3 aanvragen per 15 minuten.';
     });
   };
   $('[data-code-form]').onsubmit = event => {
     event.preventDefault();submit(event.target,async()=>{
-      await request('auth/verify-otp.php',{email:pendingEmail,code:$('[name=code]').value.trim()});
+      await request('auth/verify-otp.php',{email:pendingEmail,code:digits.map(input=>input.value).join('')});
       $('[data-login-message]').textContent='';dialog.close();await refresh();
     });
   };

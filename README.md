@@ -3,18 +3,78 @@
 Educatieve browserspellen. Accounts en opgeslagen resultaten zijn voorlopig
 beschikbaar op de startpagina en in het provincieklikspel.
 
+## Tablet, telefoon en computer
+
+Alle pagina's gebruiken `assets/responsive.css`: een compacte basis met grote
+aanraakvlakken, tabletindeling vanaf 600px en uitbreiding voor computers vanaf
+1100px. De instellingen van RekenCraft krijgen vanaf 800px twee kolommen.
+Het inlogvenster heeft vier Minecraft-cijfervakken met automatisch doorspringen,
+plakken/autofill en terugwissen. `assets/responsive.js` houdt de beschikbare
+viewporthoogte en de ruimte voor het schermtoetsenbord bij.
+
 ## Speladressen
 
-De homepage linkt naar nette adressen zoals `/spellen/provincie-klik/`,
-`/spellen/provincie-schrijf/` en `/spellen/getallenzee/`. Elke spelmap heeft een
-kleine PHP-startpagina die via een vaste lijst het bestaande HTML-bestand serveert.
-Daarvoor is geen interne rewrite naar een HTML-bestand nodig. Oude speladressen en
+De homepage linkt naar adressen zoals `/spellen/topografie/groep-6/provincie-klik/`
+en `/spellen/rekenen/groep-6/getallenzee/`. Elke spelmap bevat het
+volledige spel in `index.php`, zonder dubbele bestanden of doorgeefpagina's.
+Oude speladressen en
 `/index.html` verwijzen permanent door naar de nieuwe adressen. De slash aan
 het eind is verplicht en wordt automatisch toegevoegd.
 
 Deze routes vereisen PHP, de root-`.htaccess`, Apache 2.4 met `mod_rewrite` en hosting
 op de root van het domein. De eenvoudige Python-server ondersteunt deze rewrites
 niet; gebruik lokaal Apache om de nette speladressen te testen.
+
+## Bestandsstructuur
+
+- `index.html`: startpagina en spellenmenu.
+- `spellen/<vak>/groep-<nummer>/<spelnaam>/index.php`: vak, schoolgroep en spel.
+- `assets/`: gedeelde stijlen, JavaScript, lettertypen, afbeeldingen en kaartdata.
+- `api/`: account-, score- en bezoeker-API; gedeelde PHP-code staat in `api/lib/`.
+- `scripts/`: hulpmiddelen voor deployment; worden niet gepubliceerd.
+- `tests/`: automatische controles; worden niet gepubliceerd.
+- `.github/workflows/`: tests en deployment naar STRATO.
+- `data/visitor-count.json`: oude tellerstand, alleen nog gelezen bij de eerste
+  migratie naar de databaseteller. Wordt niet meer bijgewerkt of geupload.
+
+De oude map `games/` is vervallen. Oude HTML-links blijven via `.htaccess`
+doorverwijzen naar de huidige speladressen. Na controle van alle nieuwe spelroutes
+ruimt de deployment uitsluitend de bekende oude spelbestanden en de vervallen
+loader op de server op. De oude mappen worden alleen verwijderd als ze leeg zijn.
+
+De vakken zijn `rekenen`, `topografie` en `taal`, elk met groep 4 t/m 8.
+Alle 12 huidige spellen staan onder **groep 6**. De andere groepsmappen zijn
+voorbereid, maar bevatten nog geen spellen. Spelinhoud wordt niet gedupliceerd
+om lege groepen op te vullen.
+
+Niveaus horen bij het spel binnen de groep: RekenCraft heeft instelbare bewerkingen,
+een instelbaar getalbereik en oplopende levels. Getallenzee heeft plus/min,
+keersommen en gemengde bewerkingen. Bij topografie zijn klikken en zelf schrijven
+verschillende oefenvormen; rasterspellen voegen kaartcoordinaten toe. Er zijn bij
+deze herindeling geen nieuwe leerinhouden of groepsniveaus verzonnen. Toekomstige
+groepsvarianten krijgen een eigen spel onder de betreffende groepsmap.
+
+### Didactische niveaus binnen groep 6
+
+Het spellenmenu gebruikt de volgende voorlopige leerlijn, op basis van de taken
+en beschikbare steun in de huidige spellen. Dit is geen vastgestelde landelijke
+norm of beoordeling van een individuele leerling.
+
+| Niveau | Didactische uitdaging | Huidige voorbeelden |
+| --- | --- | --- |
+| 1 | Een genoemde plek herkennen en aanwijzen | Provincieklikspel, Zoek het Land |
+| 2 | Zelf een naam ophalen en schrijven, of hoofdstad en land koppelen | Provincies schrijven, landen schrijven, Zoek de Hoofdstad |
+| 3 | Meerdere kennisstappen combineren of kaartvaardigheden toepassen | Hoofdsteden schrijven, rasterspellen, De Atlascode |
+
+Bij vergelijkbare inhoud geeft herkennen meer antwoordsteun dan zelf een naam
+produceren. Hints, aantal antwoordmogelijkheden, kaartcomplexiteit en vereiste
+voorkennis kunnen die onderlinge moeilijkheid veranderen. Schrijffouten zijn
+bovendien een andere uitdaging dan ontbrekende topografische kennis.
+
+Bij rekenen bepalen bewerkingen, getalbereik en benodigde tussenstappen het
+inhoudelijke niveau. Daarom krijgen de instelbare spellen geen vast sterrenaantal.
+Tijdsdruk, sturen en springen tellen apart als spelbelasting; een moeilijk te
+besturen spel hoort daardoor niet automatisch bij een hogere schoolgroep.
 
 ## Accounts installeren op de server
 
