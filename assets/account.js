@@ -13,12 +13,13 @@
       <label>E-mailadres<input name="email" type="email" autocomplete="email" maxlength="255" required></label>
       <button>Stuur inlogcode</button></form>
       <form data-code-form hidden><h2>Vul je inlogcode in</h2><p data-code-recipient></p>
-      <label>Code van 8 cijfers<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{8}" minlength="8" maxlength="8" required></label>
+      <label>Code van 4 cijfers<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4}" minlength="4" maxlength="4" required></label>
       <button>Inloggen</button><button type="button" data-change-email>Andere e-mail / nieuwe code</button></form>
       <p data-login-message role="status"></p><button type="button" data-close>Sluiten</button>
     </dialog></section>`;
   const $ = selector => host.querySelector(selector);
   let email = null, pendingEmail = '';
+  const accountListeners = new Set();
   async function request(path, body) {
     let response, data;
     try {
@@ -37,7 +38,10 @@
     const fill = document.getElementById('xp-fill'), xp = document.getElementById('xp-text');
     if(xp){xp.textContent='Log in om punten te bewaren';fill.style.width='0%';}
     try {
-      const me = await request('auth/me.php'); email = me.loggedIn ? me.email : null;
+      const me = await request('auth/me.php');
+      const previousEmail = email;
+      email = me.loggedIn ? me.email : null;
+      if (email !== previousEmail) accountListeners.forEach(listener => listener(email));
       $('[data-account-status]').textContent = email ? `Ingelogd als ${email}` : 'Speel als gast of log in om je punten te bewaren.';
       $('[data-login]').hidden = !!email; $('[data-logout]').hidden = !email;
       if (email) {
@@ -78,6 +82,8 @@
     try{await request('auth/logout.php',{});await refresh();}catch(error){$('[data-account-status]').textContent=error.message;}
     finally{$('[data-logout]').disabled=false;}
   };
-  window.LeerCraft={request,refresh,openLogin:()=>dialog.showModal(),get email(){return email;}};
+  window.LeerCraft={request,refresh,openLogin:()=>dialog.showModal(),
+    onChange(listener){accountListeners.add(listener);return ()=>accountListeners.delete(listener);},
+    get email(){return email;}};
   window.LeerCraft.ready = refresh();
 })();

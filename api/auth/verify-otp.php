@@ -12,8 +12,8 @@ $body = read_json_body();
 $email = is_string($body['email'] ?? null) ? strtolower(trim($body['email'])) : '';
 $code = is_string($body['code'] ?? null) ? trim($body['code']) : '';
 
-if (strlen($email) > 255 || !filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^[0-9]{8}$/D', $code)) {
-    json_response(['ok' => false, 'error' => 'Vul een geldige 8-cijferige code in.'], 400);
+if (strlen($email) > 255 || !filter_var($email, FILTER_VALIDATE_EMAIL) || !preg_match('/^[0-9]{4}$/D', $code)) {
+    json_response(['ok' => false, 'error' => 'Vul een geldige 4-cijferige code in.'], 400);
 }
 
 $pdo = db();

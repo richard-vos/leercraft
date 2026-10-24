@@ -39,7 +39,7 @@ try {
     $stmt->execute(['ip' => $ip, 'since' => $since]);
     $ipCount = (int)$stmt->fetchColumn();
     if ($emailCount < 3 && $ipCount < 20) {
-        $code = str_pad((string)random_int(0, 99999999), 8, '0', STR_PAD_LEFT);
+        $code = str_pad((string)random_int(0, 9999), 4, '0', STR_PAD_LEFT);
         $stmt = $pdo->prepare('UPDATE otp_codes SET consumed_at = :now WHERE email = :email AND consumed_at IS NULL');
         $stmt->execute(['now' => date('Y-m-d H:i:s'), 'email' => $email]);
         $ins = $pdo->prepare(

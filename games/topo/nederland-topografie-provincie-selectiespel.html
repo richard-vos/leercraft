@@ -119,7 +119,7 @@ h1 small{display:block;font-size:0.65em;color:#aaffaa;text-shadow:2px 2px #00660
   <div class="end-score" id="end-score">0 / 12</div>
   <div class="end-msg" id="end-msg"></div>
   <div id="save-result" class="end-msg" role="status"></div>
-  <button type="button" class="mc-btn" style="max-width:260px" onclick="LeerCraft.openLogin()">Inloggen</button>
+  <button id="end-login" type="button" class="mc-btn" style="max-width:260px" onclick="LeerCraft.openLogin()" hidden>Inloggen</button>
   <button id="retry-save" class="mc-btn" style="max-width:260px" hidden>Opnieuw opslaan</button>
   <button class="mc-btn red" onclick="closeEnd()" style="max-width:260px;">🔄 Opnieuw spelen</button>
 </div>
@@ -151,6 +151,7 @@ function startGame(){
   runId=crypto.randomUUID();runOwner=LeerCraft.email;completedResult=null;
   document.getElementById("save-result").textContent="";
   document.getElementById("retry-save").hidden=true;
+  document.getElementById('end-login').hidden=!!LeerCraft.email;
   queue=shuffle(PROVINCES);score=0;wrong=0;round=0;done={};answered=false;
   document.getElementById('end-screen').classList.remove('show');
   resetAll();buildChips();updateBar();nextRound();
@@ -241,6 +242,7 @@ function endGame(){
 async function saveResult(){
   const result=completedResult, target=document.getElementById('save-result'), retry=document.getElementById('retry-save');
   retry.hidden=true;
+  document.getElementById('end-login').hidden=!!LeerCraft.email;
   if(!runOwner){target.textContent='Je verdiende '+(result.score*10)+' oefenpunten. Log in en start een nieuw spel om punten te bewaren.';return;}
   if(LeerCraft.email!==runOwner){target.textContent='Je account is gewijzigd. Start een nieuw spel om punten op te slaan.';return;}
   target.textContent='Punten opslaan...';
@@ -249,10 +251,16 @@ async function saveResult(){
     if(completedResult!==result)return;
     target.textContent=data.saved?'Opgeslagen! +'+data.points+' punten.':'Je sessie is verlopen. Log opnieuw in en probeer opslaan nogmaals.';
     retry.hidden=data.saved;
+    document.getElementById('end-login').hidden=data.saved;
     await LeerCraft.refresh();
   }catch(error){if(completedResult!==result)return;target.textContent=error.message;retry.hidden=false;}
 }
 document.getElementById('retry-save').addEventListener('click',saveResult);
+LeerCraft.onChange(email=>{
+  document.getElementById('end-login').hidden=!!email;
+  // A guest who logs in during play can save this round under that account.
+  if(email && !runOwner && !completedResult)runOwner=email;
+});
 function closeEnd(){document.getElementById('end-screen').classList.remove('show');startGame();}
 LeerCraft.ready.then(startGame);
 </script>
