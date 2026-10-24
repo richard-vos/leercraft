@@ -3,6 +3,18 @@
 Educatieve browserspellen. Accounts en opgeslagen resultaten zijn voorlopig
 beschikbaar op de startpagina en in het provincieklikspel.
 
+## Speladressen
+
+De homepage linkt naar nette adressen zoals `/spellen/provincie-klik/`,
+`/spellen/provincie-schrijf/` en `/spellen/getallenzee/`. Apache `mod_rewrite`
+serveert hiervoor intern de bestaande HTML-bestanden. Oude speladressen en
+`/index.html` verwijzen permanent door naar de nieuwe adressen. De slash aan
+het eind is verplicht en wordt automatisch toegevoegd.
+
+Deze routes vereisen de root-`.htaccess`, Apache 2.4 met `mod_rewrite` en hosting
+op de root van het domein. De eenvoudige Python-server ondersteunt deze rewrites
+niet; gebruik lokaal Apache om de nette speladressen te testen.
+
 ## Accounts installeren op de server
 
 1. Gebruik PHP 8 met PDO MySQL, een MySQL-database en werkende PHP `mail()`.
