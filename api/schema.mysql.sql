@@ -1,6 +1,11 @@
 -- LeerCraft: accounts, inlogcodes, sessies en scores
 -- Wordt automatisch toegepast bij een ontbrekend databaseschema.
 
+CREATE TABLE IF NOT EXISTS site_counters (
+  name VARCHAR(50) NOT NULL PRIMARY KEY,
+  count BIGINT UNSIGNED NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,

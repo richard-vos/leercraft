@@ -17,10 +17,15 @@ $password = getenv('TEST_DB_PASS') ?: '';
 $pdo = connect_leercraft_mysql($host, $name, $user, $password);
 try {
     check(leercraft_schema_ready($pdo), 'New database was not initialized.');
+    $visitors = (int)$pdo->query("SELECT count FROM site_counters WHERE name = 'visitors'")->fetchColumn();
+    check($visitors >= 2892, 'Visitor migration did not preserve the initial total.');
+    $pdo->exec("UPDATE site_counters SET count = count + 1 WHERE name = 'visitors'");
     $pdo->exec("INSERT INTO users (email) VALUES ('bootstrap@example.com')");
     $pdo->exec("INSERT INTO scores (user_id, game_slug, score, max_score) VALUES (1, 'provincie-klikspel', 7, 12)");
     $again = connect_leercraft_mysql($host, $name, $user, $password);
     check((int)$again->query('SELECT COUNT(*) FROM users')->fetchColumn() === 1, 'Repeated initialization changed users.');
+    check((int)$again->query("SELECT count FROM site_counters WHERE name = 'visitors'")->fetchColumn() === $visitors + 1,
+        'Repeated initialization reset the visitor counter.');
     // Reproduce the previously deployed schema, then verify automatic upgrades.
     $pdo->exec('ALTER TABLE scores DROP INDEX idx_scores_run, DROP COLUMN run_id');
     $pdo->exec('ALTER TABLE otp_codes DROP INDEX idx_otp_ip_created');
@@ -36,6 +41,10 @@ try {
         'Guest account request failed.');
     check(leercraft_schema_ready($pdo), 'Guest account request did not restore the missing table.');
     check((string)$pdo->query('SELECT DATABASE()')->fetchColumn() === $name, 'Wrong database selected.');
+    $output = [];
+    exec(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(__DIR__ . '/../api/visitor-counter.php'), $output, $status);
+    $counter = json_decode(implode("\n", $output), true);
+    check(($counter['ok'] ?? false) && $counter['count'] === $visitors + 1, 'Visitor GET changed the total or returned the wrong count.');
     echo "Passed: tables in configured database, repeat initialization, old schema upgrade, missing table and data preservation.\n";
 } finally {
     // Leave disposal of the database to the isolated CI service container.

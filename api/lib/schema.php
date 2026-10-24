@@ -5,8 +5,9 @@ declare(strict_types=1);
 function leercraft_schema_ready(PDO $pdo): bool
 {
     $tables = $pdo->query("SELECT COUNT(*) FROM information_schema.TABLES
-        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME IN ('users','otp_codes','sessions','scores')")->fetchColumn();
-    if ((int)$tables !== 4) return false;
+        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME IN ('users','otp_codes','sessions','scores','site_counters')")->fetchColumn();
+    if ((int)$tables !== 5) return false;
+    if ($pdo->query("SELECT count FROM site_counters WHERE name = 'visitors'")->fetchColumn() === false) return false;
     $column = $pdo->query("SELECT COUNT(*) FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'scores' AND COLUMN_NAME = 'run_id'")->fetchColumn();
     if ((int)$column !== 1) return false;
@@ -34,6 +35,18 @@ function ensure_leercraft_schema(PDO $pdo): void
         foreach (explode(';', $schema) as $sql) {
             if (trim($sql) !== '') $pdo->exec($sql);
         }
+        // One-time migration: preserve a higher legacy live total if available.
+        $initialCount = 2892;
+        $legacyFile = dirname(__DIR__, 2) . '/data/visitor-count.json';
+        if (is_readable($legacyFile)) {
+            $legacy = json_decode((string)file_get_contents($legacyFile), true);
+            if (is_array($legacy) && is_int($legacy['count'] ?? null) && $legacy['count'] > $initialCount) {
+                $initialCount = $legacy['count'];
+            }
+        }
+        $seed = $pdo->prepare("INSERT INTO site_counters (name, count) VALUES ('visitors', :count)
+            ON DUPLICATE KEY UPDATE name = name");
+        $seed->execute(['count' => $initialCount]);
         $column = $pdo->query("SELECT COUNT(*) FROM information_schema.COLUMNS
             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'scores' AND COLUMN_NAME = 'run_id'")->fetchColumn();
         if ((int)$column === 0) $pdo->exec('ALTER TABLE scores ADD COLUMN run_id VARCHAR(36) NULL');

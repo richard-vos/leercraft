@@ -17,7 +17,7 @@
   fetch(endpoint, {
     method,
     cache: 'no-store',
-    headers: { Accept: 'application/json' }
+    headers: { Accept: 'application/json', 'X-Requested-With': 'fetch' }
   })
     .then(response => {
       if (!response.ok) throw new Error(`Counter returned ${response.status}`);

@@ -67,6 +67,14 @@ configuratie. Zet nooit productiegeheimen in de repository.
 
 ## Punten en voortgang
 
+De bezoekersteller staat in `DB_NAME`, tabel `site_counters`, rij `visitors`.
+Bij de eerste migratie wordt 2892 overgenomen, of een hogere stand uit het oude
+serverbestand `data/visitor-count.json`. Een bestaande databasestand wordt nooit
+door een deployment of schema-update gereset. Het oude bestand wordt daarna niet
+meer bijgewerkt en niet meer geupload. De tabel wordt automatisch aangemaakt.
+De teller telt eenmaal per browsersessie via sessionStorage; het is geen betrouwbare
+meting van unieke personen en is gescheiden van het aantal geregistreerde accounts.
+
 - Een afgerond provincieklikspel bewaart het resultaat van 12 vragen.
 - Elk goed antwoord levert 10 punten/XP op; maximaal 120 per spel.
 - Het accountoverzicht toont het totaal, aantal afgeronde spellen en beste score.
