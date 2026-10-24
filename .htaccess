@@ -12,6 +12,7 @@ RedirectMatch 404 "(?i)/(?:\.git|\.github|\.claude|\.codex|\.agents|\.tmp|script
 
 # Public game URLs. Only browser requests to old HTML URLs are redirected.
 RewriteEngine On
+RewriteBase /
 RewriteCond %{THE_REQUEST} "\s/+index\.html(?:[?\s])" [NC]
 RewriteRule ^index\.html$ / [R=301,L]
 
@@ -43,15 +44,15 @@ RewriteRule ^games/rekenen/getallenzee\.html$ /spellen/getallenzee/ [R=301,L]
 # Normalize the trailing slash before serving the underlying file.
 RewriteRule ^spellen/(provincie-klik|provincie-schrijf|atlascode|europa-landen-klik|europa-landen-schrijf|europa-hoofdsteden-klik|europa-hoofdsteden-schrijf|europa-raster-landen|europa-raster-hoofdsteden|reken-race|rekencraft|getallenzee)$ /spellen/$1/ [R=301,L]
 
-RewriteRule ^spellen/provincie-klik/$ games/topo/nederland-topografie-provincie-selectiespel.html [END]
-RewriteRule ^spellen/provincie-schrijf/$ games/topo/nederland-topografie-provincie-schrijfspel.html [END]
-RewriteRule ^spellen/atlascode/$ games/topo/atlascode-avontuur-3d.html [END]
-RewriteRule ^spellen/europa-landen-klik/$ games/topo/europa-landen-klikspel-3d.html [END]
-RewriteRule ^spellen/europa-landen-schrijf/$ games/topo/europa-landen-schrijfspel-3d.html [END]
-RewriteRule ^spellen/europa-hoofdsteden-klik/$ games/topo/europa-hoofdsteden-klikspel-3d.html [END]
-RewriteRule ^spellen/europa-hoofdsteden-schrijf/$ games/topo/europa-hoofdsteden-schrijfspel-3d.html [END]
-RewriteRule ^spellen/europa-raster-landen/$ games/topo/europa-raster-landen-3d.html [END]
-RewriteRule ^spellen/europa-raster-hoofdsteden/$ games/topo/europa-raster-hoofdsteden-3d.html [END]
-RewriteRule ^spellen/reken-race/$ games/rekenen/rekenen-race.html [END]
-RewriteRule ^spellen/rekencraft/$ games/rekenen/rekencraft.html [END]
-RewriteRule ^spellen/getallenzee/$ games/rekenen/getallenzee.html [END]
+RewriteRule ^spellen/provincie-klik/$ /games/topo/nederland-topografie-provincie-selectiespel.html [END]
+RewriteRule ^spellen/provincie-schrijf/$ /games/topo/nederland-topografie-provincie-schrijfspel.html [END]
+RewriteRule ^spellen/atlascode/$ /games/topo/atlascode-avontuur-3d.html [END]
+RewriteRule ^spellen/europa-landen-klik/$ /games/topo/europa-landen-klikspel-3d.html [END]
+RewriteRule ^spellen/europa-landen-schrijf/$ /games/topo/europa-landen-schrijfspel-3d.html [END]
+RewriteRule ^spellen/europa-hoofdsteden-klik/$ /games/topo/europa-hoofdsteden-klikspel-3d.html [END]
+RewriteRule ^spellen/europa-hoofdsteden-schrijf/$ /games/topo/europa-hoofdsteden-schrijfspel-3d.html [END]
+RewriteRule ^spellen/europa-raster-landen/$ /games/topo/europa-raster-landen-3d.html [END]
+RewriteRule ^spellen/europa-raster-hoofdsteden/$ /games/topo/europa-raster-hoofdsteden-3d.html [END]
+RewriteRule ^spellen/reken-race/$ /games/rekenen/rekenen-race.html [END]
+RewriteRule ^spellen/rekencraft/$ /games/rekenen/rekencraft.html [END]
+RewriteRule ^spellen/getallenzee/$ /games/rekenen/getallenzee.html [END]

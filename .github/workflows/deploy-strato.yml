@@ -136,6 +136,18 @@ jobs:
           bye
           EOF
 
+      - name: Publieke spelroute na upload controleren
+        run: |
+          python3 - <<'PY'
+          import urllib.request
+          url = 'https://leercraft.nl/spellen/provincie-klik/'
+          with urllib.request.urlopen(url, timeout=30) as response:
+              html = response.read().decode('utf-8')
+              if response.status != 200 or '<title>Nederland Ontdekker</title>' not in html:
+                  raise SystemExit('De provincieklik-route levert niet de verwachte spelpagina op.')
+          print('Spelroute bereikbaar en juiste spelpagina ontvangen.')
+          PY
+
       - name: Tijdelijke serverconfiguratie opruimen
         if: always()
         run: rm -f /tmp/leercraft-deploy/api/config.php
