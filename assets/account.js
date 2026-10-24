@@ -8,14 +8,14 @@
     <p data-account-progress></p>
     <button type="button" data-login>Inloggen met e-mail</button>
     <button type="button" data-logout hidden>Uitloggen</button>
-    <dialog class="account-dialog"><form data-email-form>
+    <dialog class="account-dialog" aria-label="Inloggen bij LeerCraft"><form data-email-form>
       <h2>Inloggen bij LeerCraft</h2><p>Ontvang een code per e-mail. Je hebt geen wachtwoord nodig.</p>
       <label>E-mailadres<input name="email" type="email" autocomplete="email" maxlength="255" required></label>
       <button>Stuur inlogcode</button></form>
       <form data-code-form hidden><h2>Vul je inlogcode in</h2><p data-code-recipient></p>
       <label>Code van 4 cijfers<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4}" minlength="4" maxlength="4" required></label>
       <button>Inloggen</button><button type="button" data-change-email>Andere e-mail / nieuwe code</button></form>
-      <p data-login-message role="status"></p><button type="button" data-close>Sluiten</button>
+      <p data-login-message role="status"></p><button type="button" data-close aria-label="Inlogscherm sluiten">&times;</button>
     </dialog></section>`;
   const $ = selector => host.querySelector(selector);
   let email = null, pendingEmail = '';

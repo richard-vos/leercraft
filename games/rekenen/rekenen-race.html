@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Reken Race 3D</title>
 <link href="../../assets/fonts/fonts.css" rel="stylesheet">
 <style>
@@ -84,8 +84,10 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
 @media(max-width:480px){#race-touch button{width:54px;height:60px;font-size:18px;}#race-touch>div{gap:6px;}}
 </style>
 <link rel="stylesheet" href="../../assets/navigation.css">
+<link rel="stylesheet" href="../../assets/responsive.css">
+<script src="../../assets/responsive.js" defer></script>
 </head>
-<body>
+<body class="game-race">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
 <canvas id="c"></canvas>
 <div id="race-touch" aria-label="Touchbesturing">
