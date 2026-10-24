@@ -1,2 +1,5 @@
 .tmp/
 play.py
+
+api/config.php
+data/*.sqlite

@@ -71,6 +71,7 @@ h1 small{display:block;font-size:0.65em;color:#aaffaa;text-shadow:2px 2px #00660
   <div class="header">
     <h1>🗺️ Nederland Ontdekker<small>Klik de juiste provincie!</small></h1>
   </div>
+  <div data-leercraft-account></div>
   <div class="score-bar">
     <div class="sc-block"><div class="sc-label">Score</div><div class="sc-val" id="score-disp">0</div></div>
     <div class="sc-block"><div class="sc-label">Fout</div><div class="sc-val" id="wrong-disp" style="color:#ff8888;">0</div></div>
@@ -117,9 +118,13 @@ h1 small{display:block;font-size:0.65em;color:#aaffaa;text-shadow:2px 2px #00660
   <div class="end-title">🏆 Spel klaar! 🏆</div>
   <div class="end-score" id="end-score">0 / 12</div>
   <div class="end-msg" id="end-msg"></div>
+  <div id="save-result" class="end-msg" role="status"></div>
+  <button type="button" class="mc-btn" style="max-width:260px" onclick="LeerCraft.openLogin()">Inloggen</button>
+  <button id="retry-save" class="mc-btn" style="max-width:260px" hidden>Opnieuw opslaan</button>
   <button class="mc-btn red" onclick="closeEnd()" style="max-width:260px;">🔄 Opnieuw spelen</button>
 </div>
 
+<script src="../../assets/account.js" data-root="../.."></script>
 <script>
 const PROVINCES=[
   {id:"path7047",name:"Groningen",color:"#3A86FF",icon:"⛏️"},
@@ -135,12 +140,17 @@ const PROVINCES=[
   {id:"path3170",name:"Noord-Brabant",color:"#F4A261",icon:"🎡"},
   {id:"path3208",name:"Limburg",color:"#E63946",icon:"⛰️"}
 ];
+let roundTimer, revealTimer, runId, runOwner, completedResult;
 let queue=[],current=null,score=0,wrong=0,round=0,answered=false,done={};
 const OK=['⚡ Goed zo!','🔥 Raak!','✅ Juist!','💎 Top!','🎯 Bullseye!'];
 const BAD=['❌ Mis!','💀 Oeps!','🕳️ Fout!','😬 Bijna...'];
 function shuffle(a){let b=[...a];for(let i=b.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 function pick(a){return a[Math.floor(Math.random()*a.length)];}
 function startGame(){
+  clearTimeout(roundTimer);clearTimeout(revealTimer);
+  runId=crypto.randomUUID();runOwner=LeerCraft.email;completedResult=null;
+  document.getElementById("save-result").textContent="";
+  document.getElementById("retry-save").hidden=true;
   queue=shuffle(PROVINCES);score=0;wrong=0;round=0;done={};answered=false;
   document.getElementById('end-screen').classList.remove('show');
   resetAll();buildChips();updateBar();nextRound();
@@ -178,16 +188,16 @@ function guess(name){
     score++;el.classList.add('correct');done[p.id]=true;
     const chip=document.getElementById('chip-'+p.id);if(chip)chip.classList.add('done');
     const fb=document.getElementById('feedback');fb.textContent=pick(OK)+' '+current.name+' ✓';fb.className='feedback ok';
-    spawnParticles(el,'#7CFC00');updateBar();setTimeout(nextRound,1300);
+    spawnParticles(el,'#7CFC00');updateBar();roundTimer=setTimeout(nextRound,1300);
   }else{
     wrong++;el.classList.add('wrong');
     const correctEl=document.getElementById(current.id);
-    if(correctEl)setTimeout(()=>{correctEl.classList.add('correct');done[current.id]=true;},400);
+    if(correctEl)revealTimer=setTimeout(()=>{correctEl.classList.add('correct');done[current.id]=true;},400);
     const chip=document.getElementById('chip-'+current.id);if(chip)chip.classList.add('missed');
     const chipW=document.getElementById('chip-'+p.id);if(chipW)chipW.classList.add('missed');
     done[current.id]=true;
     const fb=document.getElementById('feedback');fb.textContent=pick(BAD)+' Dit is '+name+'. Het was '+current.name+'!';fb.className='feedback bad';
-    updateBar();setTimeout(nextRound,2400);
+    updateBar();roundTimer=setTimeout(nextRound,2400);
   }
 }
 function spawnParticles(el,color){
@@ -204,6 +214,9 @@ function spawnParticles(el,color){
   }
 }
 function endGame(){
+  answered=true;
+  completedResult={game_slug:"provincie-klikspel",score,max_score:12,run_id:runId,account_email:runOwner};
+  saveResult();
   document.getElementById('xp-fill').style.width='100%';
   document.getElementById('end-screen').classList.add('show');
   document.getElementById('end-score').textContent=score+' / '+PROVINCES.length;
@@ -225,8 +238,23 @@ function endGame(){
     document.body.appendChild(p);setTimeout(()=>p.remove(),1500);
   },i*70);
 }
+async function saveResult(){
+  const result=completedResult, target=document.getElementById('save-result'), retry=document.getElementById('retry-save');
+  retry.hidden=true;
+  if(!runOwner){target.textContent='Je verdiende '+(result.score*10)+' oefenpunten. Log in en start een nieuw spel om punten te bewaren.';return;}
+  if(LeerCraft.email!==runOwner){target.textContent='Je account is gewijzigd. Start een nieuw spel om punten op te slaan.';return;}
+  target.textContent='Punten opslaan...';
+  try{
+    const data=await LeerCraft.request('scores/submit.php',result);
+    if(completedResult!==result)return;
+    target.textContent=data.saved?'Opgeslagen! +'+data.points+' punten.':'Je sessie is verlopen. Log opnieuw in en probeer opslaan nogmaals.';
+    retry.hidden=data.saved;
+    await LeerCraft.refresh();
+  }catch(error){if(completedResult!==result)return;target.textContent=error.message;retry.hidden=false;}
+}
+document.getElementById('retry-save').addEventListener('click',saveResult);
 function closeEnd(){document.getElementById('end-screen').classList.remove('show');startGame();}
-startGame();
+LeerCraft.ready.then(startGame);
 </script>
 <script src="../../assets/visitor-counter.js" data-root="../.."></script>
 </body>

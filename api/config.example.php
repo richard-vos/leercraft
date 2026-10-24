@@ -5,10 +5,9 @@ declare(strict_types=1);
  * Sjabloon voor api/config.php — dat bestand zelf wordt NOOIT gecommit
  * (staat in .gitignore) en bevat de echte geheimen.
  *
- * Op de live server (Strato) wordt api/config.php automatisch gegenereerd
- * tijdens het deployen, met de waarden uit de GitHub Actions secrets
- * db_host / db_name / db_user / db_pass / otp_pepper
- * (zie .github/workflows/deploy-strato.yml).
+ * GitHub Actions genereert api/config.php tijdens deployment uit secrets:
+ * db_host, db_name, db_user, db_pass en otp_pepper (minimaal 32 tekens).
+ * mail_from is optioneel; standaard inlog@leercraft.nl.
  *
  * Voor lokaal testen: kopieer dit bestand naar api/config.php en vul een
  * eigen (test)waarde in, of gebruik DB_DRIVER 'sqlite' met een lokaal

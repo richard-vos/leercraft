@@ -12,9 +12,15 @@ require_once __DIR__ . '/../config.php';
  */
 function send_otp_mail(string $toEmail, string $code): array
 {
+    if (!filter_var($toEmail, FILTER_VALIDATE_EMAIL)
+        || !filter_var(MAIL_FROM, FILTER_VALIDATE_EMAIL)
+        || preg_match('/[\r\n]/', MAIL_FROM_NAME)
+        || !preg_match('/^[0-9]{8}$/D', $code)) {
+        throw new InvalidArgumentException('Ongeldige mailconfiguratie of code.');
+    }
     $subject = 'Je inlogcode voor LeerCraft';
     $body = "Hallo,\n\n"
-        . "Je inlogcode voor LeerCraft is: {$code}\n\n"
+        . "Je inlogcode van 8 cijfers voor LeerCraft is: {$code}\n\n"
         . "Deze code is 10 minuten geldig. Heb je deze code niet zelf aangevraagd?\n"
         . "Dan kun je deze e-mail gewoon negeren.\n\n"
         . "Groetjes,\nLeerCraft\n";

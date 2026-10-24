@@ -16,7 +16,7 @@ $pdo = db();
 
 $totalStmt = $pdo->prepare('SELECT COALESCE(SUM(score), 0) AS total FROM scores WHERE user_id = :uid');
 $totalStmt->execute(['uid' => $user['id']]);
-$total = (int)$totalStmt->fetch()['total'];
+$total = (int)$totalStmt->fetch()['total'] * 10;
 
 $perGameStmt = $pdo->prepare(
     'SELECT game_slug,

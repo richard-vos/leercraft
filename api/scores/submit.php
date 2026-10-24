@@ -20,28 +20,42 @@ if (!$user) {
 }
 
 $body = read_json_body();
-$gameSlug = isset($body['game_slug']) ? (string)$body['game_slug'] : '';
-$score = isset($body['score']) && is_numeric($body['score']) ? (int)$body['score'] : null;
-$maxScore = isset($body['max_score']) && is_numeric($body['max_score']) ? (int)$body['max_score'] : null;
+if (($body['account_email'] ?? '') !== $user['email']) {
+    json_response(['ok' => false, 'error' => 'Je account is gewijzigd. Log opnieuw in met het account waarmee je dit spel begon.'], 409);
+}
+$gameSlug = is_string($body['game_slug'] ?? null) ? $body['game_slug'] : '';
+$score = $body['score'] ?? null;
+$maxScore = $body['max_score'] ?? null;
+$runId = $body['run_id'] ?? '';
 
 if (!in_array($gameSlug, $ALLOWED_GAMES, true)) {
     json_response(['ok' => false, 'error' => 'Onbekend spel.'], 400);
 }
-if ($score === null || $score < 0 || $score > 100000) {
+if (!is_int($score) || $score < 0 || $score > 12) {
     json_response(['ok' => false, 'error' => 'Ongeldige score.'], 400);
 }
-if ($maxScore !== null && ($maxScore < 0 || $maxScore > 100000)) {
+if ($maxScore !== 12 || !is_string($runId) || !preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/D', $runId)) {
     json_response(['ok' => false, 'error' => 'Ongeldige maximumscore.'], 400);
 }
 
 $stmt = db()->prepare(
-    'INSERT INTO scores (user_id, game_slug, score, max_score) VALUES (:uid, :slug, :score, :max)'
+    'INSERT INTO scores (user_id, game_slug, score, max_score, run_id) VALUES (:uid, :slug, :score, :max, :run)'
 );
+try {
 $stmt->execute([
     'uid' => $user['id'],
     'slug' => $gameSlug,
     'score' => $score,
     'max' => $maxScore,
+    'run' => $runId,
 ]);
+} catch (PDOException $error) {
+    // Een herhaalde aanvraag na een netwerkfout mag geen dubbele punten geven.
+    $existing = db()->prepare('SELECT score FROM scores WHERE user_id = :uid AND run_id = :run');
+    $existing->execute(['uid' => $user['id'], 'run' => $runId]);
+    $row = $existing->fetch();
+    if (!$row) throw $error;
+    $score = (int)$row['score'];
+}
 
-json_response(['ok' => true, 'saved' => true]);
+json_response(['ok' => true, 'saved' => true, 'points' => $score * 10]);

@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS otp_codes (
   consumed_at DATETIME NULL,
   ip_address VARCHAR(45) NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  INDEX idx_otp_email_created (email, created_at)
+  INDEX idx_otp_email_created (email, created_at),
+  INDEX idx_otp_ip_created (ip_address, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS sessions (
@@ -37,7 +38,9 @@ CREATE TABLE IF NOT EXISTS scores (
   score INT NOT NULL,
   max_score INT NULL,
   meta TEXT NULL,
+  run_id VARCHAR(36) NULL,
   played_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_scores_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  INDEX idx_scores_user_game (user_id, game_slug)
+  INDEX idx_scores_user_game (user_id, game_slug),
+  UNIQUE KEY idx_scores_run (user_id, run_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

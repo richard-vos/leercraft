@@ -10,6 +10,9 @@ concurrency:
   group: strato-production
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -31,16 +34,35 @@ jobs:
             --exclude=".git/" \
             --exclude=".github/" \
             --exclude=".gitlab-ci.yml" \
+            --exclude="api/config.php" \
+            --exclude=".claude/" \
+            --exclude=".codex/" \
+            --exclude=".agents/" \
+            --exclude=".tmp/" \
+            --exclude="scripts/" \
+            --exclude="tests/" \
+            --exclude="__pycache__/" \
             ./ /tmp/leercraft-deploy/
+
+      - name: Serverconfiguratie maken met GitHub secrets
+        env:
+          DB_HOST: ${{ secrets.db_host }}
+          DB_NAME: ${{ secrets.db_name }}
+          DB_USER: ${{ secrets.db_user }}
+          DB_PASS: ${{ secrets.db_pass }}
+          OTP_PEPPER: ${{ secrets.otp_pepper }}
+          MAIL_FROM: ${{ secrets.mail_from }}
+        run: python3 scripts/build-server-config.py /tmp/leercraft-deploy/api/config.php
 
       - name: SSH-hostsleutel toevoegen
         env:
           SFTP_HOST: ${{ secrets.STRATO_SFTP_HOST }}
-          SFTP_PORT: ${{ secrets.STRATO_SFTP_PORT }}
+          SFTP_KNOWN_HOSTS: ${{ secrets.STRATO_SFTP_KNOWN_HOSTS }}
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          ssh-keyscan -p "$SFTP_PORT" "$SFTP_HOST" >> ~/.ssh/known_hosts
+          test -n "$SFTP_KNOWN_HOSTS" || { echo 'Secret STRATO_SFTP_KNOWN_HOSTS ontbreekt'; exit 1; }
+          printf '%s\n' "$SFTP_KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
       - name: Website uploaden naar STRATO
@@ -61,5 +83,13 @@ jobs:
             "$SFTP_USER@$SFTP_HOST" <<EOF
           cd "$REMOTE_PATH"
           put -r /tmp/leercraft-deploy/*
+          put /tmp/leercraft-deploy/.htaccess .htaccess
+          put /tmp/leercraft-deploy/api/.htaccess api/.htaccess
+          put /tmp/leercraft-deploy/api/lib/.htaccess api/lib/.htaccess
+          put /tmp/leercraft-deploy/data/.htaccess data/.htaccess
           bye
           EOF
+
+      - name: Tijdelijke serverconfiguratie opruimen
+        if: always()
+        run: rm -f /tmp/leercraft-deploy/api/config.php

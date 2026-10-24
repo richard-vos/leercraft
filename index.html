@@ -229,6 +229,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
     </div>
   </div>
 
+  <div data-leercraft-account></div>
   <div class="welcome">
     👋 Welkom, <b>Avonturier</b>! &nbsp;·&nbsp; Kies een vak hieronder om te spelen.
   </div>
@@ -474,10 +475,7 @@ fillRow('grass-row','grass-block');
 fillRow('dirt-row', 'dirt-block');
 
 // ── XP balk ──
-setTimeout(()=>{
-  document.getElementById('xp-fill').style.width = '12%';
-  document.getElementById('xp-text').textContent  = '12 / 100 XP';
-}, 400);
+
 
 // ── Pixel-pop effect bij klik ──
 document.querySelectorAll('.card:not(.soon)').forEach(card=>{
@@ -496,6 +494,7 @@ document.querySelectorAll('.card:not(.soon)').forEach(card=>{
   });
 });
 </script>
+<script src="assets/account.js" data-root="."></script>
 <script src="assets/visitor-counter.js" data-root="."></script>
 </body>
 </html>

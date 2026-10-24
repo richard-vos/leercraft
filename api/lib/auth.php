@@ -52,7 +52,7 @@ function create_session(int $userId): string
 function current_user(): ?array
 {
     $token = $_COOKIE[SESSION_COOKIE_NAME] ?? null;
-    if (!$token || !is_string($token)) {
+    if (!is_string($token) || !preg_match('/^[a-f0-9]{64}$/D', $token)) {
         return null;
     }
 

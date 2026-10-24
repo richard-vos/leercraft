@@ -7,6 +7,13 @@ declare(strict_types=1);
  * JSON-envelope, nooit een HTML-foutpagina.
  */
 
+ini_set('display_errors', '0');
+set_exception_handler(function (Throwable $error): void {
+    // No SQL parameters, email addresses or credentials in application logs.
+    error_log('LeerCraft API failure: ' . get_class($error));
+    json_response(['ok' => false, 'error' => 'De accountservice is tijdelijk niet beschikbaar. Probeer het later opnieuw.'], 503);
+});
+
 function json_response(array $data, int $status = 200): void
 {
     http_response_code($status);
@@ -35,6 +42,9 @@ function require_method(string ...$allowed): string
  */
 function require_fetch_header(): void
 {
+    if (isset($_SERVER['HTTP_SEC_FETCH_SITE']) && !in_array($_SERVER['HTTP_SEC_FETCH_SITE'], ['same-origin', 'none'], true)) {
+        json_response(['ok' => false, 'error' => 'Bad request'], 403);
+    }
     if (($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') !== 'fetch') {
         json_response(['ok' => false, 'error' => 'Bad request'], 400);
     }
@@ -42,7 +52,16 @@ function require_fetch_header(): void
 
 function read_json_body(): array
 {
-    $raw = file_get_contents('php://input');
-    $data = json_decode($raw !== false ? $raw : '', true);
-    return is_array($data) ? $data : [];
+    if (strtolower(trim(explode(';', $_SERVER['CONTENT_TYPE'] ?? '')[0])) !== 'application/json') {
+        json_response(['ok' => false, 'error' => 'JSON vereist.'], 415);
+    }
+    $raw = file_get_contents('php://input', false, null, 0, 8193);
+    if ($raw === false || strlen($raw) > 8192) {
+        json_response(['ok' => false, 'error' => 'Aanvraag te groot.'], 413);
+    }
+    $data = json_decode($raw, true);
+    if (!is_array($data) || json_last_error() !== JSON_ERROR_NONE || substr(ltrim($raw), 0, 1) !== '{') {
+        json_response(['ok' => false, 'error' => 'Ongeldige JSON.'], 400);
+    }
+    return $data;
 }
