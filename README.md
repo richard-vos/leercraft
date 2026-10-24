@@ -6,12 +6,13 @@ beschikbaar op de startpagina en in het provincieklikspel.
 ## Speladressen
 
 De homepage linkt naar nette adressen zoals `/spellen/provincie-klik/`,
-`/spellen/provincie-schrijf/` en `/spellen/getallenzee/`. Apache `mod_rewrite`
-serveert hiervoor intern de bestaande HTML-bestanden. Oude speladressen en
+`/spellen/provincie-schrijf/` en `/spellen/getallenzee/`. Elke spelmap heeft een
+kleine PHP-startpagina die via een vaste lijst het bestaande HTML-bestand serveert.
+Daarvoor is geen interne rewrite naar een HTML-bestand nodig. Oude speladressen en
 `/index.html` verwijzen permanent door naar de nieuwe adressen. De slash aan
 het eind is verplicht en wordt automatisch toegevoegd.
 
-Deze routes vereisen de root-`.htaccess`, Apache 2.4 met `mod_rewrite` en hosting
+Deze routes vereisen PHP, de root-`.htaccess`, Apache 2.4 met `mod_rewrite` en hosting
 op de root van het domein. De eenvoudige Python-server ondersteunt deze rewrites
 niet; gebruik lokaal Apache om de nette speladressen te testen.
 
