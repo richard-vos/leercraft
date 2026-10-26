@@ -1,0 +1,32 @@
+const assert=require('node:assert/strict');
+const {pathToFileURL}=require('node:url');
+const path=require('node:path');
+const fs=require('node:fs');
+(async()=>{
+  const {RekencraftProgress}=await import(pathToFileURL(path.resolve('assets/js/rekencraft-progress.js')).href);
+  const page=fs.readFileSync('spellen/rekenen/groep-6/rekencraft/index.php','utf8');
+  const operators=[...page.matchAll(/class="operator-choice"><input[^>]*value="([^"]+)"/g)]
+    .map(match=>match[1].replace('&#215;','\u00d7').replace('&#247;','\u00f7'));
+  assert.deepEqual(operators,['+','-','\u00d7','\u00f7'],'menu must submit the actual arithmetic operators');
+  const calls=[];let onChange,fail=false;
+  const account={email:'one@example.com',onChange(fn){onChange=fn;},async refresh(){},async request(url,payload){calls.push(payload);if(fail)throw Error('offline');return {saved:true,points:payload.score*10};}};
+  const progress=new RekencraftProgress(account);
+  const settings={operators:['+','-'],max:10};
+  progress.begin(1,4,settings);
+  progress.recordGate(0,true);progress.recordGate(0,true);progress.recordGate(1,false);progress.recordGate(2,true);
+  const first=progress.finish();await new Promise(setImmediate);
+  assert.equal(first.correct,2);assert.equal(first.points,70);assert.equal(first.state,'saved');
+  assert.equal(calls[0].max_score,9);assert.equal(calls[0].meta.level,1);
+  progress.finish();await progress.retryPending();assert.equal(calls.length,1,'finished levels are saved once');
+  fail=true;progress.begin(2,5,settings);progress.recordGate(0,true);const second=progress.finish();
+  await new Promise(setImmediate);assert.equal(second.state,'error');
+  const failedId=second.id;progress.begin(3,6,settings);fail=false;
+  await progress.retryPending();assert.equal(second.state,'saved');assert.equal(calls.at(-1).run_id,failedId,'retry retains run ID across levels');
+  account.email=null;progress.begin(1,4,settings);const count=calls.length;
+  const guest=progress.finish();assert.equal(guest.state,'guest');assert.equal(calls.length,count);
+  progress.begin(1,4,settings);account.email='two@example.com';onChange(account.email);
+  assert.equal(progress.current.owner,'two@example.com','login during play attaches to that account');
+  account.email='other@example.com';const changed=progress.finish();await new Promise(setImmediate);
+  assert.equal(changed.state,'account-changed');assert.equal(calls.length,count,'cannot send previous account score to another account');
+  console.log('Passed: scoring, duplicate gate guard, one save per level, retry IDs, guest and account transitions.');
+})().catch(error=>{console.error(error);process.exitCode=1;});

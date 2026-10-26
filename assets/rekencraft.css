@@ -1,0 +1,87 @@
+/* RekenCraft: tablet touch controls first, compact phone and mouse layouts below. */
+.game-rekencraft #topbar{top:calc(16px + env(safe-area-inset-top));left:16px;transform:none;width:min(340px,calc(100% - 112px));gap:10px}
+.game-rekencraft .pcircle{width:40px;height:40px;font:700 17px Arial,sans-serif}
+.game-rekencraft #ptrack{height:16px}
+.game-rekencraft #game-actions{position:absolute;top:calc(12px + env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));display:flex;flex-direction:column;gap:12px;z-index:3;pointer-events:auto}
+.game-rekencraft #game-actions button{position:static;min-height:56px;width:56px;height:56px;border:3px solid #bdcf9b;border-top-color:#e3efcc;border-left-color:#e3efcc;border-bottom-color:#344c2a;border-right-color:#344c2a;border-radius:3px;background:#28482bef;box-shadow:inset 2px 2px #ffffff16,0 4px #152913;font:700 24px/1 Arial,sans-serif;cursor:pointer}
+.game-rekencraft #game-actions button:active{transform:translateY(3px);box-shadow:0 1px #152913}
+.game-rekencraft #controls{display:flex;position:absolute;inset:auto 0 max(18px,env(safe-area-inset-bottom));padding-inline:max(14px,env(safe-area-inset-left)) max(14px,env(safe-area-inset-right));justify-content:space-between;z-index:2}
+.game-rekencraft #controls .ctrl-group{display:contents}
+.game-rekencraft #controls .ctrl{width:68px;height:72px;min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:3px solid #bdcf9b;border-top-color:#e3efcc;border-left-color:#e3efcc;border-bottom-color:#344c2a;border-right-color:#344c2a;border-radius:4px;background:#28482bef;box-shadow:inset 2px 2px #ffffff16,0 5px #152913;font:26px/1 Arial,sans-serif;cursor:pointer;pointer-events:auto}
+.game-rekencraft #controls .ctrl small{font:700 14px/1.2 Arial,sans-serif}
+.game-rekencraft #controls .ctrl.active{background:#57963a;transform:translateY(3px);box-shadow:inset 2px 2px #ffffff16,0 2px #152913}
+.game-rekencraft #pause-label{z-index:1;font:700 clamp(24px,5vw,38px)/1.4 'Press Start 2P',monospace}
+.game-rekencraft :is(#steve-badge,#creeper-badge){font:700 20px/1.2 Arial,sans-serif;padding:6px 12px}
+.game-rekencraft .site-menu{min-width:84px;bottom:max(18px,env(safe-area-inset-bottom));min-height:48px;z-index:100}
+.game-rekencraft #ss .start-intro{max-width:760px;font:17px/1.6 Arial,sans-serif;margin:20px auto 24px}
+.game-rekencraft #ss .start-layout{padding-bottom:72px}
+@media(min-width:600px){
+ .game-rekencraft #controls{bottom:max(24px,env(safe-area-inset-bottom));padding-inline:max(24px,env(safe-area-inset-left)) max(24px,env(safe-area-inset-right))}
+ .game-rekencraft #controls .ctrl{width:88px;height:88px;min-height:88px;font-size:34px}
+ .game-rekencraft #controls .ctrl small{font-size:16px}
+ .game-rekencraft #game-actions{top:calc(20px + env(safe-area-inset-top));right:max(24px,env(safe-area-inset-right));gap:14px}
+ .game-rekencraft #game-actions button{width:64px;height:64px;min-height:64px;font-size:28px}
+ .game-rekencraft #topbar{left:24px;top:calc(24px + env(safe-area-inset-top))}
+ .game-rekencraft .site-menu{bottom:max(24px,env(safe-area-inset-bottom));min-width:100px;min-height:52px}
+}
+@media(min-width:1100px) and (hover:hover) and (pointer:fine){
+ .game-rekencraft #controls{display:none}
+ .game-rekencraft #game-actions{flex-direction:row}
+ .game-rekencraft #topbar{left:50%;transform:translateX(-50%)}
+}
+/* A connected trackpad must not remove touch controls from an iPad. */
+@media(any-pointer:coarse){.game-rekencraft #controls{display:flex}}
+@media(max-height:500px) and (orientation:landscape){
+ .game-rekencraft #controls .ctrl{width:64px;height:64px;min-height:64px;font-size:24px}
+ .game-rekencraft #game-actions{flex-direction:row;top:10px;gap:8px}
+ .game-rekencraft #game-actions button{width:48px;height:48px;min-height:48px;font-size:22px}
+ .game-rekencraft #topbar{top:12px;width:min(260px,calc(100% - 156px))}
+}
+
+/* One readable setup card: choose operations, choose range, start. */
+.game-rekencraft #ss{padding:16px 12px calc(90px + env(safe-area-inset-bottom));text-align:left}
+.game-rekencraft .runner-menu{box-sizing:border-box;width:min(880px,100%);margin:0 auto;padding:22px 16px;background:#172d20f2;border:4px solid #91b575;border-top-color:#c5dba4;border-left-color:#c5dba4;border-right-color:#304c27;border-bottom-color:#304c27;box-shadow:inset 3px 3px #ffffff0a,0 8px #0b1d10;color:#f1f5ea;font:17px/1.6 Arial,sans-serif}
+.game-rekencraft .runner-menu-heading{text-align:center;margin-bottom:20px}
+.game-rekencraft .runner-menu-heading h1{font:clamp(22px,5vw,36px)/1.6 'Press Start 2P',monospace;color:#ffe36b;text-shadow:3px 3px #665018;margin:6px 0 14px}
+.game-rekencraft #ss .runner-menu p{font:16px/1.6 Arial,sans-serif;max-width:none;color:#dcebd4;margin:0}
+.game-rekencraft #ss .runner-menu .menu-eyebrow{font-size:13px;letter-spacing:1px;color:#bdd79e}
+.game-rekencraft #ss #math-settings{margin:24px 0;border:0;padding:0;min-width:0}
+.game-rekencraft #math-settings legend{font:700 19px/1.5 Arial,sans-serif;margin:0 0 8px;padding:0}
+.game-rekencraft .menu-step{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;margin-right:8px;color:#152412;background:#c5db9c;border:2px solid #66854e;font-weight:700;flex-shrink:0}
+.game-rekencraft #ss .runner-menu .setting-help{font-size:15px;color:#c2d3b7}
+.game-rekencraft .operator-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0 26px}
+.game-rekencraft .operator-choice span{box-sizing:border-box;min-height:106px;display:flex;flex-direction:column;gap:10px;padding:16px 8px}
+.game-rekencraft .operator-choice b{font:30px/1 'Press Start 2P',monospace}
+.game-rekencraft .operator-choice small{font:700 16px/1.3 Arial,sans-serif;text-shadow:none;text-align:center}
+.game-rekencraft .max-label{font:700 18px/1.5 Arial,sans-serif;align-items:center;margin-top:0}
+.game-rekencraft .max-label>span{display:flex;align-items:center}
+.game-rekencraft #math-max-value{font-size:20px;min-width:48px}
+.game-rekencraft .range-presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}
+.game-rekencraft .range-presets button,.game-rekencraft .menu-secondary{font:700 16px/1.4 Arial,sans-serif;min-height:50px;padding:12px;background:#233e26;color:#f1f5ea;border:3px solid #7e9d65;border-top-color:#b5ce97;border-left-color:#b5ce97;cursor:pointer;touch-action:manipulation}
+.game-rekencraft .range-presets button[aria-pressed=true]{background:#558e38;color:#fff6b6;border-color:#d1eb9f;box-shadow:inset 0 -3px #294c23}
+.game-rekencraft #ss #math-max{height:56px;margin:0 0 12px}
+.game-rekencraft #math-max::-webkit-slider-thumb{width:44px;height:44px;margin-top:-18px}
+.game-rekencraft #math-max::-moz-range-thumb{width:38px;height:38px}
+.game-rekencraft .menu-reward{margin:20px 0;padding:14px;border-left:4px solid #ffe36b;background:#ffffff08}
+.game-rekencraft .menu-reward strong{color:#ffe36b;display:block;margin-bottom:6px}
+.game-rekencraft #ss .runner-menu .menu-selection{margin:16px 0;color:#f4e9ae;font-weight:700}
+.game-rekencraft #ss #start-run{font:700 19px/1.4 Arial,sans-serif;min-height:58px;border:3px solid #b5da82;border-bottom-color:#2a5122;border-right-color:#2a5122;box-shadow:inset 2px 2px #ffffff1a,0 5px #10250e}
+.game-rekencraft #start-run:disabled{opacity:.6;cursor:wait}
+.game-rekencraft #ss .runner-menu .menu-controls{font-size:14px;margin-top:20px;color:#bdcdb4}
+.game-rekencraft #pending-scores:empty{display:none}
+.game-rekencraft .result-card{box-sizing:border-box;width:min(680px,100%);padding:24px 16px;display:grid;gap:18px;background:#172d20f2;border:4px solid #91b575;color:#f1f5ea}
+.game-rekencraft #ws .banner{width:100%;margin:0;padding:12px;background:#315c2a;font:700 22px/1.5 Arial,sans-serif}
+.game-rekencraft .result-card .srow{gap:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.game-rekencraft .result-card .sbox{min-width:0;padding:12px 6px}
+.game-rekencraft .result-card .sn{font:700 24px/1.4 Arial,sans-serif}
+.game-rekencraft .result-card .sl{font:13px/1.4 Arial,sans-serif;letter-spacing:0}
+.game-rekencraft #runner-save-status{font:16px/1.6 Arial,sans-serif;margin:0;color:#e1edd7}
+.game-rekencraft #ws{background:linear-gradient(#162c21d9,#08170fe8)}
+.game-rekencraft [hidden]{display:none!important}
+@media(min-width:600px){
+ .game-rekencraft #ss{padding:24px 24px 96px}
+ .game-rekencraft .runner-menu{padding:32px}
+ .game-rekencraft .operator-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+ .game-rekencraft .operator-choice span{min-height:120px}
+ .game-rekencraft .result-card{padding:32px}
+}

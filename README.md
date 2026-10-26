@@ -1,7 +1,7 @@
 # LeerCraft
 
 Educatieve browserspellen. Accounts en opgeslagen resultaten zijn voorlopig
-beschikbaar op de startpagina en in het provincieklikspel.
+beschikbaar op de startpagina, in het provincieklikspel en in RekenCraft.
 
 ## Tablet, telefoon en computer
 
@@ -11,6 +11,22 @@ aanraakvlakken, tabletindeling vanaf 600px en uitbreiding voor computers vanaf
 Het inlogvenster heeft vier Minecraft-cijfervakken met automatisch doorspringen,
 plakken/autofill en terugwissen. `assets/responsive.js` houdt de beschikbare
 viewporthoogte en de ruimte voor het schermtoetsenbord bij.
+
+RekenCraft gebruikt de bestaande Three.js 0.160-engine met een lage volgcamera,
+uitgewerkte Minecraft-personages en gepixeld water met blokwolken. De visuele
+bouwstenen staan in `assets/js/minecraft-runner-visuals.js`. De rekeninstellingen,
+poorten, gevechten en obstakels blijven in de spelpagina. Bomen,
+heuvels en wolken gebruiken instancing om herhaalde tekenopdrachten te beperken;
+apparaten met aanraakbediening gebruiken een kleinere schaduwkaart.
+De stuurknoppen staan links- en rechtsonder, met pauze en geluid rechtsboven.
+Over het vrije speelveld slepen stuurt Steve dezelfde richting op; de afstand
+van de vinger bepaalt hoeveel hij opzij beweegt. De baan begrenst zijn positie.
+Op tablets blijven de aanraakknoppen zichtbaar, ook met een aangesloten trackpad.
+Op grote computers met alleen een muis verdwijnen alleen de stuurknoppen; pauze
+en geluid blijven bereikbaar. Bij verlies van focus wordt het spel gepauzeerd
+en worden ingedrukte stuurknoppen losgelaten.
+Personages combineren hun gekleurde blokonderdelen per geanimeerd lichaamsdeel,
+zodat elk personage maximaal zes meshes nodig heeft.
 
 ## Speladressen
 
@@ -136,12 +152,27 @@ De teller telt eenmaal per browsersessie via sessionStorage; het is geen betrouw
 meting van unieke personen en is gescheiden van het aantal geregistreerde accounts.
 
 - Een afgerond provincieklikspel bewaart het resultaat van 12 vragen.
-- Elk goed antwoord levert 10 punten/XP op; maximaal 120 per spel.
+- Elk goed provincieantwoord levert 10 punten/XP op; maximaal 120 per spel.
+- RekenCraft geeft 10 punten per goede poort en 50 finishbonus. Een goede poort
+  geeft genoeg rekenkracht om de volgende Creeper-groep te verslaan. De punten
+  worden bij het voltooien van een level opgeslagen, niet bij een verloren level.
+  Level 1 heeft 4 poorten (maximaal 90 punten); vanaf level 4 zijn dat 7 poorten
+  (maximaal 120 punten). De resterende rekenkracht levert geen extra accountpunten op.
+- RekenCraft bewaart in de bestaande `scores`-tabel ook het level, de goede poorten
+  en gekozen rekeninstellingen in `meta`. Een databasewijziging is hiervoor niet nodig.
+- Het startmenu heeft bewerkingskeuzes, getalbereik-presets (5, 10, 20) en een schuif
+  voor 3 t/m 20. Dit bereik geldt voor de poortgetallen, niet voor het eindantwoord.
+  De oude geheime levelcodes zijn verwijderd. Andere sommen kiezen begint een nieuw
+  avontuur; de knop Volgende level speelt door met dezelfde instellingen.
 - Het accountoverzicht toont het totaal, aantal afgeronde spellen en beste score.
 - Elke 100 XP begint een volgend level. De balk toont de voortgang binnen dat level.
-- Gasten kunnen oefenen. Alleen spellen gestart met een ingelogd account worden
-  opgeslagen. Een onderbroken spel wordt niet hervat of opgeslagen.
+- Gasten kunnen oefenen. Inloggen voor of tijdens een level maakt opslaan mogelijk.
+  Een voltooid gastlevel wordt niet achteraf aan een nieuw account gekoppeld.
+  Een onderbroken spel wordt niet hervat of opgeslagen.
 - Een unieke spel-ID voorkomt dubbel tellen wanneer opslaan opnieuw wordt geprobeerd.
+- Mislukte RekenCraft-resultaten blijven tijdens dezelfde geopende pagina klaarstaan
+  voor opnieuw opslaan, ook als je alvast een volgend level start. De resultaten
+  worden uitsluitend bij het account waarmee het level gespeeld is opgeslagen.
 - Scores worden door de browser aangeleverd en door de API op bereik gecontroleerd.
   Dit is geschikt voor persoonlijke oefenvoortgang; voor een competitief klassement
   moet de server ook de vragen en antwoorden controleren.

@@ -103,7 +103,6 @@ input:not([type=checkbox]):not([type=range]),select,textarea{font-size:18px;min-
 .game-race .sbox{min-width:0;padding:12px 6px}
 .game-race .sboxl,.game-rekencraft .sl{font:13px/1.4 Arial,sans-serif;color:#ddd}
 .game-rekencraft #ss .start-layout{grid-template-columns:minmax(0,1fr);max-width:560px;gap:24px;padding:0 16px}
-.game-rekencraft #ss #resume-form{border-left:0;border-top:2px solid #59774a;padding:24px 0 0}
 .game-rekencraft .banner{box-sizing:border-box;width:100%;margin:0;font-size:20px;line-height:1.5}
 .game-rekencraft .screen p{font:16px/1.6 Arial,sans-serif}
 .game-rekencraft #controls{bottom:calc(78px + env(safe-area-inset-bottom));padding-inline:12px}
@@ -149,7 +148,6 @@ input:not([type=checkbox]):not([type=range]),select,textarea{font-size:18px;min-
 }
 @media(min-width:800px){
  .game-rekencraft #ss .start-layout{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px;padding-inline:28px}
- .game-rekencraft #ss #resume-form{border-top:0;border-left:2px solid #59774a;padding:0 0 0 24px}
 }
 @media(min-width:1100px){
  .site-home .wrapper{max-width:1240px}

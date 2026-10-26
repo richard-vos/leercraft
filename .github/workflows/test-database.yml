@@ -32,6 +32,10 @@ jobs:
         run: |
           node tests/account-otp.cjs
           node tests/province-game.cjs
+          node --experimental-default-type=module tests/rekencraft-visuals.cjs
+          node --experimental-default-type=module tests/rekencraft-progress.cjs
+      - name: Puntentoekenning controleren
+        run: php tests/game-scores.php
       - name: Configuratie voor gast-accounttest maken
         env:
           DB_HOST: 127.0.0.1
@@ -47,3 +51,8 @@ jobs:
           TEST_DB_USER: leercraft_ci
           TEST_DB_PASS: leercraft-ci-user-only
         run: php tests/database-bootstrap.php
+      - name: Account- en punten-API samen testen
+        run: |
+          php -S 127.0.0.1:8093 -t . > /tmp/leercraft-api-tests.log 2>&1 &
+          php -r 'for($i=0;$i<30;$i++){ $s=@fsockopen("127.0.0.1",8093); if($s){fclose($s);exit(0);} usleep(100000);} exit(1);'
+          php tests/scores-api.php

@@ -128,10 +128,6 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
 #math-max::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:36px;height:36px;margin-top:-14px;border:3px solid #d0ef9c;border-radius:2px;background:#65ac43;box-shadow:inset 3px 3px #9cdb67,inset -3px -3px #32682a,0 3px #142311;}
 #math-max::-moz-range-thumb{width:30px;height:30px;border:3px solid #d0ef9c;border-radius:2px;background:#65ac43;box-shadow:inset 3px 3px #9cdb67,inset -3px -3px #32682a,0 3px #142311;}
 #math-max:focus-visible{outline:3px solid #fff;outline-offset:2px;}
-.level-code{width:min(360px,100%);font:16px/1.5 sans-serif;color:white;flex-shrink:0;}
-.level-code input{box-sizing:border-box;width:100%;min-height:48px;margin:8px 0;padding:10px;border:3px solid #79ad58;border-radius:2px;background:#20311c;color:#fff;font:18px monospace;text-align:center;}
-.level-code button{min-height:48px;}
-#code-error{color:#ffb8a8;min-height:24px;font:14px/1.5 sans-serif;}
 .gbtn.red{background:linear-gradient(180deg,#ef5350,#c62828);box-shadow:0 5px 0 #7f0000,0 7px 14px rgba(0,0,0,.4);}
 .srow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
 .sbox{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:12px 20px;}
@@ -154,19 +150,16 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
 #math-max-value{min-width:36px;padding:4px 8px;background:#294522;border:2px solid #79ad58;text-align:center;font-weight:bold;}
 #ss #math-max{width:100%;margin:8px 0 0;}
 #ss .gbtn{box-sizing:border-box;width:100%;min-height:52px;border-radius:3px;}
-#ss #resume-form{box-sizing:border-box;width:100%;min-width:0;border-left:2px solid #59774a;padding-left:32px;}
-#ss #resume-code{margin:12px 0 20px;}
-#ss #code-error{margin-top:12px;}
 @media(max-width:620px){
   #ss .banner{padding:20px 12px;}
   #ss .start-intro{margin:18px auto 24px;font-size:15px;}
   .start-layout{grid-template-columns:minmax(0,1fr);gap:32px;padding:0 20px;max-width:430px;}
-  #ss #resume-form{border-left:0;border-top:2px solid #59774a;padding:24px 0 0;}
   #ss h2{font-size:14px;margin-bottom:18px;}
 }
 </style>
 <link rel="stylesheet" href="/assets/navigation.css">
 <link rel="stylesheet" href="/assets/responsive.css">
+<link rel="stylesheet" href="/assets/rekencraft.css">
 <script src="/assets/responsive.js" defer></script>
 </head>
 <body class="game-rekencraft">
@@ -194,59 +187,66 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
   ">0</div>
   <div id="msg"></div>
   <div id="flash"></div>
-  <button id="sound-btn" aria-label="Geluid uitzetten" title="Geluid aan/uit">🔊</button>
+  <div id="game-actions" role="group" aria-label="Spelbediening">
+    <button type="button" class="ctrl" id="pause-btn" aria-label="Spel pauzeren" aria-pressed="false" title="Pauze (P)">Ⅱ</button>
+    <button type="button" id="sound-btn" aria-label="Geluid uitzetten" title="Geluid aan/uit">🔊</button>
+  </div>
   <div id="hint">
     <div class="hb"><div class="hl">BEWEEG</div><div class="hk"><span class="k">A</span><span class="k">D</span></div></div>
     <div class="hd"></div>
     <div class="hb"><div class="hl">OF MUIS/TOUCH</div><div class="hk"><span class="k">←→</span></div></div>
   </div>
-  <div id="controls">
-    <div class="ctrl-group"><button class="ctrl" id="left-btn" aria-label="Naar links">◀</button><button class="ctrl" id="right-btn" aria-label="Naar rechts">▶</button></div>
-    <button class="ctrl" id="pause-btn" aria-label="Pauzeren">Ⅱ</button>
+  <div id="controls" role="group" aria-label="Sturen: houd links of rechts ingedrukt">
+    <div class="ctrl-group"><button type="button" class="ctrl" id="left-btn" aria-label="Naar links sturen" aria-pressed="false"><span aria-hidden="true">◀</span><small>Links</small></button><button type="button" class="ctrl" id="right-btn" aria-label="Naar rechts sturen" aria-pressed="false"><span aria-hidden="true">▶</span><small>Rechts</small></button></div>
   </div>
   <div id="pause-label">PAUZE</div>
   <div id="battle-toast">⚔️ SLAG GEWONNEN! ✨</div>
 </div>
 <div class="screen" id="ss">
-  <div class="banner">RekenCraft</div>
-  <p class="start-intro">Een blokkenwereld vol rekensommen.</p>
-  <div class="start-layout">
-  <section class="start-new" aria-labelledby="new-game-title">
-  <h2 id="new-game-title">Nieuw avontuur</h2>
-  <fieldset id="math-settings">
-    <legend>Kies je sommen</legend>
-    <div class="operator-grid">
-      <label class="operator-choice"><input type="checkbox" value="+" aria-label="Optellen" checked><span aria-hidden="true">+</span></label>
-      <label class="operator-choice"><input type="checkbox" value="-" aria-label="Aftrekken" checked><span aria-hidden="true">−</span></label>
-      <label class="operator-choice"><input type="checkbox" value="×" aria-label="Vermenigvuldigen" checked><span aria-hidden="true">×</span></label>
-      <label class="operator-choice"><input type="checkbox" value="÷" aria-label="Delen" checked><span aria-hidden="true">:</span></label>
-    </div>
-    <label for="math-max" class="max-label">Getal op het poortje tot <output id="math-max-value">10</output></label>
-    <input id="math-max" type="range" min="3" max="20" value="10">
-  </fieldset>
-  <button class="gbtn" onclick="window.startGame()">▶ SPEEL!</button>
-  </section>
-  <form class="level-code" id="resume-form" aria-labelledby="resume-title">
-    <h2 id="resume-title">Verder spelen</h2>
-    <label for="resume-code">Levelwachtwoord</label>
-    <input id="resume-code" placeholder="RUN-..." autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" aria-describedby="code-error">
-    <button class="gbtn" type="submit">VERDER</button>
-    <div id="code-error" role="alert"></div>
-  </form>
+  <div class="runner-menu">
+    <header class="runner-menu-heading"><p class="menu-eyebrow">GROEP 6 &middot; REKENAVONTUUR</p><h1>RekenCraft</h1><p>Kies je sommen. Maak je rekenkracht groot genoeg om de Creepers te verslaan.</p></header>
+    <div data-leercraft-account data-game="rekencraft" data-dialog-outside="true"></div>
+    <fieldset id="math-settings">
+      <legend><span class="menu-step">1</span> Welke sommen wil je oefenen?</legend>
+      <p class="setting-help">Kies een of meer bewerkingen.</p>
+      <div class="operator-grid">
+        <label class="operator-choice"><input type="checkbox" value="+" aria-label="Optellen" checked><span><b>+</b><small>Optellen</small></span></label>
+        <label class="operator-choice"><input type="checkbox" value="-" aria-label="Aftrekken" checked><span><b>&minus;</b><small>Aftrekken</small></span></label>
+        <label class="operator-choice"><input type="checkbox" value="&#215;" aria-label="Vermenigvuldigen"><span><b>&times;</b><small>Keersommen</small></span></label>
+        <label class="operator-choice"><input type="checkbox" value="&#247;" aria-label="Delen"><span><b>:</b><small>Deelsommen</small></span></label>
+      </div>
+      <label for="math-max" class="max-label"><span><span class="menu-step">2</span> Getallen op de poortjes</span><output id="math-max-value">10</output></label>
+      <div class="range-presets" role="group" aria-label="Kies je getalbereik">
+        <button type="button" data-math-max="5" aria-pressed="false">Tot 5</button>
+        <button type="button" data-math-max="10" aria-pressed="true">Tot 10</button>
+        <button type="button" data-math-max="20" aria-pressed="false">Tot 20</button>
+      </div>
+      <input id="math-max" type="range" min="3" max="20" value="10" aria-describedby="range-help">
+      <p id="range-help" class="setting-help">Getallen van 1 t/m 10 op de poortjes. Je rekenkracht kan hoger worden.</p>
+    </fieldset>
+    <div class="menu-reward"><strong>Verdien punten met goede keuzes</strong><p>10 punten per goede poort + 50 bonus als je het level haalt. Je punten worden bij een voltooid level bewaard als je bent ingelogd.</p></div>
+    <p id="menu-selection" class="menu-selection" aria-live="polite">Optellen en aftrekken &middot; getallen t/m 10</p>
+    <button id="start-run" class="gbtn" onclick="window.startNewGame()" disabled>Spel laden...</button>
+    <p id="pending-scores" class="setting-help" role="status"></p>
+    <button id="retry-pending" type="button" class="menu-secondary" hidden>Punten opnieuw opslaan</button>
+    <p class="menu-controls">Houd Links of Rechts ingedrukt, of swipe over het speelveld. Op de computer werken ook A/D en de pijltjestoetsen.</p>
   </div>
 </div>
 <div class="screen hidden" id="ws">
-  <div class="banner">🏆 GEWONNEN!</div>
-  <div class="srow">
-    <div class="sbox"><div class="sn" id="wst">0</div><div class="sl">STEVE'S OVER</div></div>
-    <div class="sbox"><div class="sn" id="wlv">1</div><div class="sl">LEVEL</div></div>
+  <div class="result-card">
+    <div class="banner">&#127942; LEVEL GEHAALD!</div>
+    <div class="srow">
+      <div class="sbox"><div class="sn" id="wst">0</div><div class="sl">REKENKRACHT OVER</div></div>
+      <div class="sbox"><div class="sn" id="wlv">1</div><div class="sl">LEVEL</div></div>
+      <div class="sbox"><div class="sn" id="wcorrect">0</div><div class="sl">GOEDE POORTEN</div></div>
+    </div>
+    <div class="earn">+<span id="wearn">0</span> punten</div>
+    <p id="runner-save-status" role="status"></p>
+    <button id="runner-retry-save" type="button" class="menu-secondary" hidden>Opnieuw opslaan</button>
+    <button id="runner-login" type="button" class="menu-secondary" hidden>Inloggen</button>
+    <button class="gbtn" onclick="window.nextLevel()">VOLGENDE LEVEL &#9654;</button>
+    <button type="button" class="menu-secondary" onclick="window.openGameMenu()">Andere sommen kiezen</button>
   </div>
-  <div class="earn">+<span id="wearn">0</span> ⭐</div>
-  <div class="level-code">
-    <label for="earned-code">Wachtwoord voor level <span id="code-level"></span></label>
-    <input id="earned-code" readonly aria-label="Je levelwachtwoord" onclick="this.select()">
-  </div>
-  <button class="gbtn" onclick="window.nextLevel()">VOLGENDE ▶</button>
 </div>
 <div class="screen hidden" id="ls">
   <div class="banner" role="heading" aria-level="1">GAME OVER</div>
@@ -255,25 +255,28 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
   <button class="gbtn" onclick="window.retryLevel()">OPNIEUW SPELEN</button>
 </div>
 
+<script src="/assets/account.js" data-root="/"></script>
 <script type="module">
 import * as THREE from '/assets/vendor/three-0.160.0.module.js';
+import {createRunnerCharacter, createRunnerScenery} from '/assets/js/minecraft-runner-visuals.js';
+import {RekencraftProgress} from '/assets/js/rekencraft-progress.js';
 
 // ═══════════════════════════════════════════════════
 // SETUP
 // ═══════════════════════════════════════════════════
 const canvas=document.getElementById('c');
-const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
 renderer.setSize(innerWidth,innerHeight);
 renderer.shadowMap.enabled=true;
 renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 renderer.outputColorSpace=THREE.SRGBColorSpace;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.05;
+renderer.toneMappingExposure=1.12;
 
 const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x87ceeb);
-scene.fog=new THREE.Fog(0x87ceeb,80,200);
+scene.background=new THREE.Color(0xa8d5df);
+scene.fog=new THREE.Fog(0xa8d5df,65,170);
 
 const camera=new THREE.PerspectiveCamera(52,innerWidth/innerHeight,0.1,300);
 const audioListener=new THREE.AudioListener();
@@ -403,15 +406,18 @@ window.addEventListener('resize',()=>{
 });
 
 // Licht
-const sun=new THREE.DirectionalLight(0xfff4d0,1.2);
-sun.position.set(30,60,30);sun.castShadow=true;
-sun.shadow.mapSize.set(2048,2048);
+const sun=new THREE.DirectionalLight(0xfff0cc,2.6);
+sun.position.set(-24,38,22);sun.castShadow=true;
+const shadowResolution=matchMedia('(any-pointer:coarse)').matches?1024:2048;
+sun.shadow.mapSize.set(shadowResolution,shadowResolution);
 sun.shadow.camera.near=1;sun.shadow.camera.far=250;
-sun.shadow.camera.left=sun.shadow.camera.bottom=-80;
-sun.shadow.camera.right=sun.shadow.camera.top=80;
-scene.add(sun);
-scene.add(new THREE.AmbientLight(0xc8e8ff,0.8));
-scene.add(new THREE.HemisphereLight(0x87ceeb,0x4a7a1a,0.6));
+sun.shadow.camera.left=sun.shadow.camera.bottom=-36;
+sun.shadow.camera.right=sun.shadow.camera.top=36;
+sun.shadow.normalBias=.035;sun.shadow.bias=-.0002;
+scene.add(sun);scene.add(sun.target);
+scene.add(new THREE.AmbientLight(0xdce9e2,.25));
+scene.add(new THREE.HemisphereLight(0xdceef1,0x476d35,1.65));
+const scenery=createRunnerScenery(scene);
 
 // ═══════════════════════════════════════════════════
 // MATERIALEN
@@ -512,6 +518,24 @@ function makeMesh(geo,mat,x,y,z,cast=false,recv=true){
   return m;
 }
 
+// Trees and hills share a few draw calls instead of one draw call per block.
+const environmentBlocks=new Map();
+function environmentBlock(mat,x,y,z,w=1,h=1,d=1){
+  if(!environmentBlocks.has(mat))environmentBlocks.set(mat,[]);
+  environmentBlocks.get(mat).push([x,y,z,w,h,d]);
+}
+function finishEnvironment(){
+  const geometry=new THREE.BoxGeometry(1,1,1),dummy=new THREE.Object3D();
+  environmentBlocks.forEach((blocks,mat)=>{
+    const mesh=new THREE.InstancedMesh(geometry,mat,blocks.length);
+    blocks.forEach(([x,y,z,w,h,d],i)=>{
+      dummy.position.set(x,y,z);dummy.scale.set(w,h,d);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);
+    });
+    mesh.instanceMatrix.needsUpdate=true;mesh.castShadow=true;mesh.receiveShadow=true;worldGroup.add(mesh);
+  });
+  environmentBlocks.clear();
+}
+
 function buildWorld(){
   const tileGeo=new THREE.BoxGeometry(TILE,TILE,TILE);
   const tileCount=PAD_TILES_Z*(PAD_HW*2+1);
@@ -610,19 +634,16 @@ function buildEnv(){
     const layers=2+Math.floor(Math.random()*3);
     for(let layer=0;layer<layers;layer++){
       const size=7+(layers-layer)*3;
-      const block=new THREE.Mesh(new THREE.BoxGeometry(size,2,size),layer===layers-1?M.grass:(layer%2?M.rock2:M.rock));
-      block.position.set(bx,1+layer*2,bz);block.castShadow=layer===layers-1;block.receiveShadow=true;
-      worldGroup.add(block);
+      environmentBlock(layer===layers-1?M.grass:(layer%2?M.rock2:M.rock),bx,1+layer*2,bz,size,2,size);
     }
   }
+  finishEnvironment();
 }
 
 function buildTree(x,z){
   const sh=3+Math.floor(Math.random()*3);
-  const tg=new THREE.BoxGeometry(1,1,1);
   for(let i=0;i<sh;i++){
-    const m=makeMesh(tg,M.wood,x,.5+i,z,true,false);
-    worldGroup.add(m);
+    environmentBlock(M.wood,x,.5+i,z);
   }
   // Bladeren (blokken)
   const offsets=[
@@ -631,7 +652,7 @@ function buildTree(x,z){
     [0,sh+2.5,0]
   ];
   offsets.forEach(([ox,oy,oz])=>{
-    worldGroup.add(makeMesh(tg,Math.random()>.4?M.leaf:M.leaf2,x+ox,oy,z+oz,true,false));
+    environmentBlock(Math.random()>.4?M.leaf:M.leaf2,x+ox,oy,z+oz);
   });
 }
 
@@ -657,85 +678,9 @@ function boxPart(w,h,d,mat,x,y,z){
   const part=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
   part.position.set(x,y,z);part.castShadow=w*h*d>.005;return part;
 }
+function makeSteve(s=1){return createRunnerCharacter('steve',s);}
+function makeCreeper(s=1){return createRunnerCharacter('creeper',s);}
 
-function makeSteve(s=1){
-  const g=new THREE.Group();
-  // Hoofd en herkenbare haarlaag.
-  g.add(boxPart(.52*s,.52*s,.52*s,M.sHead,0,1.58*s,0));
-  g.add(boxPart(.54*s,.15*s,.54*s,M.sHair,0,1.79*s,-.005*s));
-  g.add(boxPart(.54*s,.34*s,.08*s,M.sHair,0,1.62*s,-.27*s));
-  g.add(boxPart(.09*s,.28*s,.54*s,M.sHair,-.255*s,1.64*s,0));
-  g.add(boxPart(.09*s,.20*s,.54*s,M.sHair,.255*s,1.68*s,0));
-  // We kijken tegen Steve's achterkant aan: hier hoort alleen haar zichtbaar te zijn.
-  g.add(boxPart(.54*s,.40*s,.07*s,M.sHair,0,1.61*s,.275*s));
-  g.add(boxPart(.18*s,.08*s,.075*s,M.sHairLight,-.15*s,1.38*s,.28*s));
-
-  // Turquoise shirt met een donkerder onderrandje.
-  g.add(boxPart(.54*s,.62*s,.28*s,M.sBody,0,1.02*s,0));
-  g.add(boxPart(.54*s,.10*s,.29*s,M.sBodyDark,0,.76*s,0));
-  // Armen als complete ledemaatgroepen zodat de loopanimatie natuurlijk blijft.
-  [-.38,.38].forEach((ax,i)=>{
-    const arm=new THREE.Group();arm.position.set(ax*s,1.22*s,0);arm.userData.ai=i;
-    arm.add(boxPart(.23*s,.20*s,.24*s,M.sBody,0,.12*s,0));
-    arm.add(boxPart(.23*s,.43*s,.24*s,M.sSkinLight,0,-.19*s,0));
-    arm.add(boxPart(.23*s,.10*s,.24*s,M.sSkinDark,0,-.43*s,0));
-    if(i===1){
-      const sword=new THREE.Group();
-      sword.position.set(.05*s,-.52*s,.08*s);sword.rotation.z=-.38;
-      sword.add(boxPart(.11*s,.22*s,.11*s,M.sHair,0,0,0));
-      sword.add(boxPart(.38*s,.09*s,.12*s,M.swordDark,0,.14*s,0));
-      sword.add(boxPart(.16*s,.58*s,.10*s,M.sword,0,.46*s,0));
-      sword.add(boxPart(.10*s,.16*s,.10*s,M.swordLight,0,.82*s,0));
-      arm.add(sword);
-    }
-    g.add(arm);
-  });
-  // Blauwe broek met afzonderlijke benen en donkere schoenen.
-  [-.145,.145].forEach((bx,i)=>{
-    const leg=new THREE.Group();leg.position.set(bx*s,.57*s,0);leg.userData.li=i;
-    leg.add(boxPart(.25*s,.58*s,.27*s,i?M.sPantLight:M.sPant,0,-.26*s,0));
-    leg.add(boxPart(.26*s,.13*s,.32*s,M.sShoe,0,-.59*s,.025*s));
-    g.add(leg);
-  });
-  return g;
-}
-
-// ═══════════════════════════════════════════════════
-// CREEPER (Minecraft stijl)
-// ═══════════════════════════════════════════════════
-function makeCreeper(s=1){
-  const g=new THREE.Group();
-  g.add(boxPart(.58*s,.58*s,.58*s,M.cHead,0,1.55*s,0));
-  // Gevlekte pixelvlakken op hoofd en zijkanten.
-  [[-.19,1.72,M.cLight],[.14,1.78,M.cDark],[-.04,1.35,M.cMid],[.22,1.48,M.cLight]].forEach(([x,y,mat])=>
-    g.add(boxPart(.12*s,.10*s,.025*s,mat,x*s,y*s,.302*s)));
-  g.add(boxPart(.025*s,.13*s,.14*s,M.cDark,-.302*s,1.62*s,-.10*s));
-  g.add(boxPart(.025*s,.11*s,.12*s,M.cLight,.302*s,1.43*s,.12*s));
-  // Iconisch zwart Creeper-gezicht.
-  [-.15,.15].forEach(ex=>g.add(boxPart(.14*s,.14*s,.03*s,M.black,ex*s,1.59*s,.313*s)));
-  g.add(boxPart(.13*s,.15*s,.03*s,M.black,0,1.43*s,.313*s));
-  g.add(boxPart(.27*s,.10*s,.03*s,M.black,0,1.34*s,.313*s));
-  g.add(boxPart(.08*s,.09*s,.03*s,M.black,-.14*s,1.30*s,.313*s));
-  g.add(boxPart(.08*s,.09*s,.03*s,M.black,.14*s,1.30*s,.313*s));
-  // Smalle, hoge romp met extra pixels.
-  g.add(boxPart(.40*s,.68*s,.30*s,M.cBody,0,.93*s,0));
-  g.add(boxPart(.10*s,.16*s,.025*s,M.cLight,-.11*s,1.05*s,.163*s));
-  g.add(boxPart(.12*s,.13*s,.025*s,M.cDark,.10*s,.80*s,.163*s));
-  // Vier afzonderlijke poten zoals in de 360°-referentie.
-  [-.12,.12].forEach(px=>{
-    [-.12,.12].forEach(pz=>{
-      const leg=new THREE.Group();leg.position.set(px*s,.43*s,pz*s);leg.userData.li=px<0?0:1;
-      leg.add(boxPart(.20*s,.46*s,.20*s,M.cLeg,0,-.20*s,0));
-      leg.add(boxPart(.205*s,.10*s,.205*s,(px+pz>0)?M.cDark:M.cMid,0,-.47*s,0));
-      g.add(leg);
-    });
-  });
-  return g;
-}
-
-// ═══════════════════════════════════════════════════
-// CROWD KLASSE
-// ═══════════════════════════════════════════════════
 class Crowd{
   constructor(isSteve){
     this.isSteve=isSteve;
@@ -766,13 +711,13 @@ class Crowd{
     this.meshes=[];
     const vis=this.isSteve?(this.count>0?1:0):Math.min(this.count,80);
     if(!vis) return;
-    const cols=Math.max(1,Math.ceil(Math.sqrt(vis*1.5)));
+    const cols=this.isSteve?1:Math.max(1,Math.ceil(Math.sqrt(vis*1.5)));
     const sc=vis>50?.4:vis>25?.52:vis>10?.66:.82;
     const sp=1.3*sc;
     for(let i=0;i<vis;i++){
       const col=i%cols-cols/2+.5;
       const row=Math.floor(i/cols);
-      const charScale=sc*2;
+      const charScale=this.isSteve?1.4:sc*1.65;
       const m=this.isSteve?makeSteve(charScale):makeCreeper(charScale);
       m.position.set(
         col*sp+(Math.random()-.5)*.12,
@@ -817,6 +762,8 @@ class Crowd{
       m.position.z=(home?.z??m.position.z)+(this.isSteve?-steveSwing*2.2:creeperRush*.58);
       m.position.y=1+(moving?Math.abs(stride)*.075*sc:fighting?Math.sin(attack*Math.PI)*.10*sc:0);
       m.rotation.z=this.isSteve?-steveSwing*.12:(creeperRush*.08*Math.sin(ph));
+      const turn=this.isSteve&&moving?THREE.MathUtils.clamp((targetX-steveX)*-.12,-.28,.28):0;
+      m.rotation.y=THREE.MathUtils.lerp(m.rotation.y,turn,1-Math.exp(-10*dt));
       m.children.forEach(c=>{
         if(c.userData.li===0) c.rotation.x= stride*.45*motion+attack*.25*(fighting?1:0);
         if(c.userData.li===1) c.rotation.x=-stride*.45*motion-attack*.25*(fighting?1:0);
@@ -1131,7 +1078,9 @@ const K={l:false,r:false};
 let mDrag=null,mLast=0;
 
 window.addEventListener('keydown',e=>{
-  if(e.target.closest('input,button,textarea,select'))return;
+  if(e.target.closest('input,textarea,select'))return;
+  if(e.code==='Space'&&e.target.closest('button'))return;
+  if(['ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();
   if(e.code==='ArrowLeft'||e.code==='KeyA') K.l=true;
   if(e.code==='ArrowRight'||e.code==='KeyD') K.r=true;
   if(e.code==='Space'&&!gameOn){
@@ -1162,10 +1111,11 @@ canvas.addEventListener('touchmove',e=>{
   targetX+=dx; mLast=e.touches[0].clientX;
 },{passive:false});
 canvas.addEventListener('touchend',()=>mDrag=null,{passive:false});
+canvas.addEventListener('touchcancel',()=>mDrag=null,{passive:false});
 
 function bindHold(id,key){
   const el=document.getElementById(id);
-  const set=on=>{K[key]=on;el.classList.toggle('active',on);};
+  const set=on=>{K[key]=on;el.classList.toggle('active',on);el.setAttribute('aria-pressed',String(on));};
   el.addEventListener('pointerdown',e=>{e.preventDefault();el.setPointerCapture(e.pointerId);set(true);});
   ['pointerup','pointercancel','lostpointercapture'].forEach(name=>el.addEventListener(name,()=>set(false)));
 }
@@ -1174,10 +1124,24 @@ document.getElementById('pause-btn').addEventListener('click',e=>{e.preventDefau
 
 function togglePause(){
   paused=!paused;
-  K.l=K.r=false;
+  releaseSteering();
   document.getElementById('pause-label').classList.toggle('show',paused);
   document.getElementById('pause-btn').textContent=paused?'▶':'Ⅱ';
+  document.getElementById('pause-btn').setAttribute('aria-label',paused?'Spel hervatten':'Spel pauzeren');
+  document.getElementById('pause-btn').setAttribute('aria-pressed',String(paused));
 }
+function releaseSteering(){
+  K.l=K.r=false;mDrag=null;
+  ['left-btn','right-btn'].forEach(id=>{
+    const button=document.getElementById(id);button.classList.remove('active');button.setAttribute('aria-pressed','false');
+  });
+}
+function pauseWhenInactive(){
+  releaseSteering();
+  if(gameOn&&!paused)togglePause();
+}
+window.addEventListener('blur',pauseWhenInactive);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseWhenInactive();});
 
 // ═══════════════════════════════════════════════════
 // OPERATORS
@@ -1189,47 +1153,42 @@ function applyOp(op,n){
   if(op.sym==='÷') return Math.max(1,Math.ceil(n/op.val));
   return n;
 }
-const mathSettings={operators:['+','-','×','÷'],max:10};
-function codeChecksum(text){
-  let hash=17;
-  for(const ch of text)hash=(hash*31+ch.charCodeAt(0))%46656;
-  return hash.toString(36).toUpperCase().padStart(3,'0');
-}
-function makeLevelCode(nextLevel,count,settings){
-  const mask=['+','-','×','÷'].reduce((n,op,i)=>n|(settings.operators.includes(op)?1<<i:0),0);
-  const body=[1,nextLevel,count,mask,settings.max].map(n=>n.toString(36).toUpperCase()).join('-');
-  return 'RUN-'+body+'-'+codeChecksum(body);
-}
-function readLevelCode(value){
-  const parts=value.toUpperCase().replace(/\s/g,'').split('-');
-  if(parts.length!==7||parts[0]!=='RUN'||parts.slice(1).some(p=>!/^[0-9A-Z]+$/.test(p)))throw Error('Controleer je wachtwoord en probeer opnieuw.');
-  const body=parts.slice(1,6).join('-');
-  const [version,nextLevel,count,mask,max]=parts.slice(1,6).map(p=>parseInt(p,36));
-  if(parts[6]!==codeChecksum(body)||version!==1||!Number.isSafeInteger(nextLevel)||nextLevel<2||count<1||count>999||mask<1||mask>15||max<3||max>20)throw Error('Dit levelwachtwoord is niet geldig.');
-  return {nextLevel,count,max,operators:['+','-','×','÷'].filter((_,i)=>mask&(1<<i))};
-}
-document.getElementById('resume-form').addEventListener('submit',e=>{
-  e.preventDefault();
-  try{
-    const saved=readLevelCode(document.getElementById('resume-code').value);
-    level=saved.nextLevel;prevSteveCount=saved.count;
-    mathSettings.max=saved.max;mathSettings.operators=saved.operators;
-    mathInputs.forEach(input=>input.checked=saved.operators.includes(input.value));
-    document.getElementById('math-max').value=saved.max;
-    document.getElementById('math-max-value').textContent=saved.max;
-    document.getElementById('code-error').textContent='';
-    window.startGame();
-  }catch(error){document.getElementById('code-error').textContent=error.message;}
-});
+const mathSettings={operators:['+','-'],max:10};
 const mathInputs=[...document.querySelectorAll('#math-settings input[type="checkbox"]')];
 mathInputs.forEach(input=>input.addEventListener('change',()=>{
   if(!mathInputs.some(el=>el.checked))input.checked=true;
   mathSettings.operators=mathInputs.filter(el=>el.checked).map(el=>el.value);
+  updateSettingsSummary();
 }));
-document.getElementById('math-max').addEventListener('input',e=>{
-  mathSettings.max=Number(e.target.value);
+function updateSettingsSummary(){
+  const names={'+':'Optellen','-':'aftrekken','\u00d7':'keersommen','\u00f7':'deelsommen'};
   document.getElementById('math-max-value').textContent=mathSettings.max;
+  document.getElementById('range-help').textContent='Getallen van 1 t/m '+mathSettings.max+' op de poortjes. Je rekenkracht kan hoger worden.';
+  document.getElementById('menu-selection').textContent=mathSettings.operators.map(op=>names[op]).join(' + ')+' \u00b7 getallen t/m '+mathSettings.max;
+  document.querySelectorAll('[data-math-max]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.mathMax)===mathSettings.max)));
+}
+document.getElementById('math-max').addEventListener('input',e=>{mathSettings.max=Number(e.target.value);updateSettingsSummary();});
+document.querySelectorAll('[data-math-max]').forEach(button=>button.addEventListener('click',()=>{
+  mathSettings.max=Number(button.dataset.mathMax);document.getElementById('math-max').value=mathSettings.max;updateSettingsSummary();
+}));
+let accountReady=false;
+const progress=new RekencraftProgress(window.LeerCraft,run=>{
+  const pending=progress.pending.size;
+  document.getElementById('pending-scores').textContent=pending?pending+' levelresultaat nog niet opgeslagen.':'';
+  document.getElementById('retry-pending').hidden=!pending;
+  if(run!==progress.current)return;
+  const messages={saving:'Je punten worden opgeslagen...',saved:'Opgeslagen! Je punten staan bij je account.',guest:'Oefenpunten: log voor je volgende level in om punten te bewaren.',error:run.error||'Opslaan is niet gelukt. Probeer het opnieuw.',
+    'needs-login':'Je sessie is verlopen. Log opnieuw in en sla je punten alsnog op.', 'account-changed':'Log in met het account waarmee je dit level begon om je punten op te slaan.'};
+  document.getElementById('runner-save-status').textContent=messages[run.state]||'';
+  document.getElementById('runner-retry-save').hidden=!['error','needs-login','account-changed'].includes(run.state);
+  document.getElementById('runner-login').hidden=!!LeerCraft.email&&run.state!=='needs-login';
 });
+LeerCraft.ready.then(()=>{accountReady=true;const button=document.getElementById('start-run');button.disabled=false;button.textContent='Start avontuur';});
+document.getElementById('runner-retry-save').addEventListener('click',()=>progress.retryPending());
+document.getElementById('retry-pending').addEventListener('click',()=>progress.retryPending());
+document.getElementById('runner-login').addEventListener('click',()=>LeerCraft.openLogin());
+window.openGameMenu=function(){gameOn=false;releaseSteering();['ws','ls'].forEach(id=>document.getElementById(id).classList.add('hidden'));document.getElementById('ss').classList.remove('hidden');};
+window.startNewGame=function(){level=1;prevSteveCount=1;window.startGame();};
 const reductionPractice=()=>!mathSettings.operators.some(op=>op==='+'||op==='×');
 const practiceStart=()=>Math.min(999,6*mathSettings.max);
 function genOpPair(lvl,n){
@@ -1431,18 +1390,22 @@ function updateBadgePos(){
 }
 
 // ═══════════════════════════════════════════════════
-// CAMERA — volgt Steve van hoog achter
+// CAMERA — lage volgcamera achter Steve, aangepast aan de schermverhouding
 // ═══════════════════════════════════════════════════
 const _cp=new THREE.Vector3();
 const _cl=new THREE.Vector3();
 function updateCamera(dt){
-  // Camera staat hoog (Y=22) en 20 units ACHTER Steve (+ z richting)
-  _cp.set(steveC.x*.18, 22, steveC.z+20);
+  // Behind-the-runner view: visible character silhouettes and a readable route.
+  const portrait=innerHeight>innerWidth;
+  const height=portrait?13.5:10.5, back=portrait?23:17;
+  const fov=portrait?62:56;
+  if(camera.fov!==fov){camera.fov=fov;camera.updateProjectionMatrix();}
+  _cp.set(steveC.x*.38, height, steveC.z+back);
   if(cameraShake>0){
     _cp.x+=(Math.random()-.5)*cameraShake;
     _cp.y+=(Math.random()-.5)*cameraShake*.55;
   }
-  _cl.set(steveC.x*.08, 1, steveC.z-8);
+  _cl.set(steveC.x*.18, 2.4, steveC.z-10);
   camera.position.lerp(_cp,1-Math.exp(-6*dt));
   camera.lookAt(_cl);
 }
@@ -1525,6 +1488,7 @@ function finishObstacle(destroyed=false){
 
 function hitGate(op, side){
   const good=applyOp(op,steveC.count)>creeperC.count;
+  progress.recordGate(segIdx,good);
   const prev=steveC.count;
   const next=applyOp(op,steveC.count);
   soundGate(good);
@@ -1784,14 +1748,15 @@ function tickBattle(dt){
 }
 
 function endLevel(win){
+  if(phase==='done')return;
   gameOn=false;
   phase='done';
   if(win){
     document.getElementById('wst').textContent=bSt||steveC.count;
     document.getElementById('wlv').textContent=level;
-    document.getElementById('wearn').textContent=(bSt||steveC.count)*level*2;
-    document.getElementById('code-level').textContent=level+1;
-    document.getElementById('earned-code').value=makeLevelCode(level+1,Math.max(1,bSt||steveC.count),mathSettings);
+    const result=progress.finish();
+    document.getElementById('wearn').textContent=result.points;
+    document.getElementById('wcorrect').textContent=result.correct+' / '+result.totalQuestions;
     document.getElementById('ws').classList.remove('hidden');
     level++;
   } else {
@@ -1805,6 +1770,7 @@ function endLevel(win){
 // LEVEL START
 // ═══════════════════════════════════════════════════
 window.startGame=function(){
+  if(!accountReady)return;
   unlockAudio();
   ['ss','ws','ls'].forEach(id=>document.getElementById(id).classList.add('hidden'));
   document.getElementById('lvnum').textContent=level;
@@ -1813,7 +1779,9 @@ window.startGame=function(){
   paused=false;
   document.getElementById('pause-label').classList.remove('show');
   document.getElementById('pause-btn').textContent='Ⅱ';
-  K.l=K.r=false;
+  document.getElementById('pause-btn').setAttribute('aria-label','Spel pauzeren');
+  document.getElementById('pause-btn').setAttribute('aria-pressed','false');
+  releaseSteering();
   battleVictims.length=0;
   swordArcs.splice(0).forEach(a=>{scene.remove(a);a.geometry.dispose();a.material.dispose();});
   steveX=0;targetX=0;steveZ=0;
@@ -1844,6 +1812,7 @@ window.startGame=function(){
   gateLop=null;gateRop=null;
 
   genLevel(level);
+  progress.begin(level,segs.filter(seg=>seg.type==='gate').length,mathSettings);
   segIdx=0;
   spawnSeg(segs[0]);
 
@@ -1933,6 +1902,9 @@ function loop(ts){
   waterMat.map.offset.set(t*.035,t*.018);
   waterFall=Math.max(0,waterFall-dt);
   steveC.group.position.y=-Math.sin(waterFall/.75*Math.PI)*1.1;
+  scenery.update(t,dt);
+  sun.position.set(-24,38,steveC.z+20);
+  sun.target.position.set(0,0,steveC.z-16);
   updateCamera(dt);
   updateBadgePos();
   renderer.render(scene,camera);

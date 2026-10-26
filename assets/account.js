@@ -21,7 +21,7 @@
       <button>Inloggen</button><button type="button" data-change-email>Andere e-mail / nieuwe code</button></form>
       <p data-login-message role="status"></p><button type="button" data-close aria-label="Inlogscherm sluiten">&times;</button>
     </dialog></section>`;
-  const $ = selector => host.querySelector(selector);
+  const $ = selector => host.querySelector(selector) || dialog.querySelector(selector);
   let email = null, pendingEmail = '';
   const accountListeners = new Set();
   async function request(path, body) {
@@ -50,8 +50,12 @@
       $('[data-login]').hidden = !!email; $('[data-logout]').hidden = !email;
       if (email) {
         const summary = await request('scores/summary.php');
-        const game = summary.games.find(g => g.gameSlug === 'provincie-klikspel');
-        $('[data-account-progress]').textContent = `${summary.totalPoints} punten · Provincieklikspel: ${game ? `${game.plays} keer afgerond · beste resultaat ${game.bestScore}/12` : 'nog niet afgerond'}`;
+        const province = summary.games.find(g => g.gameSlug === 'provincie-klikspel');
+        const runner = summary.games.find(g => g.gameSlug === 'rekencraft');
+        const details = [];
+        if(province)details.push(`Provincieklikspel: ${province.plays} keer · beste ${province.bestScore}/12`);
+        if(runner)details.push(`RekenCraft: ${runner.plays} levels gehaald · ${runner.totalScore*10} punten`);
+        $('[data-account-progress]').textContent = `${summary.totalPoints} punten${details.length?' · '+details.join(' · '):' · nog geen spellen afgerond'}`;
         if(xp){const points=summary.totalPoints;xp.textContent=`Level ${Math.floor(points/100)+1} · ${points} XP · ${100-points%100} tot volgend level`;fill.style.width=`${points%100}%`;}
       }
     } catch(error) { $('[data-account-status]').textContent = error.message; }
@@ -120,4 +124,10 @@
     onChange(listener){accountListeners.add(listener);return ()=>accountListeners.delete(listener);},
     get email(){return email;}};
   window.LeerCraft.ready = refresh();
+  if (host.dataset?.dialogOutside === 'true') {
+    // Full-screen games hide their menu while playing. Keep login outside that hidden ancestor.
+    const portal=document.createElement('div');
+    portal.className='account-panel account-dialog-portal';
+    portal.append(dialog);document.body.append(portal);
+  }
 })();
