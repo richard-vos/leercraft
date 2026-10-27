@@ -89,10 +89,12 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
 <link rel="stylesheet" href="/assets/navigation.css">
 <link rel="stylesheet" href="/assets/responsive.css">
 <script src="/assets/responsive.js" defer></script>
+<link rel="stylesheet" href="/assets/race.css">
 </head>
 <body class="game-race">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
 <canvas id="c"></canvas>
+<button type="button" id="pause-race" aria-pressed="false">Pauze</button>
 <div id="race-touch" aria-label="Touchbesturing">
   <div><button type="button" data-drive="left" aria-label="Stuur links">◀</button><button type="button" data-drive="right" aria-label="Stuur rechts">▶</button></div>
   <div><button type="button" data-drive="brake" aria-label="Remmen">Rem</button><button type="button" data-drive="gas" aria-label="Gas geven">Gas</button></div>
@@ -105,7 +107,7 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
     <div class="hbox"><div class="hlbl">Tijd</div><div class="hval" id="hval-time">0'00"00</div></div>
   </div>
   <div id="standings"></div>
-  <div id="sombar" id="sombar"><span id="somtxt"></span></div>
+  <div id="sombar"><span id="somtxt"></span></div>
   <div id="fb"></div>
   <div id="bigpos"><span id="bignum">1</span><span id="bigsuf">e</span></div>
   <div id="minimap"><canvas id="mm" width="210" height="210"></canvas></div>
@@ -117,7 +119,7 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
 
 <div class="screen" id="startscreen">
   <h1>🏁 Reken Race 3D</h1>
-  <p>Race tegen 4 tegenstanders!<br>Rij langs het <span style="color:#7CFC00">juiste antwoord</span> voor extra snelheid.<br>Fout antwoord? Spin-out! 💥<br>Pijltjestoetsen of WASD om te rijden.</p>
+  <p>Drie rondes. Vier rivalen. Jouw Steve.<br>Rij langs het <span style="color:#7CFC00">juiste antwoord</span> voor extra snelheid.<br>Fout antwoord? Je draait rond! 💥<br>Pijltjestoetsen of WASD om te rijden.</p>
   <button class="btn" onclick="beginGame()">▶ Start Race!</button>
 </div>
 
@@ -134,22 +136,26 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
   </div>
 </div>
 
+<script src="/assets/avatar-profile.js"></script>
 <script type="module">
-import * as THREE from '/assets/vendor/three-r128.module.js';
+import * as THREE from '/assets/vendor/three-0.160.0.module.js';
+import {createKart,decorateCircuit} from '/assets/js/race-kart.js';
 
 // ═══════════════════════════════════════════
 // SCENE
 // ═══════════════════════════════════════════
 const W = innerWidth, H = innerHeight;
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById('c'), antialias:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;
 renderer.setSize(W,H);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const scene  = new THREE.Scene();
 scene.background = new THREE.Color(0x87CEEB);
-scene.fog = new THREE.Fog(0x87CEEB, 120, 500);
+scene.fog = new THREE.Fog(0x87CEEB, 180, 500);
 
 const camera = new THREE.PerspectiveCamera(58, W/H, 0.1, 600);
 window.addEventListener('resize',()=>{
@@ -159,7 +165,7 @@ window.addEventListener('resize',()=>{
 });
 
 // Verlichting
-const sun = new THREE.DirectionalLight(0xfff4d0,1.3);
+const sun = new THREE.DirectionalLight(0xfff4d0,2.4);
 sun.position.set(80,120,60);
 sun.castShadow=true;
 sun.shadow.mapSize.set(2048,2048);
@@ -167,8 +173,8 @@ sun.shadow.camera.near=1; sun.shadow.camera.far=500;
 sun.shadow.camera.left=sun.shadow.camera.bottom=-200;
 sun.shadow.camera.right=sun.shadow.camera.top=200;
 scene.add(sun);
-scene.add(new THREE.AmbientLight(0xc8d8ff,0.75));
-scene.add(new THREE.HemisphereLight(0x87CEEB,0x2d5a1b,0.5));
+scene.add(new THREE.AmbientLight(0xc8d8ff,1.3));
+scene.add(new THREE.HemisphereLight(0x87CEEB,0x2d5a1b,1.1));
 
 // ═══════════════════════════════════════════
 // BAAN — cyclische Catmull-Rom
@@ -449,51 +455,11 @@ for(let i=0;i<TRES;i+=8){
 // AUTO BOUWEN
 // ═══════════════════════════════════════════
 function makeCar(col){
-  const g=new THREE.Group();
-  const bm=new THREE.MeshLambertMaterial({color:col});
-  // Body
-  const body=new THREE.Mesh(new THREE.BoxGeometry(2.2,0.65,4),bm);
-  body.position.y=0.55; body.castShadow=true; g.add(body);
-  // Cabine
-  const cab=new THREE.Mesh(new THREE.BoxGeometry(1.75,0.58,2.0),bm);
-  cab.position.set(0,1.1,-0.1); cab.castShadow=true; g.add(cab);
-  // Ruiten
-  const wm=new THREE.MeshLambertMaterial({color:0x3377aa,transparent:true,opacity:0.65});
-  [[[1.7,0.48,0.1],[0,1.1,0.96]],[[1.7,0.42,0.1],[0,1.1,-1.12]]].forEach(([s,p])=>{
-    const w=new THREE.Mesh(new THREE.BoxGeometry(...s),wm);
-    w.position.set(...p); g.add(w);
-  });
-  // Spoiler
-  const sp=new THREE.Mesh(new THREE.BoxGeometry(2.1,0.14,0.45),bm);
-  sp.position.set(0,1.38,-2.1); g.add(sp);
-  [-1,1].forEach(s=>{
-    const sw=new THREE.Mesh(new THREE.BoxGeometry(0.14,0.44,0.44),M.stone);
-    sw.position.set(s*0.98,1.18,-2.1); g.add(sw);
-  });
-  // Wielen
-  [[-1.15,0.38,1.35],[1.15,0.38,1.35],[-1.15,0.38,-1.35],[1.15,0.38,-1.35]].forEach(([wx,wy,wz])=>{
-    const wg=new THREE.Group();
-    const wh=new THREE.Mesh(new THREE.CylinderGeometry(0.37,0.37,0.26,12),M.wheel);
-    wh.rotation.z=Math.PI/2; wg.add(wh);
-    const rm=new THREE.Mesh(new THREE.CylinderGeometry(0.21,0.21,0.28,8),M.rim);
-    rm.rotation.z=Math.PI/2; wg.add(rm);
-    wg.position.set(wx,wy,wz);
-    wg.userData.wheel=true;
-    g.add(wg);
-  });
-  // Koplampen
-  const hlm=new THREE.MeshLambertMaterial({color:0xffffcc,emissive:0xffffaa,emissiveIntensity:0.5});
-  [-0.68,0.68].forEach(lx=>{
-    const hl=new THREE.Mesh(new THREE.BoxGeometry(0.32,0.18,0.07),hlm);
-    hl.position.set(lx,0.62,2.03); g.add(hl);
-  });
-  scene.add(g);
-  return g;
+  const kart=createKart(col);scene.add(kart);return kart;
 }
+decorateCircuit(scene,tAt,tTan,ROAD_W);
 
-// ═══════════════════════════════════════════
-// SOMMEN
-// ═══════════════════════════════════════════
+
 const SOMMEN=[
   {q:'2 × 3',a:6,  w:[4,8]},
   {q:'4 × 5',a:20, w:[15,25]},
@@ -517,7 +483,7 @@ function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.fl
 function makeTex(w,h,fn){
   const cv=document.createElement('canvas');cv.width=w;cv.height=h;
   const cx=cv.getContext('2d');fn(cx,w,h);
-  const t=new THREE.CanvasTexture(cv);t.needsUpdate=true;return t;
+  const t=new THREE.CanvasTexture(cv);t.colorSpace=THREE.SRGBColorSpace;t.needsUpdate=true;return t;
 }
 
 // Billboard: boog over baan met grote som-tekst
@@ -599,7 +565,7 @@ function makeGate(t, lane, val, correct){
   }
 
   drawNeutral();
-  const tex=new THREE.CanvasTexture(cv); tex.needsUpdate=true;
+  const tex=new THREE.CanvasTexture(cv);tex.colorSpace=THREE.SRGBColorSpace; tex.needsUpdate=true;
   const board=new THREE.Mesh(
     new THREE.PlaneGeometry(5.8,5.8),
     new THREE.MeshBasicMaterial({map:tex,side:THREE.DoubleSide})
@@ -650,6 +616,7 @@ const racers=RACER_DEFS.map((d,i)=>({
   jumpY:0, jumpVY:0, inAir:false,  // springphysics
 }));
 const player=racers[0];
+LeerCraftAvatar.subscribe(state=>player.car.userData.equip(state.equipped));
 
 // ═══════════════════════════════════════════
 // SPEL OBJECTEN
@@ -719,7 +686,12 @@ window.addEventListener('keyup',e=>{
 // ═══════════════════════════════════════════
 // GAME STATE
 // ═══════════════════════════════════════════
-let gameRunning=false, raceTime=0;
+let gameRunning=false, paused=false, raceTime=0;
+const pauseButton=document.getElementById('pause-race');
+function pauseRace(value){if(!gameRunning)return;paused=value;pauseButton.textContent=value?'Verder':'Pauze';pauseButton.setAttribute('aria-pressed',String(value));Object.keys(K).forEach(key=>K[key]=false);}
+pauseButton.addEventListener('click',()=>pauseRace(!paused));
+window.addEventListener('blur',()=>pauseRace(true));
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseRace(true);});
 let fbTO=null, somTO=null;
 
 function showFb(txt,cls){
@@ -840,7 +812,8 @@ function updateHUD(){
   document.getElementById('spfill').style.width=(pct*100)+'%';
   document.getElementById('bignum').textContent=pos;
 
-  const stEl=document.getElementById('standings');stEl.innerHTML='';
+  const stEl=document.getElementById('standings');
+  const signature=sorted.map(r=>r.name).join('|');if(stEl.dataset.order===signature)return;stEl.dataset.order=signature;stEl.innerHTML='';
   sorted.forEach((r,i)=>{
     const div=document.createElement('div');
     div.className='srow'+(r===player?' me':'');
@@ -878,9 +851,7 @@ function placeRacer(r){
   // Lichte pitch omhoog als auto in de lucht is
   r.car.rotation.x = r.inAir ? Math.min(0.25, r.jumpVY*0.8) : 0;
   r.car.rotation.y = r.spin>0 ? r.spinAng : Math.atan2(tan.x,tan.z);
-  r.car.children.forEach(c=>{
-    if(c.userData.wheel) c.children.forEach(w=>{w.rotation.x+=r.spd*35;});
-  });
+  r.car.userData.update(r.spd*100, r===player?((K.left||touchDrive.left?1:0)-(K.right||touchDrive.right?1:0)):0,raceTime);
 }
 
 // ═══════════════════════════════════════════
@@ -890,7 +861,8 @@ const _cp=new THREE.Vector3(), _cl=new THREE.Vector3(), _camLook=new THREE.Vecto
 function updateCam(){
   const tan=tTan(player.t), pos=tAt(player.t,player.off);
   const jy=player.jumpY;
-  _cp.set(pos.x-tan.x*9.5, 4.2+jy*0.6, pos.z-tan.z*9.5);
+  const distance=innerWidth<600?13:10.5;
+  _cp.set(pos.x-tan.x*distance, 5.2+jy*.6, pos.z-tan.z*distance);
   _cl.set(pos.x+tan.x*7,   1.4+jy,     pos.z+tan.z*7);
   camera.position.lerp(_cp, 0.09);
   _camLook.lerp(_cl, 0.12);
@@ -907,7 +879,7 @@ function loop(ts){
   const dt=Math.min((ts-lastTS)/16.667, 1.0); // max 1 frame, nooit meer
   lastTS=ts;
 
-  if(!gameRunning){
+  if(!gameRunning||paused){
     // Idle: toon startopstelling met camera erachter
     updateCam();
     renderer.render(scene,camera);
@@ -971,7 +943,7 @@ window.beginGame=function(){
     r.correct=0; r.wrong=0; r.somCount=0;
     r.jumpY=0; r.jumpVY=0; r.inAir=false;
   });
-  raceTime=0; gameRunning=false;
+  raceTime=0; gameRunning=false;paused=false;pauseButton.textContent='Pauze';pauseButton.setAttribute('aria-pressed','false');
   spawnObjects();
 
   // Zet auto's neer
