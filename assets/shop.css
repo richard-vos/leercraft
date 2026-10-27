@@ -10,7 +10,12 @@
 .shop-layout{display:grid;gap:24px;align-items:start}
 .avatar-card{background:#14251be8;border:4px solid #9bb97d;padding:20px;text-align:center}
 .avatar-card h2{margin:0;font-size:22px;color:#ffe182}
-#avatar-preview{display:block;width:100%;height:340px;touch-action:pan-y}
+#avatar-preview{display:block;width:100%;height:340px;touch-action:pan-y;cursor:grab}
+#avatar-preview:active{cursor:grabbing}
+.preview-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0 20px}
+.preview-actions .shop-button{padding:10px 6px;min-height:52px;font-size:15px}
+.preview-actions [aria-pressed="true"]{background:#6c7130;border-color:#ffe182;color:#fff4c9}
+.shop-button:focus-visible{outline:3px solid #ffe182;outline-offset:3px}
 .wallet-amount{font-size:27px;font-weight:700;color:#ffe182;margin:10px 0}
 .shop-help{font-size:15px;color:#c9d8bb}
 .try-games{display:grid;gap:10px;margin-top:20px}

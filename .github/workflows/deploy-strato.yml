@@ -184,9 +184,17 @@ jobs:
           commands = Path('scripts/cleanup-legacy-games.sftp').read_text()
           Path('/tmp/leercraft-cleanup.sftp').write_text('cd "' + quoted + '"\n' + commands + '\nbye\n')
           PY
-          sshpass -e sftp -b /tmp/leercraft-cleanup.sftp \
-            -o BatchMode=no -o StrictHostKeyChecking=yes \
+          # Set BatchMode before -b: OpenSSH uses the first value, and -b adds BatchMode=yes.
+          # Keep password authentication identical to the successful upload connection.
+          sshpass -e sftp \
+            -o BatchMode=no \
+            -o PubkeyAuthentication=no \
+            -o KbdInteractiveAuthentication=yes \
+            -o PasswordAuthentication=yes \
+            -o PreferredAuthentications=keyboard-interactive,password \
+            -o StrictHostKeyChecking=yes \
             -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
+            -b /tmp/leercraft-cleanup.sftp \
             -P "$SFTP_PORT" "$SFTP_USER@$SFTP_HOST"
 
       - name: Tijdelijke serverconfiguratie opruimen

@@ -17,7 +17,16 @@
     <div class="shop-layout">
       <aside class="avatar-card" aria-label="Je personage">
         <h2>Jouw Steve</h2>
-        <canvas id="avatar-preview" aria-label="3D-voorbeeld van je gedragen outfit"></canvas>
+        <canvas id="avatar-preview" aria-label="3D-voorbeeld van je gedragen outfit. Sleep om Steve te draaien."></canvas>
+        <div id="preview-controls" hidden>
+          <p class="shop-help">Sleep over Steve om hem van alle kanten te bekijken.</p>
+          <div class="preview-actions" role="group" aria-label="Beweeg Steve">
+            <button type="button" class="shop-button secondary" id="preview-turn" aria-pressed="false">Ronddraaien</button>
+            <button type="button" class="shop-button secondary" id="preview-walk" aria-pressed="false">Lopen</button>
+            <button type="button" class="shop-button secondary" id="preview-jump">Springen</button>
+            <button type="button" class="shop-button secondary" id="preview-crouch" aria-pressed="false">Bukken</button>
+          </div>
+        </div>
         <p id="preview-fallback" hidden>Je outfit wordt tijdens het spelen zichtbaar.</p>
         <p class="wallet-amount" id="shop-balance">Saldo laden...</p>
         <p id="shop-earned"></p>

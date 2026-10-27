@@ -60,7 +60,48 @@ try{
   preview=createRunnerCharacter('steve',1,LeerCraftAvatar.state.equipped);scene.add(preview);
   const base=new THREE.Mesh(new THREE.BoxGeometry(2.8,.3,2.8),new THREE.MeshStandardMaterial({color:0x527c39,roughness:1}));base.position.y=-.2;scene.add(base);
   new ResizeObserver(()=>{renderer.setSize(canvas.clientWidth,canvas.clientHeight,false);camera.aspect=canvas.clientWidth/canvas.clientHeight;camera.updateProjectionMatrix();}).observe(canvas);
-  const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  function frame(time){requestAnimationFrame(frame);if(!document.hidden){preview.rotation.y=reduced?-.25:Math.sin(time*.00025)*.5;renderer.render(scene,camera);}}requestAnimationFrame(frame);
+  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
+  let turning=!reduced.matches,walking=false,crouching=false,jumpTime=null,lastTime=null,phase=0,drag=null;
+  preview.rotation.y=-.25;
+  const limbs=preview.children.filter(part=>part.userData.ai!==undefined||part.userData.li!==undefined);
+  function toggle(id,active){$(id).setAttribute('aria-pressed',String(active));}
+  toggle('preview-turn',turning);
+  $('preview-controls').hidden=false;
+  $('preview-turn').addEventListener('click',()=>{turning=!turning;toggle('preview-turn',turning);});
+  $('preview-walk').addEventListener('click',()=>{walking=!walking;toggle('preview-walk',walking);});
+  $('preview-crouch').addEventListener('click',()=>{crouching=!crouching;toggle('preview-crouch',crouching);});
+  $('preview-jump').addEventListener('click',()=>{if(jumpTime===null)jumpTime=0;});
+  reduced.addEventListener('change',()=>{if(reduced.matches){turning=false;walking=false;toggle('preview-turn',false);toggle('preview-walk',false);}});
+  canvas.addEventListener('pointerdown',event=>{
+    if(!event.isPrimary||event.button!==0)return;
+    drag={id:event.pointerId,x:event.clientX};canvas.setPointerCapture(event.pointerId);
+    turning=false;toggle('preview-turn',false);
+  });
+  canvas.addEventListener('pointermove',event=>{
+    if(!drag||drag.id!==event.pointerId)return;
+    preview.rotation.y+=(event.clientX-drag.x)*.012;drag.x=event.clientX;
+  });
+  canvas.addEventListener('lostpointercapture',()=>{drag=null;});
+  canvas.addEventListener('pointercancel',()=>{drag=null;});
+  canvas.addEventListener('pointerup',event=>{if(canvas.hasPointerCapture(event.pointerId))canvas.releasePointerCapture(event.pointerId);});
+  function frame(time){
+    requestAnimationFrame(frame);
+    const dt=lastTime===null?0:Math.min((time-lastTime)/1000,.05);lastTime=time;
+    if(document.hidden)return;
+    if(turning&&!drag)preview.rotation.y+=dt*.55;
+    phase+=dt*8;
+    if(jumpTime!==null){jumpTime+=dt;if(jumpTime>=.8)jumpTime=null;}
+    const jump=jumpTime===null?0:Math.sin(jumpTime/.8*Math.PI)*.75;
+    preview.position.y=jump;
+    // Compress the whole block character so the crown stays attached while crouching.
+    preview.scale.y=THREE.MathUtils.damp(preview.scale.y,crouching?.72:1,14,dt);
+    for(const limb of limbs){
+      const arm=limb.userData.ai!==undefined,index=arm?limb.userData.ai:limb.userData.li;
+      const stride=walking?Math.sin(phase+index*Math.PI)*(arm?-.65:.65):0;
+      limb.rotation.x=THREE.MathUtils.damp(limb.rotation.x,stride+(jumpTime!==null&&arm?-.65:0),18,dt);
+    }
+    renderer.render(scene,camera);
+  }
+  requestAnimationFrame(frame);
 }catch(error){$('avatar-preview').hidden=true;$('preview-fallback').hidden=false;}
 LeerCraftAvatar.subscribe(render);
