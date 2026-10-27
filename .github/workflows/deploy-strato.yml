@@ -141,6 +141,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import urllib.request
+          import json
           from pathlib import Path
           entries = sorted(Path('spellen').rglob('index.php'))
           if not entries:
@@ -152,6 +153,17 @@ jobs:
                   if response.status != 200 or '<title>' not in html or '<?php' in html:
                       raise SystemExit('Spelroute levert geen spelpagina op: ' + entry.parent.name)
               print('Spelroute bereikbaar: ' + entry.parent.name)
+          with urllib.request.urlopen('https://leercraft.nl/winkel/', timeout=30) as response:
+              if 'id="shop-catalog"' not in response.read().decode('utf-8'):
+                  raise SystemExit('Winkelpagina ontbreekt.')
+          # Guest account lookup initializes missing tables only inside DB_NAME.
+          with urllib.request.urlopen('https://leercraft.nl/api/auth/me.php', timeout=30) as response:
+              if not json.load(response).get('ok'):
+                  raise SystemExit('Accountservice of database-initialisatie mislukt.')
+          with urllib.request.urlopen('https://leercraft.nl/api/shop/state.php', timeout=30) as response:
+              state = json.load(response)
+              if not state.get('ok') or not state.get('catalog') or state.get('loggedIn'):
+                  raise SystemExit('Winkel-API werkt niet correct voor gasten.')
           PY
 
       - name: Vervallen spelbestanden opruimen na geslaagde routecontrole

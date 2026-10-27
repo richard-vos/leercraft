@@ -5,8 +5,8 @@ declare(strict_types=1);
 function leercraft_schema_ready(PDO $pdo): bool
 {
     $tables = $pdo->query("SELECT COUNT(*) FROM information_schema.TABLES
-        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME IN ('users','otp_codes','sessions','scores','site_counters')")->fetchColumn();
-    if ((int)$tables !== 5) return false;
+        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME IN ('users','otp_codes','sessions','scores','site_counters','user_items','avatar_equipment')")->fetchColumn();
+    if ((int)$tables !== 7) return false;
     if ($pdo->query("SELECT count FROM site_counters WHERE name = 'visitors'")->fetchColumn() === false) return false;
     $column = $pdo->query("SELECT COUNT(*) FROM information_schema.COLUMNS
         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'scores' AND COLUMN_NAME = 'run_id'")->fetchColumn();

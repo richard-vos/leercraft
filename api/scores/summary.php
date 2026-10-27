@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../lib/http.php';
 require_once __DIR__ . '/../lib/db.php';
 require_once __DIR__ . '/../lib/auth.php';
+require_once __DIR__ . '/../lib/shop.php';
 
 require_method('GET');
 
@@ -36,6 +37,7 @@ json_response([
     'ok' => true,
     'email' => $user['email'],
     'totalPoints' => $total,
+    'wallet' => shop_wallet($pdo, $user['id']),
     'games' => array_map(static fn ($g) => [
         'gameSlug' => $g['game_slug'],
         'plays' => (int)$g['plays'],

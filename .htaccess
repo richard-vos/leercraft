@@ -13,6 +13,7 @@ RedirectMatch 404 "(?i)/(?:\.git|\.github|\.claude|\.codex|\.agents|\.tmp|script
 # Public game URLs. Only browser requests to old HTML URLs are redirected.
 RewriteEngine On
 RewriteBase /
+RewriteRule ^winkel$ /winkel/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+index\.html(?:[?\s])" [NC]
 RewriteRule ^index\.html$ / [R=301,L]
 

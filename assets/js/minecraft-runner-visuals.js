@@ -1,4 +1,5 @@
 import * as THREE from '../vendor/three-0.160.0.module.js';
+import {applyRunnerOutfit} from './avatar-cosmetics.js';
 
 // Block-built characters. Facing direction: Steve -Z, Creepers +Z.
 const materials = new Map();
@@ -37,7 +38,7 @@ function packCharacterParts(parent, includeGroups, castShadow) {
   const mesh=new THREE.Mesh(geometry,characterMaterial);mesh.castShadow=castShadow;mesh.receiveShadow=true;parent.add(mesh);
 }
 
-export function createRunnerCharacter(kind, scale = 1) {
+export function createRunnerCharacter(kind, scale = 1, equipped = {}) {
   const model = new THREE.Group();
   function part(w,h,d,color,x,y,z,parent=model) {
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(w*scale,h*scale,d*scale), material(color));
@@ -112,6 +113,8 @@ export function createRunnerCharacter(kind, scale = 1) {
   shadow.rotation.x=-Math.PI/2;
   shadow.scale.setScalar(scale);shadow.position.y=.014;
   model.add(shadow);
+  model.userData.avatarScale=scale;
+  if(kind==='steve')applyRunnerOutfit(THREE,model,equipped);
   return model;
 }
 

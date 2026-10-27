@@ -44,6 +44,15 @@ function validate_game_score(array $body): array
         }
         $meta = ['level' => $level, 'correct_answers' => $correct, 'total_questions' => $questions,
             'settings' => ['max' => $settings['max'], 'operators' => $settings['operators']]];
+    } elseif ($slug === 'getallenzee') {
+        $meta=$body['meta']??null;
+        if(!is_array($meta)||!is_int($meta['rounds']??null)||$meta['rounds']<1||$meta['rounds']>1000
+            ||!is_int($meta['correct_answers']??null)||$meta['correct_answers']<0||$meta['correct_answers']>$meta['rounds']
+            ||!in_array($meta['mode']??null,['plusminus','times','all'],true)
+            ||$score!==$meta['correct_answers']+5||$max!==$meta['rounds']+5){
+            throw new InvalidArgumentException('Ongeldig Getallenzee-resultaat.');
+        }
+        $meta=['rounds'=>$meta['rounds'],'correct_answers'=>$meta['correct_answers'],'mode'=>$meta['mode']];
     } else {
         throw new InvalidArgumentException('Onbekend spel.');
     }

@@ -229,6 +229,7 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
     <button id="start-run" class="gbtn" onclick="window.startNewGame()" disabled>Spel laden...</button>
     <p id="pending-scores" class="setting-help" role="status"></p>
     <button id="retry-pending" type="button" class="menu-secondary" hidden>Punten opnieuw opslaan</button>
+    <a class="menu-secondary outfit-link" href="/winkel/">Winkel &amp; mijn spullen</a>
     <p class="menu-controls">Houd Links of Rechts ingedrukt, of swipe over het speelveld. Op de computer werken ook A/D en de pijltjestoetsen.</p>
   </div>
 </div>
@@ -255,11 +256,13 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
   <button class="gbtn" onclick="window.retryLevel()">OPNIEUW SPELEN</button>
 </div>
 
+<script src="/assets/avatar-profile.js"></script>
 <script src="/assets/account.js" data-root="/"></script>
 <script type="module">
 import * as THREE from '/assets/vendor/three-0.160.0.module.js';
 import {createRunnerCharacter, createRunnerScenery} from '/assets/js/minecraft-runner-visuals.js';
 import {RekencraftProgress} from '/assets/js/rekencraft-progress.js';
+import {applyRunnerOutfit} from '/assets/js/avatar-cosmetics.js';
 
 // ═══════════════════════════════════════════════════
 // SETUP
@@ -678,7 +681,7 @@ function boxPart(w,h,d,mat,x,y,z){
   const part=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
   part.position.set(x,y,z);part.castShadow=w*h*d>.005;return part;
 }
-function makeSteve(s=1){return createRunnerCharacter('steve',s);}
+function makeSteve(s=1){return createRunnerCharacter('steve',s,window.LeerCraftAvatar.state.equipped);}
 function makeCreeper(s=1){return createRunnerCharacter('creeper',s);}
 
 class Crowd{
@@ -922,7 +925,7 @@ function buildGate(z,lop,rop){
   // Elk bord = 6 units breed, tussenruimte 1 unit aan elke kant = genoeg om langs te lopen
   const BW = 6.0;   // breedte één bord
   const BH = 3.0;   // hoogte bord
-  const BY = 4.2;   // extra hoge doorgang voor de 2× grotere karakters
+  const BY = 5.1;   // vrije doorgang voor Steve, inclusief een gedragen kroon
   const PH = BY+BH+0.6; // paal hoogte
 
   // Centra van de twee borden
@@ -1050,6 +1053,11 @@ let paused=false;
 let steveX=0,targetX=0,steveZ=0,runSpd=6;
 
 const steveC=new Crowd(true);
+let outfitKey='';
+window.LeerCraftAvatar.subscribe(profile=>{
+  const key=JSON.stringify(profile.equipped);if(key===outfitKey)return;outfitKey=key;
+  steveC.meshes.forEach(model=>applyRunnerOutfit(THREE,model,profile.equipped));
+});
 let creeperC=new Crowd(false);
 
 // Segmenten: afwisselend gate en battle
@@ -1183,7 +1191,7 @@ const progress=new RekencraftProgress(window.LeerCraft,run=>{
   document.getElementById('runner-retry-save').hidden=!['error','needs-login','account-changed'].includes(run.state);
   document.getElementById('runner-login').hidden=!!LeerCraft.email&&run.state!=='needs-login';
 });
-LeerCraft.ready.then(()=>{accountReady=true;const button=document.getElementById('start-run');button.disabled=false;button.textContent='Start avontuur';});
+Promise.all([LeerCraft.ready,LeerCraftAvatar.ready]).then(()=>{accountReady=true;const button=document.getElementById('start-run');button.disabled=false;button.textContent='Start avontuur';});
 document.getElementById('runner-retry-save').addEventListener('click',()=>progress.retryPending());
 document.getElementById('retry-pending').addEventListener('click',()=>progress.retryPending());
 document.getElementById('runner-login').addEventListener('click',()=>LeerCraft.openLogin());

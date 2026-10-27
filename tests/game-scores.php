@@ -23,3 +23,8 @@ foreach($invalid as $body){
 $province=validate_game_score(['game_slug'=>'provincie-klikspel','score'=>7,'max_score'=>12,'run_id'=>$valid['run_id']]);
 if($province['score']!==7)throw new RuntimeException('Province compatibility failed.');
 echo "Passed: RekenCraft points and bounds, settings, invalid submissions and province compatibility.\n";
+$sea=['game_slug'=>'getallenzee','score'=>8,'max_score'=>11,'run_id'=>$valid['run_id'],
+    'meta'=>['rounds'=>6,'correct_answers'=>3,'mode'=>'all']];
+if(validate_game_score($sea)['score']!==8)throw new RuntimeException('Sea score rejected.');
+$sea['meta']['correct_answers']=99;
+try{validate_game_score($sea);throw new RuntimeException('Invalid sea score accepted.');}catch(InvalidArgumentException $expected){}

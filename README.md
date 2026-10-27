@@ -1,7 +1,31 @@
 # LeerCraft
 
 Educatieve browserspellen. Accounts en opgeslagen resultaten zijn voorlopig
-beschikbaar op de startpagina, in het provincieklikspel en in RekenCraft.
+beschikbaar op de startpagina, in het provincieklikspel, RekenCraft en Getallenzee.
+
+## Winkel en outfits
+
+Op `/winkel/` koop je permanente items met je verdiende punten en kies je bij
+Mijn gekochte items wat je draagt. De eerste items zijn een gouden kroon (250
+punten, hoofdslot) en een roze T-shirt (150 punten, shirtslot). Je kunt beide
+tegelijk dragen of per slot teruggaan naar het standaarduiterlijk.
+
+De server bepaalt de prijzen en controleert bezit en saldo. `user_items` bewaart
+aankopen en betaalde prijzen; `avatar_equipment` bewaart de gedragen items. De
+tabellen worden automatisch toegevoegd binnen de bestaande database `DB_NAME`.
+Aankopen zijn transacties met een lock op het account, zodat gelijktijdige
+aankopen het saldo niet dubbel kunnen uitgeven. Herhaald kopen van hetzelfde
+item geeft geen tweede afschrijving. De accountidentiteit wordt ook gecontroleerd.
+
+Het beschikbare saldo is verdiende punten minus aankoopkosten. De totale XP,
+levels en bestaande scores worden niet verlaagd door winkelen. Er is geen echt
+geld of betaling betrokken. `api/lib/shop.php` bevat de catalogus en prijzen.
+
+RekenCraft en Getallenzee laden de outfit bij het account en bij terugkeer naar
+het spelvenster. Alleen het eigen personage krijgt die outfit; NPC's blijven
+ongewijzigd. Zonder account speel je met de herkenbare standaard-Steve. Een
+netwerkfout bij het laden van de outfit blokkeert het spel niet en gebruikt de
+standaardoutfit. De gedeelde visuele code staat in `avatar-cosmetics.js`.
 
 ## Tablet, telefoon en computer
 
@@ -160,6 +184,11 @@ meting van unieke personen en is gescheiden van het aantal geregistreerde accoun
   (maximaal 120 punten). De resterende rekenkracht levert geen extra accountpunten op.
 - RekenCraft bewaart in de bestaande `scores`-tabel ook het level, de goede poorten
   en gekozen rekeninstellingen in `meta`. Een databasewijziging is hiervoor niet nodig.
+- Getallenzee geeft 10 punten per overleefde ronde op een juiste antwoordtegel
+  en 50 punten als je als eerste de finish haalt. Op de veilige oever of brug
+  blijven staan telt niet als goed antwoord. Alleen gewonnen races worden
+  opgeslagen; gasten verdienen oefenpunten zonder databaseopslag. De uitslag
+  blijft staan zodat opnieuw opslaan bij verbindingsproblemen mogelijk is.
 - Het startmenu heeft bewerkingskeuzes, getalbereik-presets (5, 10, 20) en een schuif
   voor 3 t/m 20. Dit bereik geldt voor de poortgetallen, niet voor het eindantwoord.
   De oude geheime levelcodes zijn verwijderd. Andere sommen kiezen begint een nieuw

@@ -32,3 +32,12 @@ if(call_score_api('scores/submit.php',$invalid,$token)['ok'])throw new RuntimeEx
 $invalid=$body;$invalid['account_email']='someone-else@example.com';
 if(call_score_api('scores/submit.php',$invalid,$token)['ok'])throw new RuntimeException('Account mismatch accepted.');
 echo "Passed: authenticated score API, 50-point finish bonus, retry deduplication, summary, guest and validation.\n";
+$sea=['game_slug'=>'getallenzee','account_email'=>$user['email'],'run_id'=>'33333333-3333-4333-8333-333333333333',
+    'score'=>7,'max_score'=>8,'meta'=>['rounds'=>3,'correct_answers'=>2,'mode'=>'plusminus']];
+foreach([1,2] as $_){
+    $saved=call_score_api('scores/submit.php',$sea,$token);
+    if(!($saved['saved']??false)||($saved['points']??null)!==70)throw new RuntimeException('Getallenzee save failed.');
+}
+$summary=call_score_api('scores/summary.php',null,$token);
+if($summary['totalPoints']!==160||$summary['wallet']['balance']!==160)throw new RuntimeException('Cross-game point balance is wrong.');
+echo "Passed: Getallenzee points combine with RekenCraft without duplicate rewards.\n";

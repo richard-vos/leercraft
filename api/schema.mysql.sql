@@ -49,3 +49,20 @@ CREATE TABLE IF NOT EXISTS scores (
   INDEX idx_scores_user_game (user_id, game_slug),
   UNIQUE KEY idx_scores_run (user_id, run_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS user_items (
+  user_id INT NOT NULL,
+  item_id VARCHAR(50) NOT NULL,
+  price_paid INT UNSIGNED NOT NULL,
+  purchased_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, item_id),
+  CONSTRAINT fk_items_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS avatar_equipment (
+  user_id INT NOT NULL,
+  slot VARCHAR(20) NOT NULL,
+  item_id VARCHAR(50) NOT NULL,
+  PRIMARY KEY (user_id, slot),
+  CONSTRAINT fk_equipment_owned FOREIGN KEY (user_id, item_id) REFERENCES user_items(user_id, item_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -26,14 +26,18 @@
   const accountListeners = new Set();
   async function request(path, body) {
     let response, data;
+    const controller=typeof AbortController==='function'?new AbortController():null;
+    const timer=controller?setTimeout(()=>controller.abort(),8000):null;
     try {
       response = await fetch(`${root}/api/${path}`, {
         method: body === undefined ? 'GET' : 'POST', credentials: 'same-origin', cache: 'no-store',
         headers: {Accept:'application/json', 'Content-Type':'application/json', 'X-Requested-With':'fetch'},
-        ...(body === undefined ? {} : {body:JSON.stringify(body)})
+        ...(body === undefined ? {} : {body:JSON.stringify(body)}),
+        ...(controller?{signal:controller.signal}:{})
       });
       data = await response.json();
     } catch { throw new Error('Verbinding met LeerCraft mislukt. Probeer het opnieuw.'); }
+    finally{if(timer!==null)clearTimeout(timer);}
     if (!response.ok || !data.ok) throw new Error(data.error || 'Dit lukte niet. Probeer het opnieuw.');
     return data;
   }
@@ -45,6 +49,7 @@
       const me = await request('auth/me.php');
       const previousEmail = email;
       email = me.loggedIn ? me.email : null;
+      if(!email||email!==previousEmail)window.LeerCraftAvatar?.clear();
       if (email !== previousEmail) accountListeners.forEach(listener => listener(email));
       $('[data-account-status]').textContent = email ? `Ingelogd als ${email}` : 'Speel als gast of log in om je punten te bewaren.';
       $('[data-login]').hidden = !!email; $('[data-logout]').hidden = !email;
@@ -52,13 +57,17 @@
         const summary = await request('scores/summary.php');
         const province = summary.games.find(g => g.gameSlug === 'provincie-klikspel');
         const runner = summary.games.find(g => g.gameSlug === 'rekencraft');
+        const sea = summary.games.find(g => g.gameSlug === 'getallenzee');
         const details = [];
         if(province)details.push(`Provincieklikspel: ${province.plays} keer · beste ${province.bestScore}/12`);
         if(runner)details.push(`RekenCraft: ${runner.plays} levels gehaald · ${runner.totalScore*10} punten`);
+        if(sea)details.push(`Getallenzee: ${sea.plays} races gewonnen · ${sea.totalScore*10} punten`);
         $('[data-account-progress]').textContent = `${summary.totalPoints} punten${details.length?' · '+details.join(' · '):' · nog geen spellen afgerond'}`;
+        if(summary.wallet)$('[data-account-progress]').textContent += ` · ${summary.wallet.balance} te besteden`;
         if(xp){const points=summary.totalPoints;xp.textContent=`Level ${Math.floor(points/100)+1} · ${points} XP · ${100-points%100} tot volgend level`;fill.style.width=`${points%100}%`;}
       }
     } catch(error) { $('[data-account-status]').textContent = error.message; }
+    await window.LeerCraftAvatar?.refresh();
   }
   const dialog = $('dialog');
   const digits = [...host.querySelectorAll('[data-otp-digit]')];
