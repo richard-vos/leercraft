@@ -77,7 +77,11 @@ export function createRunnerCharacter(kind, scale = 1, equipped = {}) {
       part(.24,.48,.30,0xc98f67,0,-.48,0,arm);
       part(.25,.13,.31,0xb37e59,0,-.74,0,arm);
       if(i===1) {
-        const sword=new THREE.Group();sword.position.set(0,-.83*scale,-.04*scale);sword.rotation.z=-.28;arm.add(sword);
+        const sword=new THREE.Group();
+        // Grip crosses the fist; the blade points forward (-Z), clear of the forearm.
+        sword.position.set(.04*scale,-.72*scale,-.12*scale);
+        sword.rotation.x=-Math.PI/2;
+        arm.add(sword);
         part(.12,.23,.12,0x59402c,0,0,0,sword);
         part(.40,.10,.13,0x168a94,0,.16,0,sword);
         part(.17,.65,.10,0x33cad2,0,.52,0,sword);

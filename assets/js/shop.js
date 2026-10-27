@@ -103,16 +103,19 @@ try{
     const dt=lastTime===null?0:Math.min((time-lastTime)/1000,.05);lastTime=time;
     if(document.hidden||$('outfit-panel').hidden)return;
     elapsed+=dt;
-    if(turning&&!drag&&!reduced.matches)preview.rotation.y+=dt*.45;
+    if(turning&&!drag)preview.rotation.y+=dt*(reduced.matches?.18:.45);
     phase+=dt*7;
     const cycle=elapsed%12,walking=cycle<6,crouching=cycle>=9&&cycle<10.5;
     const jump=cycle>=7&&cycle<7.8?Math.sin((cycle-7)/.8*Math.PI)*.65:0;
-    preview.position.y=reduced.matches?0:jump;
-    preview.scale.y=THREE.MathUtils.damp(preview.scale.y,!reduced.matches&&crouching?.72:1,14,dt);
+    preview.position.y=jump;
+    preview.scale.y=THREE.MathUtils.damp(preview.scale.y,crouching?.72:1,14,dt);
     for(const limb of limbs){
       const arm=limb.userData.ai!==undefined,index=arm?limb.userData.ai:limb.userData.li;
-      const stride=!reduced.matches&&walking?Math.sin(phase+index*Math.PI)*(arm?-.65:.65):0;
-      limb.rotation.x=THREE.MathUtils.damp(limb.rotation.x,stride+(jump>0&&arm?-.65:0),18,dt);
+      const stride=walking?Math.sin(phase+index*Math.PI)*(arm?-.65:.65):0;
+      // Steve's right-hand sword is part of this character's packed arm mesh.
+      const waving=arm&&index===1&&cycle>=10.5;
+      limb.rotation.x=THREE.MathUtils.damp(limb.rotation.x,waving?-1.4+Math.sin(phase*1.5)*.55:stride+(jump>0&&arm?-.65:0),18,dt);
+      limb.rotation.z=THREE.MathUtils.damp(limb.rotation.z,waving?Math.sin(phase)*.25:0,18,dt);
     }
     renderer.render(scene,camera);
   }
