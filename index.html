@@ -233,7 +233,12 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
   </div>
 
   <div data-leercraft-account></div>
-  <a class="shop-entry" href="/winkel/">Winkel &amp; mijn spullen <span>Koop een kroon of outfit met je punten</span></a>
+  <nav class="hub-nav" aria-label="Hoofdmenu">
+    <a href="#spellen" data-hub="spellen">Spellen</a>
+    <a href="#winkel" data-hub="winkel">Winkel</a>
+    <a href="#mijn-steve" data-hub="mijn-steve">Mijn Steve</a>
+  </nav>
+  <section id="games-panel" aria-label="Spellen">
   <div class="welcome">
     👋 Welkom, <b>Avonturier</b>! &nbsp;·&nbsp; Kies een vak hieronder om te spelen.
   </div>
@@ -457,6 +462,25 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
     </div>
   </div>
 
+  </section>
+  <section id="outfit-panel" class="outfit-panel" hidden aria-labelledby="outfit-heading">
+    <header class="outfit-heading"><h1 id="outfit-heading">Winkel</h1><strong id="shop-balance" role="status">Saldo laden...</strong></header>
+    <p id="shop-message" role="status" aria-live="polite"></p>
+    <div class="outfit-layout">
+      <div class="outfit-inventory">
+        <nav id="shop-categories" class="shop-categories" aria-label="Itemcategorie"></nav>
+        <h2 id="category-heading">Petjes</h2>
+        <div id="shop-catalog" class="item-grid"></div>
+        <div id="shop-owned" class="item-grid" hidden></div>
+        <p id="category-empty" hidden>Nog geen items in deze categorie.</p>
+      </div>
+      <aside class="avatar-card" aria-label="Jouw Steve">
+        <h2>Jouw Steve</h2>
+        <canvas id="avatar-preview" aria-label="Steve met jouw outfit. Sleep om hem te draaien."></canvas>
+        <p id="preview-fallback" hidden>Het 3D-voorbeeld kon niet worden geladen.</p>
+      </aside>
+    </div>
+  </section>
   <div class="footer">
     ⛏️ LeerCraft &nbsp;·&nbsp; Versie 0.2 &nbsp;·&nbsp; Meer spellen komen eraan! 🚀<br>
     👀 Bezoekers: <span id="visitor-count">...</span>
@@ -504,5 +528,6 @@ document.querySelectorAll('.card:not(.soon)').forEach(card=>{
 <script src="/assets/avatar-profile.js"></script>
 <script src="assets/account.js" data-root="."></script>
 <script src="assets/visitor-counter.js" data-root="."></script>
+<script type="module" src="/assets/js/shop.js"></script>
 </body>
 </html>
