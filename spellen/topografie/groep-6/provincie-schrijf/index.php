@@ -132,6 +132,7 @@ h1 small{display:block;font-size:0.65em;color:#aaffaa;text-shadow:2px 2px #00660
   <div class="header">
     <h1>✏️ Nederland Schrijfspel<small>Typ de naam van de uitgelichte provincie!</small></h1>
   </div>
+  <div data-leercraft-account></div>
   <div class="score-bar">
     <div class="sc-block"><div class="sc-label">Score</div><div class="sc-val" id="score-disp">0</div></div>
     <div class="sc-block"><div class="sc-label">Fout</div><div class="sc-val" id="wrong-disp" style="color:#ff8888;">0</div></div>
@@ -187,9 +188,14 @@ h1 small{display:block;font-size:0.65em;color:#aaffaa;text-shadow:2px 2px #00660
   <div class="end-title">🏆 Spel klaar! 🏆</div>
   <div class="end-score" id="end-score">0 / 12</div>
   <div class="end-msg" id="end-msg"></div>
+  <div id="save-result" class="end-msg" role="status"></div>
+  <button id="end-login" type="button" class="mc-btn" style="max-width:260px" onclick="LeerCraft.openLogin()" hidden>Inloggen</button>
+  <button id="retry-save" class="mc-btn" style="max-width:260px" hidden>Opnieuw opslaan</button>
+
   <button class="mc-btn red" onclick="closeEnd()" style="max-width:280px;margin-top:8px;">🔄 Opnieuw spelen</button>
 </div>
 
+<script src="/assets/account.js" data-root="/"></script>
 <script>
 const PROVINCES = [
   {id:"path7047",name:"Groningen",color:"#3A86FF",icon:"⛏️"},
@@ -210,6 +216,9 @@ const MAX_ATTEMPTS = 3;
 const DIM  = '#b0c4d8';
 const GOLD = '#FFD700';
 
+let runId,runOwner,completedResult;
+const roundTimers=new Set();
+function scheduleRound(fn,delay){const id=setTimeout(()=>{roundTimers.delete(id);fn();},delay);roundTimers.add(id);return id;}
 let queue=[], current=null, score=0, wrong=0, round=0, attempts=0, answered=false, done={};
 
 function shuffle(a){
@@ -242,6 +251,12 @@ function setAnim(pid, cls){
 }
 
 function startGame(){
+  roundTimers.forEach(clearTimeout);roundTimers.clear();
+  runId=crypto.randomUUID();runOwner=LeerCraft.email;completedResult=null;
+  document.getElementById('save-result').textContent='';
+  document.getElementById('retry-save').hidden=true;
+  document.getElementById('end-login').hidden=!!LeerCraft.email;
+
   queue=shuffle(PROVINCES); score=0; wrong=0; round=0; attempts=0; answered=false; done={};
   document.getElementById('end-screen').classList.remove('show');
   buildChips();
@@ -322,7 +337,7 @@ function nextRound(){
   setFill(current.id, GOLD);
   setAnim(current.id, 'is-active');
 
-  setTimeout(()=>inp.focus(), 50);
+  scheduleRound(()=>inp.focus(), 50);
 }
 
 document.getElementById('prov-input').addEventListener('input', function(){
@@ -357,7 +372,7 @@ function submitAnswer(){
     setFeedback('✅ Juist! '+current.name+' 🎉','ok');
     spawnParticles('#7CFC00');
     updateBar();
-    setTimeout(nextRound, 1500);
+    scheduleRound(nextRound, 1500);
 
   }else{
     // ❌ FOUT
@@ -365,7 +380,7 @@ function submitAnswer(){
     inp.className='no';
     setAnim(current.id, 'is-wrong');
 
-    setTimeout(()=>{
+    scheduleRound(()=>{
       inp.className='';
       inp.value='';
       buildLetterHint('');
@@ -381,7 +396,7 @@ function submitAnswer(){
       inp.disabled=true;
 
       // Zet juiste kleur na kort delay (wacht op shake animatie)
-      setTimeout(()=>{
+      scheduleRound(()=>{
         setFill(current.id, current.color);
         setAnim(current.id, 'is-done');
       }, 420);
@@ -391,7 +406,7 @@ function submitAnswer(){
 
       setFeedback('❌ Het was: '+current.name,'no');
       updateBar();
-      setTimeout(nextRound, 2500);
+      scheduleRound(nextRound, 2500);
     }else{
       const left=MAX_ATTEMPTS-attempts;
       if(typed.toLowerCase()===current.name.toLowerCase()){
@@ -431,6 +446,11 @@ function spawnParticles(color){
 }
 
 function endGame(){
+  if(completedResult)return;
+  answered=true;current=null;
+  completedResult={game_slug:'provincie-schrijfspel',score,max_score:12,run_id:runId,account_email:runOwner};
+  saveResult();
+
   document.getElementById('xp-fill').style.width='100%';
   document.getElementById('end-screen').classList.add('show');
   document.getElementById('end-score').textContent=score+' / '+PROVINCES.length;
@@ -453,9 +473,31 @@ function endGame(){
   },i*70);
 }
 
+async function saveResult(){
+  const result=completedResult, target=document.getElementById('save-result'), retry=document.getElementById('retry-save');
+  retry.hidden=true;
+  document.getElementById('end-login').hidden=!!LeerCraft.email;
+  if(!runOwner){target.textContent='Je verdiende '+(result.score*10)+' oefenpunten. Log in en start een nieuw spel om punten te bewaren.';return;}
+  if(LeerCraft.email!==runOwner){target.textContent='Je account is gewijzigd. Start een nieuw spel om punten op te slaan.';return;}
+  target.textContent='Punten opslaan...';
+  try{
+    const data=await LeerCraft.request('scores/submit.php',result);
+    if(completedResult!==result)return;
+    target.textContent=data.saved?'Opgeslagen! +'+data.points+' punten.':'Je sessie is verlopen. Log opnieuw in en probeer opslaan nogmaals.';
+    retry.hidden=data.saved;
+    document.getElementById('end-login').hidden=data.saved;
+    await LeerCraft.refresh();
+  }catch(error){if(completedResult!==result)return;target.textContent=error.message;retry.hidden=false;}
+}
+document.getElementById('retry-save').addEventListener('click',saveResult);
+LeerCraft.onChange(email=>{
+  document.getElementById('end-login').hidden=!!email;
+  // A guest who logs in during play can save this round under that account.
+  if(email && !runOwner && !completedResult)runOwner=email;
+});
 function closeEnd(){document.getElementById('end-screen').classList.remove('show');startGame();}
 
-startGame();
+LeerCraft.ready.then(startGame);
 </script>
 <script src="/assets/visitor-counter.js" data-root="/"></script>
 </body>

@@ -13,7 +13,7 @@ function validate_game_score(array $body): array
     }
     if (!is_int($score) || !is_int($max)) throw new InvalidArgumentException('Ongeldige score.');
     $meta = null;
-    if ($slug === 'provincie-klikspel') {
+    if (in_array($slug, ['provincie-klikspel', 'provincie-schrijfspel'], true)) {
         if ($max !== 12 || $score < 0 || $score > 12) throw new InvalidArgumentException('Ongeldige provinciescore.');
     } elseif ($slug === 'rekencraft') {
         $meta = $body['meta'] ?? null;

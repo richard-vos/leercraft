@@ -31,12 +31,12 @@
     total.textContent=summary?`${summary.totalPoints} punten verdiend${summary.wallet?' · '+summary.wallet.spent+' munten uitgegeven':''}`:'Log in om je voortgang te bekijken.';
     if(!summary)return;
     if(!summary.games.length){games.textContent='Je hebt nog geen spellen afgerond.';return;}
-    const names={'provincie-klikspel':'Provincieklikspel',rekencraft:'RekenCraft',getallenzee:'Getallenzee'};
+    const names={'provincie-klikspel':'Provincieklikspel','provincie-schrijfspel':'Provincies schrijven',rekencraft:'RekenCraft',getallenzee:'Getallenzee'};
     for(const game of summary.games){
       const row=document.createElement('article'),title=document.createElement('h3'),detail=document.createElement('p');
       title.textContent=names[game.gameSlug]||game.gameSlug;
       detail.textContent=`${game.plays} keer gespeeld · ${game.totalScore*10} punten verdiend`;
-      if(game.gameSlug==='provincie-klikspel')detail.textContent+=` · beste score ${game.bestScore}/12`;
+      if(['provincie-klikspel','provincie-schrijfspel'].includes(game.gameSlug))detail.textContent+=` · beste score ${game.bestScore}/12`;
       row.append(title,detail);games.append(row);
     }
   }

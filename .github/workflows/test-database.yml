@@ -32,6 +32,7 @@ jobs:
         run: |
           node tests/account-otp.cjs
           node tests/province-game.cjs
+          node tests/province-write-game.cjs
           node --experimental-default-type=module tests/rekencraft-visuals.cjs
           node --experimental-default-type=module tests/rekencraft-progress.cjs
           node --experimental-default-type=module tests/getallenzee-progress.cjs

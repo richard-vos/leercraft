@@ -41,3 +41,15 @@ foreach([1,2] as $_){
 $summary=call_score_api('scores/summary.php',null,$token);
 if($summary['totalPoints']!==160||$summary['wallet']['balance']!==160)throw new RuntimeException('Cross-game point balance is wrong.');
 echo "Passed: Getallenzee points combine with RekenCraft without duplicate rewards.\n";
+$province=['game_slug'=>'provincie-schrijfspel','account_email'=>$user['email'],
+    'run_id'=>'44444444-4444-4444-8444-444444444444','score'=>12,'max_score'=>12];
+foreach([1,2] as $_){
+    $saved=call_score_api('scores/submit.php',$province,$token);
+    if(!($saved['saved']??false)||$saved['points']!==120)throw new RuntimeException('Province writing save failed.');
+}
+$summary=call_score_api('scores/summary.php',null,$token);
+$games=array_values(array_filter($summary['games'],static fn($game)=>$game['gameSlug']==='provincie-schrijfspel'));
+if($summary['totalPoints']!==280||$summary['wallet']['balance']!==280||count($games)!==1||$games[0]['plays']!==1){
+    throw new RuntimeException('Province writing wallet, history or retry deduplication failed.');
+}
+echo "Passed: province writing points, wallet, history and retry deduplication.\n";
