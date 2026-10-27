@@ -24,6 +24,22 @@
   const $ = selector => host.querySelector(selector) || dialog.querySelector(selector);
   let email = null, pendingEmail = '';
   const accountListeners = new Set();
+  function renderHistory(summary) {
+    const total=document.getElementById('history-total'),games=document.getElementById('history-games');
+    if(!total||!games)return;
+    games.replaceChildren();
+    total.textContent=summary?`${summary.totalPoints} punten verdiend${summary.wallet?' · '+summary.wallet.spent+' munten uitgegeven':''}`:'Log in om je voortgang te bekijken.';
+    if(!summary)return;
+    if(!summary.games.length){games.textContent='Je hebt nog geen spellen afgerond.';return;}
+    const names={'provincie-klikspel':'Provincieklikspel',rekencraft:'RekenCraft',getallenzee:'Getallenzee'};
+    for(const game of summary.games){
+      const row=document.createElement('article'),title=document.createElement('h3'),detail=document.createElement('p');
+      title.textContent=names[game.gameSlug]||game.gameSlug;
+      detail.textContent=`${game.plays} keer gespeeld · ${game.totalScore*10} punten verdiend`;
+      if(game.gameSlug==='provincie-klikspel')detail.textContent+=` · beste score ${game.bestScore}/12`;
+      row.append(title,detail);games.append(row);
+    }
+  }
   async function request(path, body) {
     let response, data;
     const controller=typeof AbortController==='function'?new AbortController():null;
@@ -42,6 +58,7 @@
     return data;
   }
   async function refresh() {
+    renderHistory(null);
     $('[data-account-progress]').textContent = '';
     const fill = document.getElementById('xp-fill'), xp = document.getElementById('xp-text');
     if(xp){xp.textContent='Log in om punten te bewaren';fill.style.width='0%';}
@@ -55,6 +72,7 @@
       $('[data-login]').hidden = !!email; $('[data-logout]').hidden = !email;
       if (email) {
         const summary = await request('scores/summary.php');
+        renderHistory(summary);
         const province = summary.games.find(g => g.gameSlug === 'provincie-klikspel');
         const runner = summary.games.find(g => g.gameSlug === 'rekencraft');
         const sea = summary.games.find(g => g.gameSlug === 'getallenzee');

@@ -223,6 +223,8 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
   <div class="logo-block">
     <div class="logo-title">⛏️ Leer<span class="logo-craft">Craft</span></div>
     <div class="logo-sub">Kies een vak en begin je avontuur! ⚔️</div>
+    <div data-leercraft-account class="header-account"></div>
+    <div class="coin-bar" aria-label="Je munten"><span>Munten</span><strong id="header-coins">0</strong></div>
     <div class="xp-wrap">
       <div class="xp-lbl">⚡ Voortgang</div>
       <div class="xp-outer">
@@ -232,7 +234,6 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
     </div>
   </div>
 
-  <div data-leercraft-account></div>
   <nav class="hub-nav" aria-label="Hoofdmenu">
     <a href="#spellen" data-hub="spellen">Spellen</a>
     <a href="#winkel" data-hub="winkel">Winkel</a>
@@ -480,6 +481,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <p id="preview-fallback" hidden>Het 3D-voorbeeld kon niet worden geladen.</p>
       </aside>
     </div>
+    <section id="player-history" hidden aria-labelledby="history-heading"><h2 id="history-heading">Mijn voortgang</h2><p id="history-total"></p><div id="history-games"></div></section>
   </section>
   <div class="footer">
     ⛏️ LeerCraft &nbsp;·&nbsp; Versie 0.2 &nbsp;·&nbsp; Meer spellen komen eraan! 🚀<br>
@@ -529,5 +531,6 @@ document.querySelectorAll('.card:not(.soon)').forEach(card=>{
 <script src="assets/account.js" data-root="."></script>
 <script src="assets/visitor-counter.js" data-root="."></script>
 <script type="module" src="/assets/js/shop.js"></script>
+<script src="/assets/js/hub-info.js" defer></script>
 </body>
 </html>

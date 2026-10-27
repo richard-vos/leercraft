@@ -15,6 +15,7 @@ function navigate(){
     else link.removeAttribute('aria-current');
   });
   $('outfit-heading').textContent=view==='winkel'?'Winkel':'Mijn Steve';
+  $('player-history').hidden=games||view!=='mijn-steve';
   render(LeerCraftAvatar.state);
 }
 window.addEventListener('hashchange',navigate);
@@ -55,6 +56,7 @@ function card(item,state,ownedView){
 }
 function render(state){
   $('shop-balance').textContent=state.loggedIn?state.wallet.balance+' punten':'Log in voor je punten';
+  $('header-coins').textContent=state.loggedIn?state.wallet.balance:0;
   const ownedView=view==='mijn-steve';
   $('shop-categories').replaceChildren(...categories.map(([id,label])=>{
     const tab=button(label,()=>{category=id;render(LeerCraftAvatar.state);$('shop-categories').querySelector('[aria-pressed="true"]').focus({preventScroll:true});});
