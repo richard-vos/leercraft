@@ -44,6 +44,14 @@ function validate_game_score(array $body): array
         }
         $meta = ['level' => $level, 'correct_answers' => $correct, 'total_questions' => $questions,
             'settings' => ['max' => $settings['max'], 'operators' => $settings['operators']]];
+    } elseif ($slug === 'reken-race') {
+        $meta=$body['meta']??null;
+        if(!is_array($meta)||($meta['laps']??null)!==3||($meta['total_questions']??null)!==10
+            ||!is_int($meta['correct_answers']??null)||$meta['correct_answers']<0||$meta['correct_answers']>10
+            ||$score!==$meta['correct_answers']+5||$max!==15){
+            throw new InvalidArgumentException('Ongeldig raceresultaat.');
+        }
+        $meta=['laps'=>3,'total_questions'=>10,'correct_answers'=>$meta['correct_answers']];
     } elseif ($slug === 'getallenzee') {
         $meta=$body['meta']??null;
         if(!is_array($meta)||!is_int($meta['rounds']??null)||$meta['rounds']<1||$meta['rounds']>1000

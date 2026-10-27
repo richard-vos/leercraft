@@ -53,3 +53,13 @@ if($summary['totalPoints']!==280||$summary['wallet']['balance']!==280||count($ga
     throw new RuntimeException('Province writing wallet, history or retry deduplication failed.');
 }
 echo "Passed: province writing points, wallet, history and retry deduplication.\n";
+$race=['game_slug'=>'reken-race','account_email'=>$user['email'],
+    'run_id'=>'55555555-5555-4555-8555-555555555555','score'=>15,'max_score'=>15,
+    'meta'=>['laps'=>3,'total_questions'=>10,'correct_answers'=>10]];
+foreach([1,2] as $_){
+    $saved=call_score_api('scores/submit.php',$race,$token);
+    if(!($saved['saved']??false)||$saved['points']!==150)throw new RuntimeException('Race save failed.');
+}
+$summary=call_score_api('scores/summary.php',null,$token);
+if($summary['totalPoints']!==430||$summary['wallet']['balance']!==430)throw new RuntimeException('Race points counted incorrectly.');
+echo "Passed: race points, wallet and retry deduplication.\n";

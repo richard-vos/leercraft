@@ -38,3 +38,11 @@ $sea=['game_slug'=>'getallenzee','score'=>8,'max_score'=>11,'run_id'=>$valid['ru
 if(validate_game_score($sea)['score']!==8)throw new RuntimeException('Sea score rejected.');
 $sea['meta']['correct_answers']=99;
 try{validate_game_score($sea);throw new RuntimeException('Invalid sea score accepted.');}catch(InvalidArgumentException $expected){}
+$race=['game_slug'=>'reken-race','score'=>15,'max_score'=>15,'run_id'=>$valid['run_id'],
+    'meta'=>['laps'=>3,'total_questions'=>10,'correct_answers'=>10]];
+if(validate_game_score($race)['score']!==15)throw new RuntimeException('Race result rejected.');
+foreach([['score'=>16],['max_score'=>16],['meta'=>['laps'=>2,'total_questions'=>10,'correct_answers'=>10]],
+    ['meta'=>['laps'=>3,'total_questions'=>10,'correct_answers'=>11]]] as $change){
+    try{validate_game_score(array_replace($race,$change));}catch(InvalidArgumentException $expected){continue;}
+    throw new RuntimeException('Invalid race result accepted.');
+}

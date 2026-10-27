@@ -3,10 +3,20 @@ declare(strict_types=1);
 
 function shop_catalog(): array
 {
-    return [
-        'gouden-kroon' => ['id'=>'gouden-kroon','name'=>'Gouden kroon','slot'=>'head','price'=>250,'icon'=>'crown','description'=>'Een gouden blokkenkroon voor je avonturier.'],
-        'roze-shirt' => ['id'=>'roze-shirt','name'=>'Roze T-shirt','slot'=>'shirt','price'=>150,'icon'=>'shirt','description'=>'Een roze shirt, ook zichtbaar tijdens het spelen.'],
-    ];
+    static $catalog=null;
+    if($catalog===null){
+        $items=json_decode(file_get_contents(__DIR__.'/../../assets/shop-catalog.json'),true,512,JSON_THROW_ON_ERROR);
+        $catalog=array_column($items,null,'id');
+    }
+    return $catalog;
+}
+
+/** Test administrator: identity comes from the database, never from request fields. */
+function shop_is_admin(PDO $pdo, int $userId): bool
+{
+    $stmt=$pdo->prepare('SELECT email FROM users WHERE id = :uid');
+    $stmt->execute(['uid'=>$userId]);
+    return strtolower((string)$stmt->fetchColumn())==='richard.vos@outlook.com';
 }
 
 function shop_wallet(PDO $pdo, int $userId): array
@@ -15,7 +25,7 @@ function shop_wallet(PDO $pdo, int $userId): array
     $stmt->execute(['uid'=>$userId]);$earned=(int)$stmt->fetchColumn();
     $stmt=$pdo->prepare('SELECT COALESCE(SUM(price_paid),0) FROM user_items WHERE user_id = :uid');
     $stmt->execute(['uid'=>$userId]);$spent=(int)$stmt->fetchColumn();
-    return ['earned'=>$earned,'spent'=>$spent,'balance'=>$earned-$spent];
+    return ['earned'=>$earned,'spent'=>$spent,'balance'=>$earned-$spent,'unlimited'=>shop_is_admin($pdo,$userId)];
 }
 
 function shop_state(PDO $pdo, int $userId): array
@@ -23,12 +33,12 @@ function shop_state(PDO $pdo, int $userId): array
     $stmt=$pdo->prepare('SELECT item_id FROM user_items WHERE user_id = :uid ORDER BY purchased_at, item_id');
     $stmt->execute(['uid'=>$userId]);$owned=array_column($stmt->fetchAll(),'item_id');
     $stmt=$pdo->prepare('SELECT slot, item_id FROM avatar_equipment WHERE user_id = :uid');
-    $stmt->execute(['uid'=>$userId]);$equipped=['head'=>null,'shirt'=>null];
+    $stmt->execute(['uid'=>$userId]);$equipped=['head'=>null,'shirt'=>null,'pants'=>null,'shoes'=>null,'object'=>null];
     $catalog=shop_catalog();
     foreach($stmt->fetchAll() as $row){
         if(isset($catalog[$row['item_id']]) && $catalog[$row['item_id']]['slot']===$row['slot'])$equipped[$row['slot']]=$row['item_id'];
     }
-    return ['loggedIn'=>true,'wallet'=>shop_wallet($pdo,$userId),'owned'=>$owned,'equipped'=>$equipped];
+    return ['loggedIn'=>true,'isAdmin'=>shop_is_admin($pdo,$userId),'wallet'=>shop_wallet($pdo,$userId),'owned'=>$owned,'equipped'=>$equipped];
 }
 
 /** User row locking serializes every purchase for this account. */
@@ -43,9 +53,10 @@ function shop_buy(PDO $pdo, int $userId, string $itemId): void
         $stmt=$pdo->prepare('SELECT item_id FROM user_items WHERE user_id = :uid AND item_id = :item');
         $stmt->execute(['uid'=>$userId,'item'=>$itemId]);
         if(!$stmt->fetchColumn()){
-            if(shop_wallet($pdo,$userId)['balance']<$catalog[$itemId]['price'])throw new DomainException('Je hebt nog niet genoeg punten voor dit item.');
+            $wallet=shop_wallet($pdo,$userId);
+            if(!$wallet['unlimited']&&$wallet['balance']<$catalog[$itemId]['price'])throw new DomainException('Je hebt nog niet genoeg punten voor dit item.');
             $stmt=$pdo->prepare('INSERT INTO user_items (user_id,item_id,price_paid) VALUES (:uid,:item,:price)');
-            $stmt->execute(['uid'=>$userId,'item'=>$itemId,'price'=>$catalog[$itemId]['price']]);
+            $stmt->execute(['uid'=>$userId,'item'=>$itemId,'price'=>$wallet['unlimited']?0:$catalog[$itemId]['price']]);
         }
         $pdo->commit();
     }catch(Throwable $error){if($pdo->inTransaction())$pdo->rollBack();throw $error;}
@@ -53,7 +64,7 @@ function shop_buy(PDO $pdo, int $userId, string $itemId): void
 
 function shop_equip(PDO $pdo, int $userId, string $slot, ?string $itemId): void
 {
-    if(!in_array($slot,['head','shirt'],true))throw new InvalidArgumentException('Onbekende uitrustingsplek.');
+    if(!in_array($slot,['head','shirt','pants','shoes','object'],true))throw new InvalidArgumentException('Onbekende uitrustingsplek.');
     $catalog=shop_catalog();
     if($itemId!==null&&(!isset($catalog[$itemId])||$catalog[$itemId]['slot']!==$slot))throw new InvalidArgumentException('Dit item past niet op deze plek.');
     $pdo->beginTransaction();

@@ -120,10 +120,14 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
 <div class="screen" id="startscreen">
   <h1>🏁 Reken Race 3D</h1>
   <p>Drie rondes. Vier rivalen. Jouw Steve.<br>Rij langs het <span style="color:#7CFC00">juiste antwoord</span> voor extra snelheid.<br>Fout antwoord? Je draait rond! 💥<br>Pijltjestoetsen of WASD om te rijden.</p>
-  <button class="btn" onclick="beginGame()">▶ Start Race!</button>
+  <div data-leercraft-account></div>
+  <button id="start-race" class="btn" onclick="beginGame()" disabled>▶ Start Race!</button>
 </div>
 
 <div class="screen hidden" id="endscreen">
+  <p id="race-points" role="status" aria-live="polite"></p>
+  <button type="button" class="btn" id="race-save-retry" hidden>Opnieuw opslaan</button>
+  <button type="button" class="btn" id="race-login" onclick="LeerCraft.openLogin()" hidden>Inloggen</button>
   <div id="endtitle" style="font-size:clamp(16px,2.5vw,26px);color:#FFD700;text-shadow:3px 3px #7A5A00;line-height:1.7;"></div>
   <div class="sgrid">
     <div class="sbox"><div class="sboxn" id="epos">-</div><div class="sboxl">POSITIE</div></div>
@@ -137,9 +141,23 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
 </div>
 
 <script src="/assets/avatar-profile.js"></script>
+<script src="/assets/account.js" data-root="/"></script>
 <script type="module">
 import * as THREE from '/assets/vendor/three-0.160.0.module.js';
 import {createKart,decorateCircuit} from '/assets/js/race-kart.js';
+import {RaceProgress} from '/assets/js/race-progress.js';
+const progress=new RaceProgress(LeerCraft,run=>{
+  if(progress.current!==run)return;
+  const messages={guest:`${run.points} oefenpunten. Log in en start een nieuwe race om punten te bewaren.`,
+    saving:'Punten opslaan...',saved:`+${run.points} punten opgeslagen!`,error:'Opslaan mislukt. Probeer opnieuw.',
+    'needs-login':'Log opnieuw in om je punten op te slaan.','account-changed':'Je account is gewijzigd. Log in met het account waarmee je begon.'};
+  document.getElementById('race-points').textContent=messages[run.state]||'Punten opslaan...';
+  document.getElementById('race-save-retry').hidden=!['error','needs-login','account-changed'].includes(run.state);
+  document.getElementById('race-login').hidden=!!LeerCraft.email;
+});
+document.getElementById('race-save-retry').addEventListener('click',()=>progress.retryPending());
+LeerCraft.onChange(email=>{document.getElementById('race-login').hidden=!!email;});
+LeerCraft.ready.then(()=>{document.getElementById('start-race').disabled=false;});
 
 // ═══════════════════════════════════════════
 // SCENE
@@ -742,8 +760,10 @@ function checkCol(){
       if(dt > T_TOL) return;
       const doff = Math.abs(obj.lane*ROAD_W*0.6 - player.off);
       if(doff > OFF_TOL) return;
-      obj.done=true;
-      scene.remove(obj.group);
+      progress.recordGate(obj.somIdx,obj.ok);
+      gameObjs.forEach(answer=>{
+        if(answer.type==='a'&&answer.somIdx===obj.somIdx){answer.done=true;scene.remove(answer.group);}
+      });
 
       if(obj.ok){
         player.spd=Math.min(player.maxSpd*1.3, player.spd+player.maxSpd*0.25);
@@ -932,6 +952,10 @@ function loop(ts){
 // ═══════════════════════════════════════════
 let cdInt;
 window.beginGame=function(){
+  progress.beginRace();
+  document.getElementById('race-points').textContent='';
+  document.getElementById('race-save-retry').hidden=true;
+  document.getElementById('race-login').hidden=true;
   document.getElementById('startscreen').classList.add('hidden');
   document.getElementById('endscreen').classList.add('hidden');
 
@@ -971,7 +995,9 @@ window.beginGame=function(){
 };
 
 function endRace(){
+  if(!player.finished)return;
   gameRunning=false;
+  progress.finishRace();
   const sorted=[...racers].sort((a,b)=>prog(b)-prog(a));
   const pos=sorted.indexOf(player)+1;
   const titles=['🏆 GEWONNEN!','🥈 2e plek!','🥉 3e plek!','4e plek','5e plek'];

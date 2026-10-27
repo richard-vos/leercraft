@@ -1,7 +1,8 @@
 # Minecraft-itemideeën
 
-20 ideeën per categorie. De gouden kroon en het roze T-shirt bestaan al.
-De overige ideeën zijn ontwerpen voor latere toevoeging aan de winkel en de spelmodellen.
+20 items per categorie, beschikbaar in de winkel en de spelmodellen.
+De catalogus staat in `assets/shop-catalog.json`. Na een wijziging genereert
+`py -3 scripts/build-shop-catalog.py` de bijbehorende browsercatalogus.
 Alle items zijn cosmetisch: ze geven geen voordeel bij het rekenen of andere leeropdrachten.
 
 | Nr. | Petjes | Schoenen | T-shirts | Broek | Voorwerpen |

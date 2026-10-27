@@ -164,6 +164,9 @@ jobs:
               state = json.load(response)
               if not state.get('ok') or not state.get('catalog') or state.get('loggedIn'):
                   raise SystemExit('Winkel-API werkt niet correct voor gasten.')
+              for slot in ['head', 'shoes', 'shirt', 'pants', 'object']:
+                  if sum(item['slot'] == slot for item in state['catalog']) != 20:
+                      raise SystemExit('Winkelcategorie bevat niet 20 items: ' + slot)
           PY
 
       - name: Vervallen spelbestanden opruimen na geslaagde routecontrole

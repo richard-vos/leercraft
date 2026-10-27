@@ -5,10 +5,10 @@ beschikbaar op de startpagina, in het provincieklikspel, RekenCraft en Getallenz
 
 ## Winkel en outfits
 
-Op `/winkel/` koop je permanente items met je verdiende punten en kies je bij
-Mijn gekochte items wat je draagt. De eerste items zijn een gouden kroon (250
-punten, hoofdslot) en een roze T-shirt (150 punten, shirtslot). Je kunt beide
-tegelijk dragen of per slot teruggaan naar het standaarduiterlijk.
+Via Winkel koop je permanente items en bij Mijn Steve kies je wat je draagt.
+De vijf categorieën bevatten elk 20 items: petjes, schoenen, T-shirts, broeken
+en voorwerpen. Je kunt één item per categorie tegelijk dragen.
+`/winkel/` opent de winkel op de hoofdpagina.
 
 De server bepaalt de prijzen en controleert bezit en saldo. `user_items` bewaart
 aankopen en betaalde prijzen; `avatar_equipment` bewaart de gedragen items. De
@@ -19,9 +19,16 @@ item geeft geen tweede afschrijving. De accountidentiteit wordt ook gecontroleer
 
 Het beschikbare saldo is verdiende punten minus aankoopkosten. De totale XP,
 levels en bestaande scores worden niet verlaagd door winkelen. Er is geen echt
-geld of betaling betrokken. `api/lib/shop.php` bevat de catalogus en prijzen.
+geld of betaling betrokken. `assets/shop-catalog.json` bevat de catalogus en
+prijzen. Na wijzigingen bouw je de browsercatalogus met
+`py -3 scripts/build-shop-catalog.py`; de CI controleert of beide overeenkomen.
 
-RekenCraft en Getallenzee laden de outfit bij het account en bij terugkeer naar
+Na OTP-login krijgt `richard.vos@outlook.com` automatisch testbeheerrechten voor
+de winkel: het saldo toont ∞ en aankopen worden voor 0 munten vastgelegd.
+De server controleert hiervoor het e-mailadres van het account in de database.
+Andere accounts kunnen deze status niet via aanvraagvelden inschakelen.
+
+RekenCraft, Getallenzee en Reken Race laden de outfit bij het account en bij terugkeer naar
 het spelvenster. Alleen het eigen personage krijgt die outfit; NPC's blijven
 ongewijzigd. Zonder account speel je met de herkenbare standaard-Steve. Een
 netwerkfout bij het laden van de outfit blokkeert het spel niet en gebruikt de

@@ -8,6 +8,9 @@ RedirectMatch 404 "(?i)/(?:\.git|\.github|\.claude|\.codex|\.agents|\.tmp|script
     Header always set X-Frame-Options "DENY"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    <FilesMatch "\.(?:js|css|json)$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
 </IfModule>
 
 # Public game URLs. Only browser requests to old HTML URLs are redirected.

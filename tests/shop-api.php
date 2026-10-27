@@ -12,6 +12,9 @@ function shop_api(string $path,?array $body,?string $token):array{
     if(!is_array($data))throw new RuntimeException('API did not return JSON.');return $data;
 }
 $pdo=db();$user=find_or_create_user('shop-tests@example.com');$token=create_session($user['id']);
+foreach(['head','shirt','pants','shoes','object'] as $slot){
+    shop_check(count(array_filter(shop_catalog(),static fn($item)=>$item['slot']===$slot))===20,'Each category needs 20 items.');
+}
 $seed=$pdo->prepare("INSERT INTO scores (user_id,game_slug,score,max_score) VALUES (:uid,'test-seed',40,40)");$seed->execute(['uid'=>$user['id']]);
 $identity=['account_email'=>$user['email']];
 $state=shop_api('shop/state.php',null,$token);shop_check($state['wallet']['balance']===400,'Initial balance is wrong.');
@@ -47,3 +50,22 @@ foreach($workers as [$process,$pipes]){
 shop_check($bought===1,'Concurrent purchases overspent the wallet.');
 shop_check(shop_wallet($pdo,$race['id'])['balance']>=0,'Negative balance after concurrent purchases.');
 echo "Passed: purchase prices, duplicate buy, inventory, equip/unequip, XP preservation, guest/account restrictions and concurrent spending.\n";
+
+// Test privileges follow the authenticated database identity, never client flags.
+$blocked=shop_api('shop/buy.php',$identity+['item_id'=>'diamanten-helm','isAdmin'=>true,'unlimited'=>true],$token);
+shop_check(!$blocked['ok'],'A normal account bypassed payment using client fields.');
+$admin=find_or_create_user('richard.vos@outlook.com');$adminToken=create_session($admin['id']);
+$adminIdentity=['account_email'=>$admin['email']];
+foreach(shop_catalog() as $item){
+    $state=shop_api('shop/buy.php',$adminIdentity+['item_id'=>$item['id']],$adminToken);
+    shop_check(($state['ok']??false)&&$state['wallet']['unlimited']===true,'Test administrator purchase failed.');
+}
+shop_check(count($state['owned'])===100&&$state['wallet']['spent']===0,'Administrator needs all 100 items without charges.');
+foreach(['head','shirt','pants','shoes','object'] as $slot){
+    $item=array_values(array_filter(shop_catalog(),static fn($item)=>$item['slot']===$slot))[19];
+    $state=shop_api('shop/equip.php',$adminIdentity+['slot'=>$slot,'item_id'=>$item['id']],$adminToken);
+    shop_check($state['equipped'][$slot]===$item['id'],'A new equipment slot could not be equipped.');
+}
+shop_check(!shop_api('shop/state.php',null,$token)['wallet']['unlimited'],'Admin rights leaked to another account.');
+shop_check(!shop_api('shop/buy.php',$adminIdentity+['item_id'=>'diamanten-helm'],$token)['ok'],'Admin identity spoof accepted.');
+echo "Passed: 100 catalog items, five slots, unlimited admin purchases and privilege isolation.\n";

@@ -38,6 +38,8 @@ jobs:
           node --experimental-default-type=module tests/getallenzee-progress.cjs
           node --experimental-default-type=module tests/avatar-cosmetics.cjs
           node --experimental-default-type=module tests/race-kart.cjs
+          node --experimental-default-type=module tests/race-progress.cjs
+          node --experimental-default-type=module tests/shop-catalog.cjs
       - name: Puntentoekenning controleren
         run: php tests/game-scores.php
       - name: Configuratie voor gast-accounttest maken

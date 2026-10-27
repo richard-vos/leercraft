@@ -31,7 +31,7 @@
     total.textContent=summary?`${summary.totalPoints} punten verdiend${summary.wallet?' · '+summary.wallet.spent+' munten uitgegeven':''}`:'Log in om je voortgang te bekijken.';
     if(!summary)return;
     if(!summary.games.length){games.textContent='Je hebt nog geen spellen afgerond.';return;}
-    const names={'provincie-klikspel':'Provincieklikspel','provincie-schrijfspel':'Provincies schrijven',rekencraft:'RekenCraft',getallenzee:'Getallenzee'};
+    const names={'provincie-klikspel':'Provincieklikspel','provincie-schrijfspel':'Provincies schrijven',rekencraft:'RekenCraft',getallenzee:'Getallenzee','reken-race':'Reken Race'};
     for(const game of summary.games){
       const row=document.createElement('article'),title=document.createElement('h3'),detail=document.createElement('p');
       title.textContent=names[game.gameSlug]||game.gameSlug;
@@ -81,7 +81,7 @@
         if(runner)details.push(`RekenCraft: ${runner.plays} levels gehaald · ${runner.totalScore*10} punten`);
         if(sea)details.push(`Getallenzee: ${sea.plays} races gewonnen · ${sea.totalScore*10} punten`);
         $('[data-account-progress]').textContent = `${summary.totalPoints} punten${details.length?' · '+details.join(' · '):' · nog geen spellen afgerond'}`;
-        if(summary.wallet)$('[data-account-progress]').textContent += ` · ${summary.wallet.balance} te besteden`;
+        if(summary.wallet)$('[data-account-progress]').textContent += summary.wallet.unlimited?' · onbeperkte testmunten':` · ${summary.wallet.balance} te besteden`;
         if(xp){const points=summary.totalPoints;xp.textContent=`Level ${Math.floor(points/100)+1} · ${points} XP · ${100-points%100} tot volgend level`;fill.style.width=`${points%100}%`;}
       }
     } catch(error) { $('[data-account-status]').textContent = error.message; }

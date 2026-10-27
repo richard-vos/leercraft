@@ -1,4 +1,4 @@
-const PINK=0xe46ba0;
+import {outfits,headwear,shirtBadge,heldObject,runnerLegColors,seaLegColors} from './outfit-parts.js';
 function removeCrown(model){
   const crown=model.getObjectByName('avatar-crown');
   if(!crown)return;
@@ -39,16 +39,22 @@ export function applyRunnerOutfit(THREE,model,equipped={}){
     });
     model.userData.shirtVertices=layers;
   }
-  const pink=new THREE.Color(PINK);
+  const shirt=outfits[equipped.shirt];
+  const pink=new THREE.Color(shirt?.color||0xe46ba0);
   for(const {colors,matches} of model.userData.shirtVertices){
     for(const {index,shade,original} of matches){
-      if(equipped.shirt==='roze-shirt'){
+      if(shirt){
         const tint=pink.clone().multiplyScalar([1,.65,.58][shade]);colors.setXYZ(index,tint.r,tint.g,tint.b);
       }else colors.setXYZ(index,...original);
     }
     colors.needsUpdate=true;
   }
   setCrown(THREE,model,equipped,model.userData.avatarScale||1,2.34);
+  const scale=model.userData.avatarScale||1;
+  headwear(THREE,model,outfits[equipped.head],scale,2.34);
+  runnerLegColors(THREE,model,equipped);
+  shirtBadge(THREE,model,shirt,scale);
+  heldObject(THREE,model,outfits[equipped.object],scale);
 }
 
 export function applySeaOutfit(THREE,model,equipped={}){
@@ -60,7 +66,12 @@ export function applySeaOutfit(THREE,model,equipped={}){
   for(const {mesh,original} of model.userData.shirtMeshes){
     if(mesh.material!==original)mesh.material.dispose();
     mesh.material=original;
-    if(equipped.shirt==='roze-shirt'){mesh.material=original.clone();mesh.material.color.setHex(PINK);}
+    const shirt=outfits[equipped.shirt];
+    if(shirt){mesh.material=original.clone();mesh.material.color.setHex(shirt.color);}
   }
   setCrown(THREE,model,equipped,1,2.31);
+  headwear(THREE,model,outfits[equipped.head],1,2.31);
+  seaLegColors(THREE,model,equipped);
+  shirtBadge(THREE,model,outfits[equipped.shirt],1,true);
+  heldObject(THREE,model,outfits[equipped.object],1,true);
 }
