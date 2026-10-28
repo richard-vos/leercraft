@@ -1,0 +1,94 @@
+/* Shared stone panels for Spellen, Winkel and Mijn Steve. */
+.site-home{--hub-stone:url('/assets/images/ui-stone.svg');--hub-panel:linear-gradient(#111a20d9,#121b21ed);--hub-top:#a3afb7;--hub-left:#929fa9;--hub-right:#333c45;--hub-bottom:#202930;--hub-accent:#ffe079;--hub-green:linear-gradient(#518f2ddd,#2a5c20ed)}
+.site-home :is(.outfit-panel,.subject-header,.subject-dialog){background:var(--hub-panel),var(--hub-stone);border:7px solid #717d87;border-top-color:var(--hub-top);border-left-color:var(--hub-left);border-right-color:var(--hub-right);border-bottom-color:var(--hub-bottom);box-shadow:inset 0 0 0 2px #17222a,0 4px #131e26}
+.site-home .outfit-panel{padding:20px 16px;font:17px/1.5 Arial,sans-serif}
+.site-home .outfit-heading{gap:16px;margin:0 0 24px;padding-bottom:18px;border-bottom:3px solid #566570;align-items:center}
+.site-home .outfit-heading h1{margin:0;color:var(--hub-accent);font-size:clamp(20px,3vw,28px);text-shadow:2px 3px #64501c}
+.shop-wallet{display:flex;align-items:center;gap:10px;min-height:56px;padding:10px 14px;background:#151e26d9;border:3px solid #566572;border-top-color:#8797a2;border-left-color:#7e8e9a;box-shadow:inset 2px 2px #0b1116}
+.shop-wallet img{width:34px;height:34px;image-rendering:pixelated}
+.site-home .outfit-heading #shop-balance{background:none;border:0;padding:0;color:#ffe5a1;font-size:19px;line-height:1.4}
+.site-home .outfit-layout{gap:20px;align-items:start}
+.site-home .outfit-inventory{min-width:0;row-gap:16px}
+.site-home .shop-categories{gap:10px;margin:0;padding:3px 3px 12px;scrollbar-width:thin;scrollbar-color:#91a2ae #17232b}
+.site-home :is(.shop-button,.subject-info,.card-btn,.world-switch-track){border-radius:0;touch-action:manipulation}
+.site-home .shop-button{min-height:54px;padding:12px;font:700 16px/1.35 Arial,sans-serif;text-shadow:1px 2px #142414;background:var(--hub-green),var(--hub-stone);border:4px solid #86b265;border-top-color:#b4dc89;border-left-color:#a0cb79;border-right-color:#234e1c;border-bottom-color:#1c4117;box-shadow:inset 2px 2px #ffffff12,0 2px #101d14}
+.site-home .shop-categories .shop-button{background:linear-gradient(#65707b99,#303c48cc),var(--hub-stone);color:#f3f7fa;border-color:#8294a1;border-top-color:#b4c1cb;border-left-color:#a3b3be;border-right-color:#28343e;border-bottom-color:#1e2933;text-shadow:1px 2px #15212d}
+.site-home .shop-categories .shop-button[aria-pressed=true]{background:var(--hub-green),var(--hub-stone);color:#fff5bd;border-top-color:#b4dc89;border-left-color:#a0cb79;border-right-color:#234e1c;border-bottom-color:#1c4117;box-shadow:inset 0 0 0 1px #b5e08b,0 2px #142414}
+.site-home .shop-button:disabled{opacity:1;cursor:default;box-shadow:none;background:linear-gradient(#414b5599,#2d3741cc),var(--hub-stone);color:#c4cdd3;border-color:#596773;border-right-color:#26323c;border-bottom-color:#202a33;text-shadow:none}
+.site-home .outfit-inventory>h2{display:flex;align-items:center;min-height:54px;padding:10px 14px;margin:0;background:#19252fd9;border:3px solid #566570;border-top-color:#83939e;border-left-color:#7e8e9a;color:var(--hub-accent);font:700 20px/1.4 Arial,sans-serif}
+.site-home .outfit-panel .item-grid{gap:16px;grid-auto-rows:1fr;align-items:stretch}
+.site-home .outfit-panel .item-card{padding:16px;display:grid;grid-template-rows:100px 54px 28px 60px;gap:10px;align-content:start;background:linear-gradient(#17232ee8,#0e1922f2),var(--hub-stone);border:4px solid #6c7b87;border-top-color:#9aabb7;border-left-color:#8799a6;border-right-color:#2c3944;border-bottom-color:#23303a;box-shadow:inset 0 0 0 1px #101b24}
+.site-home .item-card .item-icon{display:flex;align-items:center;justify-content:center;min-height:100px;height:100px;background:radial-gradient(ellipse,#ffffff0b,transparent 70%)}
+.site-home .item-thumbnail{width:140px;height:100px}
+.site-home .item-card h3{margin:0;align-self:center;color:#f2f5f7;font:700 18px/1.35 Arial,sans-serif;overflow-wrap:anywhere}
+.site-home .item-card :is(.item-price,.item-status){margin:0;align-self:center;font:700 17px/1.4 Arial,sans-serif}
+.site-home .item-card .item-price{color:var(--hub-accent)}
+.site-home .item-card .item-status{color:#b6df96}
+.site-home .item-card .shop-button{margin:0;width:100%;height:60px;min-height:60px;padding:6px 8px;line-height:1.25;align-self:end}
+.site-home .outfit-panel .item-card.equipped{border-color:#c9a84e;border-top-color:#ffe6a1;border-left-color:#ecd386;border-right-color:#80632a;border-bottom-color:#6b5120;box-shadow:inset 0 0 0 1px #ffe9a34d}
+.site-home .outfit-panel .avatar-card{align-self:start;position:static;min-width:0;max-height:none;margin:0;padding:16px;background:var(--hub-panel),var(--hub-stone);border:5px solid #7b8b97;border-top-color:#afbdc7;border-left-color:#9babb7;border-right-color:#2c3944;border-bottom-color:#23303a;box-shadow:inset 0 0 0 2px #17232c}
+.site-home .avatar-card h2{padding:0 0 14px;margin:0;border-bottom:2px solid #52616b;color:var(--hub-accent);font:700 21px/1.4 Arial,sans-serif}
+.site-home .outfit-panel #avatar-preview{height:260px;margin-top:10px;background:radial-gradient(ellipse at 50% 80%,#5d764028,transparent 72%)}
+.site-home #shop-message:empty{display:none}
+.site-home #shop-message:not(:empty){margin:0 0 20px;background:#17232de8;border-left-color:var(--hub-accent)}
+.site-home #category-empty{margin:0;padding:20px;border:3px solid #566570;background:#17232dd9;color:#d7e2e9}
+.site-home .world-theme-setting{margin:0 0 24px;padding:14px 16px;background:#19252fd9;border:3px solid #566570;border-top-color:#83939e;border-left-color:#7e8e9a}
+.site-home #player-history{margin-top:24px;padding-top:24px;border-top:3px solid #566570}
+.site-home #player-history h2{color:var(--hub-accent);font-size:23px}
+.site-home #history-total{color:#d7e2e9}
+.site-home #history-games{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:14px}
+.site-home #history-games article{padding:18px;background:linear-gradient(#17232ee8,#0e1922f2),var(--hub-stone);border:4px solid #6c7b87;border-top-color:#9aabb7;border-left-color:#8799a6;border-right-color:#2c3944;border-bottom-color:#23303a}
+.site-home #history-games h3{color:#f2f5f7}.site-home #history-games p{color:#d3e0e8;line-height:1.6}
+.site-home .subject{margin-bottom:24px}
+.site-home .subject-header{padding:12px 16px;gap:14px;margin-bottom:16px}
+.site-home .subject-title{color:var(--hub-accent)}
+.site-home .subject-info{background:linear-gradient(#65707b99,#303c48cc),var(--hub-stone);border:4px solid #8294a1;border-top-color:#b4c1cb;border-left-color:#a3b3be;border-right-color:#28343e;border-bottom-color:#1e2933;box-shadow:inset 1px 1px #ffffff14}
+.site-home .chapter-title{margin:16px 0 12px;padding:14px 16px;background:linear-gradient(#34434ecc,#263440ed),var(--hub-stone);border:3px solid #677b88;border-top-color:#a0b1bc;border-left-color:#8da0ad;border-right-color:#2b3945;border-bottom-color:#22313d;font-size:clamp(15px,2vw,20px);color:#f3f7f9}
+.site-home .cards-grid{gap:16px}
+.site-home .card{background:linear-gradient(#17232ee8,#0e1922f2),var(--hub-stone);border:5px solid #6c7b87;border-top-color:#9aabb7;border-left-color:#8799a6;border-right-color:#2c3944;border-bottom-color:#23303a;box-shadow:inset 0 0 0 1px #101b24}
+.site-home .card-body{padding:20px;gap:8px}
+.site-home .card-name{font-size:clamp(14px,1.8vw,19px);line-height:1.7;margin:0;color:#f3f7f9}
+.site-home .card-desc{margin:0 0 12px;color:#d3e0e8;font-size:16px;line-height:1.55}
+.site-home .card-btn{margin-top:auto;background:var(--hub-green),var(--hub-stone);border:4px solid #86b265;border-top-color:#b4dc89;border-left-color:#a0cb79;border-right-color:#234e1c;border-bottom-color:#1c4117;min-height:56px;padding:12px;font:700 18px/1.4 Arial,sans-serif;box-shadow:inset 2px 2px #ffffff12,0 2px #101d14}
+.site-home .card.soon .card-btn{background:linear-gradient(#414b5599,#2d3741cc),var(--hub-stone);border-color:#596773;color:#c4cdd3}
+.site-home .card:hover{transform:translateY(-3px);filter:brightness(1.12)}
+.site-home .subject-dialog{padding:22px;font:17px/1.6 Arial,sans-serif;color:#e4edf2}
+.site-home .subject-dialog :is(h2,h3){color:var(--hub-accent)}
+.site-home .subject-dialog .learning-path,.site-home .subject-dialog .didactic-level{background:#273b45c9;border-left-color:#a7c681;color:#e4edf2}
+.site-home .subject-dialog .shop-button{width:100%;margin-top:24px}
+.site-home :is(.shop-button,.subject-info,.card-btn):focus-visible{outline:3px solid #ffe385;outline-offset:4px}
+.site-home :is(.shop-button,.subject-info,.card-btn):not(:disabled):active{transform:translateY(2px);box-shadow:inset 2px 2px #0003}
+html[data-world-theme=end] .site-home{--hub-panel:linear-gradient(#1a1224e6,#171121f2);--hub-green:linear-gradient(#6d4186dd,#3f2657ed)}
+html[data-world-theme=end] .site-home :is(.outfit-panel,.subject-header,.subject-dialog){background:var(--hub-panel),var(--hub-stone);border-top-color:var(--hub-top);border-left-color:var(--hub-left);border-right-color:var(--hub-right);border-bottom-color:var(--hub-bottom)}
+html[data-world-theme=end] .site-home :is(.item-card,.card,#history-games article){background:linear-gradient(#241b30e8,#171320f2),var(--hub-stone)}
+html[data-world-theme=end] .site-home :is(.shop-categories .shop-button[aria-pressed=true],.card-btn,.shop-button:not(:disabled)){border-top-color:#c9a7e2;border-left-color:#b894d2;border-right-color:#39214c;border-bottom-color:#2d193e}
+html[data-world-theme=end] .site-home .outfit-panel .item-card.equipped{border-top-color:#ffe6a1;border-left-color:#ecd386;border-right-color:#80632a;border-bottom-color:#6b5120}
+html[data-world-theme=end] .site-home .shop-categories .shop-button:not([aria-pressed=true]){border-top-color:#b4c1cb;border-left-color:#a3b3be;border-right-color:#28343e;border-bottom-color:#1e2933}
+@media(min-width:700px){
+ .site-home .outfit-panel{padding:24px}
+ .site-home .outfit-layout{grid-template-columns:minmax(0,1fr) 240px;gap:22px}
+ .site-home .outfit-inventory{grid-template-columns:120px minmax(0,1fr);column-gap:16px}
+ .site-home .shop-categories{padding:0;grid-row:1/5;align-self:start;position:sticky;top:18px}
+ .site-home .outfit-panel .avatar-card{position:sticky;top:18px}
+ .site-home .outfit-panel #avatar-preview{height:300px}
+ .site-home .outfit-panel .item-grid{grid-template-columns:1fr}
+}
+@media(min-width:1050px){
+ .site-home .outfit-layout{grid-template-columns:minmax(0,1fr) 280px;gap:24px}
+ .site-home .outfit-inventory{grid-template-columns:140px minmax(0,1fr);column-gap:20px}
+ .site-home .outfit-panel .item-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .site-home .outfit-panel #avatar-preview{height:330px}
+}
+@media(max-width:480px){
+ .site-home .outfit-panel{padding:16px 12px}
+ .site-home .outfit-heading{gap:14px;margin-bottom:18px}
+ .site-home .shop-wallet{padding:8px 10px;min-height:48px}
+ .site-home .outfit-heading #shop-balance{font-size:17px}
+ .site-home .shop-wallet img{width:28px;height:28px}
+ .site-home .outfit-panel .item-card{padding:14px}
+ .site-home .outfit-panel .avatar-card{padding:14px}
+ .site-home .subject-header{padding:10px 12px}
+ .site-home .card-body{padding:18px}
+}
+@media(max-height:550px){.site-home .outfit-panel .avatar-card,.site-home .shop-categories{position:static}.site-home .outfit-panel #avatar-preview{height:240px}}
+@media(prefers-reduced-motion:reduce){.site-home .card:hover{transform:none}}
