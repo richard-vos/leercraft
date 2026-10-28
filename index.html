@@ -495,10 +495,18 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
     </div>
     <section id="player-history" hidden aria-labelledby="history-heading"><h2 id="history-heading">Mijn voortgang</h2><p id="history-total"></p><div id="history-games"></div></section>
   </section>
-  <div class="footer">
-    ⛏️ LeerCraft &nbsp;·&nbsp; Versie 0.43 &nbsp;·&nbsp; Meer spellen komen eraan! <br>
-    👀 Bezoekers: <span id="visitor-count">...</span>
-  </div>
+  <footer class="footer site-footer" aria-label="Over LeerCraft">
+    <div class="footer-identity">
+      <a class="footer-brand" href="/#spellen"><img src="/assets/images/ui-pickaxe.svg" width="32" height="32" alt=""><span>Leer<span>Craft</span></span></a>
+      <p>Meer spellen komen eraan!</p>
+      <span class="footer-version">Versie 0.43</span>
+    </div>
+    <div class="footer-visitors"><img src="/assets/images/steve-portrait.svg" width="36" height="36" alt=""><div><span>Bezoekers</span><strong id="visitor-count">...</strong></div></div>
+    <a class="footer-donate" href="https://whydonate.com/fundraising/leercraft" target="_blank" rel="noopener noreferrer" aria-label="Doneer voor LeerCraft (opent in een nieuw tabblad)">
+      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" shape-rendering="crispEdges"><path fill="#79511b" d="M3 2h6v2h6V2h6v3h3v9h-3v3h-3v3h-3v3H9v-3H6v-3H3v-3H0V5h3z"/><path fill="#ffdc70" d="M3 5h6v3h6V5h6v8h-3v3h-3v3H9v-3H6v-3H3z"/><path fill="#fff5bb" d="M4 6h4v2H6v3H4z"/></svg>
+      <span>Doneer voor LeerCraft</span><span aria-hidden="true">↗</span>
+    </a>
+  </footer>
 
 </div>
 
