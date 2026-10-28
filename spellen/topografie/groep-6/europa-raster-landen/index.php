@@ -5,7 +5,28 @@ header('Content-Type: text/html; charset=utf-8');
 <html lang="nl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Raster: Zoek het Land - De Atlascode</title>
+<!-- leercraft:seo:start -->
+<title>Kaartcoördinaten en Europese landen oefenen | LeerCraft</title>
+<meta name="description" content="Zoek Europese landen en lees het juiste rastervak af. Oefen kaartcoördinaten en topografie met dit gratis LeerCraft-spel voor kinderen in groep 6.">
+<link rel="canonical" href="https://leercraft.nl/spellen/topografie/groep-6/europa-raster-landen/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LeerCraft">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="Kaartcoördinaten en Europese landen oefenen | LeerCraft">
+<meta property="og:description" content="Zoek Europese landen en lees het juiste rastervak af. Oefen kaartcoördinaten en topografie met dit gratis LeerCraft-spel voor kinderen in groep 6.">
+<meta property="og:url" content="https://leercraft.nl/spellen/topografie/groep-6/europa-raster-landen/">
+<meta property="og:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LeerCraft: rekenen en topografie oefenen voor groep 6">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kaartcoördinaten en Europese landen oefenen | LeerCraft">
+<meta name="twitter:description" content="Zoek Europese landen en lees het juiste rastervak af. Oefen kaartcoördinaten en topografie met dit gratis LeerCraft-spel voor kinderen in groep 6.">
+<meta name="twitter:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<link rel="icon" type="image/svg+xml" href="/assets/images/ui-grass.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://leercraft.nl/#website","url":"https://leercraft.nl/","name":"LeerCraft","inLanguage":"nl-NL"},{"@type":"VideoGame","@id":"https://leercraft.nl/spellen/topografie/groep-6/europa-raster-landen/#game","url":"https://leercraft.nl/spellen/topografie/groep-6/europa-raster-landen/","name":"Raster: Zoek het Land","description":"Zoek Europese landen en lees het juiste rastervak af. Oefen kaartcoördinaten en topografie met dit gratis LeerCraft-spel voor kinderen in groep 6.","image":"https://leercraft.nl/assets/images/social/leercraft.png","inLanguage":"nl-NL","isAccessibleForFree":true,"educationalLevel":"Groep 6","genre":["Educatief","Topografie"],"applicationCategory":"EducationalApplication","gamePlatform":"Webbrowser","isPartOf":{"@id":"https://leercraft.nl/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"LeerCraft","item":"https://leercraft.nl/"},{"@type":"ListItem","position":2,"name":"Raster: Zoek het Land","item":"https://leercraft.nl/spellen/topografie/groep-6/europa-raster-landen/"}]}]}</script>
+<!-- leercraft:seo:end -->
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07121b;font-family:Arial,sans-serif;touch-action:none}
 canvas{display:block;width:100%;height:100%}
@@ -38,6 +59,7 @@ canvas{display:block;width:100%;height:100%}
 <script src="/assets/responsive.js" defer></script>
 <link rel="stylesheet" href="/assets/theme.css">
 <script src="/assets/theme.js"></script>
+<link rel="stylesheet" href="/assets/game-info.css">
 </head>
 <body class="game-europe">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
@@ -63,6 +85,15 @@ canvas{display:block;width:100%;height:100%}
 <div id="start">
   <div class="card">
     <h1>📐 Raster: Zoek het Land</h1>
+<!-- leercraft:game-info:start -->
+<details class="game-info"><summary>Over dit spel</summary>
+<div class="game-info-content"><h2>Raster: Zoek het Land voor groep 6</h2>
+<p>Je combineert het herkennen van Europese landen met het aflezen van een raster. Daarmee oefen je zowel topografie als het gebruiken van kaartcoördinaten.</p>
+<h3>Hoe speel je?</h3>
+<p>Lees welk land je zoekt en bepaal in welk rastervak het ligt. Gebruik de letters en cijfers van het raster om het antwoord te vinden.</p>
+<h3>Verder oefenen</h3><ul><li><a href="/spellen/topografie/groep-6/europa-raster-hoofdsteden/">Raster: Zoek de Hoofdstad</a></li><li><a href="/spellen/topografie/groep-6/europa-landen-klik/">Zoek het Land</a></li></ul>
+<p>Dit spel is gratis en zonder account te spelen.</p></div></details>
+<!-- leercraft:game-info:end -->
     <p>Boven de kaart van Europa ligt een raster met letters (A–J) en cijfers (1–8) — net als in een atlas.</p>
     <p>Elke opdracht noemt een land. Klik op het juiste <b>rastervak</b>, of typ de coördinaat (bijv. "D5") om een schatkist te openen!</p>
     <button class="play" id="goBtn">▶ Begin de expeditie!</button>

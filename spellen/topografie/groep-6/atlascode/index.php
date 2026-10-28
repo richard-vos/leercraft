@@ -5,7 +5,28 @@ header('Content-Type: text/html; charset=utf-8');
 <html lang="nl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>De Atlascode - De Verdwenen Kaart</title>
+<!-- leercraft:seo:start -->
+<title>De Atlascode: atlasvaardigheden oefenen in 3D | LeerCraft</title>
+<meta name="description" content="Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 6.">
+<link rel="canonical" href="https://leercraft.nl/spellen/topografie/groep-6/atlascode/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LeerCraft">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="De Atlascode: atlasvaardigheden oefenen in 3D | LeerCraft">
+<meta property="og:description" content="Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 6.">
+<meta property="og:url" content="https://leercraft.nl/spellen/topografie/groep-6/atlascode/">
+<meta property="og:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LeerCraft: rekenen en topografie oefenen voor groep 6">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="De Atlascode: atlasvaardigheden oefenen in 3D | LeerCraft">
+<meta name="twitter:description" content="Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 6.">
+<meta name="twitter:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<link rel="icon" type="image/svg+xml" href="/assets/images/ui-grass.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://leercraft.nl/#website","url":"https://leercraft.nl/","name":"LeerCraft","inLanguage":"nl-NL"},{"@type":"VideoGame","@id":"https://leercraft.nl/spellen/topografie/groep-6/atlascode/#game","url":"https://leercraft.nl/spellen/topografie/groep-6/atlascode/","name":"De Atlascode","description":"Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 6.","image":"https://leercraft.nl/assets/images/social/leercraft.png","inLanguage":"nl-NL","isAccessibleForFree":true,"educationalLevel":"Groep 6","genre":["Educatief","Topografie"],"applicationCategory":"EducationalApplication","gamePlatform":"Webbrowser","isPartOf":{"@id":"https://leercraft.nl/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"LeerCraft","item":"https://leercraft.nl/"},{"@type":"ListItem","position":2,"name":"De Atlascode","item":"https://leercraft.nl/spellen/topografie/groep-6/atlascode/"}]}]}</script>
+<!-- leercraft:seo:end -->
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07121b;font-family:Arial,sans-serif;touch-action:none}
 canvas{display:block;width:100%;height:100%}
@@ -33,6 +54,7 @@ h1{margin:0;color:#ffe15b;font-size:clamp(30px,6vw,55px);text-shadow:4px 4px #73
 <script src="/assets/responsive.js" defer></script>
 <link rel="stylesheet" href="/assets/theme.css">
 <script src="/assets/theme.js"></script>
+<link rel="stylesheet" href="/assets/game-info.css">
 </head>
 <body class="game-atlas">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
@@ -46,7 +68,16 @@ h1{margin:0;color:#ffe15b;font-size:clamp(30px,6vw,55px);text-shadow:4px 4px #73
  <button class="btn" id="jump">SPRING</button>
 </div>
 <div id="start"><div class="card">
- <h1>DE ATLASCODE</h1><h2>De verdwenen kaart</h2>
+ <h1>DE ATLASCODE</h1>
+<!-- leercraft:game-info:start -->
+<details class="game-info"><summary>Over dit spel</summary>
+<div class="game-info-content"><h2>De Atlascode voor groep 6</h2>
+<p>Je past kaartvaardigheden toe in een avontuur. Oefen met windrichtingen, kaarten en informatie uit de atlas. De missies combineren verschillende topografische vaardigheden.</p>
+<h3>Hoe speel je?</h3>
+<p>Verken de blokkenwereld en voer de atlasmissies uit om de verdwenen kaart te herstellen. Lees de opdracht en kies het antwoord dat bij de kaartvraag past.</p>
+<h3>Verder oefenen</h3><ul><li><a href="/spellen/topografie/groep-6/provincie-klik/">Provincie Klikspel</a></li><li><a href="/spellen/topografie/groep-6/europa-raster-landen/">Raster: Zoek het Land</a></li></ul>
+<p>Dit spel is gratis en zonder account te spelen.</p></div></details>
+<!-- leercraft:game-info:end --><h2>De verdwenen kaart</h2>
  <p>O nee! De kaart van Nederland is in vijf stukken uit de magische Bosatlas gevlogen. Ren door het Atlaslokaal, vang sterren en kraak vijf actieve atlasmissies.</p>
  <p><b>Computer:</b> WASD/pijlen + spatie. <b>iPad:</b> gebruik de grote knoppen.</p>
  <button class="play" id="go">START AVONTUUR</button>

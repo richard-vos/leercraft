@@ -1,0 +1,9 @@
+.game-info{box-sizing:border-box;width:min(560px,100%);margin:12px auto;color:#e7eef2;font:16px/1.6 Arial,Helvetica,sans-serif;text-align:left;text-shadow:none}
+.game-info>summary{box-sizing:border-box;min-height:44px;padding:10px 14px;cursor:pointer;list-style:revert;background:#172833e8;border:2px solid #8295a2;color:#ffe18b;font-weight:700}
+.game-info>summary:focus-visible{outline:3px solid #ffe385;outline-offset:3px}
+.game-info-content{box-sizing:border-box;max-height:250px;overflow:auto;overscroll-behavior:contain;touch-action:pan-y;padding:16px;background:#17232ff5;border:2px solid #8295a2;border-top:0}
+.game-info .game-info-content h2,.game-info .game-info-content h3{font:700 18px/1.5 Arial,Helvetica,sans-serif;letter-spacing:normal;text-shadow:none;color:#ffe18b;margin:0 0 8px;padding:0}
+.game-info .game-info-content p{font:16px/1.6 Arial,Helvetica,sans-serif;color:#e7eef2;margin:0 0 14px;max-width:none;text-shadow:none}
+.game-info .game-info-content ul{padding-left:22px;margin:0 0 14px}
+.game-info .game-info-content a{display:inline-block;min-height:44px;padding:8px 0;color:#bfe8ff;text-decoration:underline}
+.game-info .game-info-content a:focus-visible{outline:3px solid #ffe385;outline-offset:3px}

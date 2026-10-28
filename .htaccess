@@ -13,9 +13,22 @@ RedirectMatch 404 "(?i)/(?:\.git|\.github|\.claude|\.codex|\.agents|\.tmp|script
     </FilesMatch>
 </IfModule>
 
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/xml text/xml image/svg+xml
+</IfModule>
+
 # Public game URLs. Only browser requests to old HTML URLs are redirected.
 RewriteEngine On
 RewriteBase /
+# Canonical production host; local development and CI hosts remain local.
+RewriteCond %{HTTP_HOST} ^(?:www\.)?leercraft\.nl$ [NC]
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !^https$ [NC]
+RewriteRule ^ https://leercraft.nl%{REQUEST_URI} [R=301,L,NE]
+RewriteCond %{HTTP_HOST} ^www\.leercraft\.nl$ [NC]
+RewriteRule ^ https://leercraft.nl%{REQUEST_URI} [R=301,L,NE]
+RewriteCond %{THE_REQUEST} "\s/+spellen/[^\s?]*index\.php(?:[?\s])" [NC]
+RewriteRule ^(spellen/.+/)index\.php$ /$1 [R=301,L]
 RewriteRule ^winkel$ /winkel/ [R=301,L]
 RewriteCond %{THE_REQUEST} "\s/+index\.html(?:[?\s])" [NC]
 RewriteRule ^index\.html$ / [R=301,L]

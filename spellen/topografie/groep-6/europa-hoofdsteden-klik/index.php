@@ -5,7 +5,28 @@ header('Content-Type: text/html; charset=utf-8');
 <html lang="nl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Zoek de Hoofdstad - De Atlascode</title>
+<!-- leercraft:seo:start -->
+<title>Hoofdsteden van Europa oefenen: klikspel | LeerCraft</title>
+<meta name="description" content="Koppel Europese hoofdsteden aan het juiste land op de kaart. Oefen topografie voor groep 6 met het gratis spel Zoek de Hoofdstad van LeerCraft.">
+<link rel="canonical" href="https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-klik/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LeerCraft">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="Hoofdsteden van Europa oefenen: klikspel | LeerCraft">
+<meta property="og:description" content="Koppel Europese hoofdsteden aan het juiste land op de kaart. Oefen topografie voor groep 6 met het gratis spel Zoek de Hoofdstad van LeerCraft.">
+<meta property="og:url" content="https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-klik/">
+<meta property="og:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LeerCraft: rekenen en topografie oefenen voor groep 6">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hoofdsteden van Europa oefenen: klikspel | LeerCraft">
+<meta name="twitter:description" content="Koppel Europese hoofdsteden aan het juiste land op de kaart. Oefen topografie voor groep 6 met het gratis spel Zoek de Hoofdstad van LeerCraft.">
+<meta name="twitter:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<link rel="icon" type="image/svg+xml" href="/assets/images/ui-grass.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://leercraft.nl/#website","url":"https://leercraft.nl/","name":"LeerCraft","inLanguage":"nl-NL"},{"@type":"VideoGame","@id":"https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-klik/#game","url":"https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-klik/","name":"Zoek de Hoofdstad","description":"Koppel Europese hoofdsteden aan het juiste land op de kaart. Oefen topografie voor groep 6 met het gratis spel Zoek de Hoofdstad van LeerCraft.","image":"https://leercraft.nl/assets/images/social/leercraft.png","inLanguage":"nl-NL","isAccessibleForFree":true,"educationalLevel":"Groep 6","genre":["Educatief","Topografie"],"applicationCategory":"EducationalApplication","gamePlatform":"Webbrowser","isPartOf":{"@id":"https://leercraft.nl/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"LeerCraft","item":"https://leercraft.nl/"},{"@type":"ListItem","position":2,"name":"Zoek de Hoofdstad","item":"https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-klik/"}]}]}</script>
+<!-- leercraft:seo:end -->
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07121b;font-family:Arial,sans-serif;touch-action:none}
 canvas{display:block;width:100%;height:100%}
@@ -32,6 +53,7 @@ canvas{display:block;width:100%;height:100%}
 <script src="/assets/responsive.js" defer></script>
 <link rel="stylesheet" href="/assets/theme.css">
 <script src="/assets/theme.js"></script>
+<link rel="stylesheet" href="/assets/game-info.css">
 </head>
 <body class="game-europe">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
@@ -50,6 +72,15 @@ canvas{display:block;width:100%;height:100%}
 <div id="start">
   <div class="card">
     <h1>🏛️ Zoek de Hoofdstad</h1>
+<!-- leercraft:game-info:start -->
+<details class="game-info"><summary>Over dit spel</summary>
+<div class="game-info-content"><h2>Zoek de Hoofdstad voor groep 6</h2>
+<p>Je legt het verband tussen Europese landen en hun hoofdsteden. Je combineert kennis van een hoofdstad met de ligging van het bijbehorende land.</p>
+<h3>Hoe speel je?</h3>
+<p>Lees de gevraagde hoofdstad en zoek het juiste land op de kaart. Klik of tik op je antwoord en ontdek of je de combinatie goed hebt onthouden.</p>
+<h3>Verder oefenen</h3><ul><li><a href="/spellen/topografie/groep-6/europa-hoofdsteden-schrijf/">Schrijf de Hoofdstad</a></li><li><a href="/spellen/topografie/groep-6/europa-landen-klik/">Zoek het Land</a></li></ul>
+<p>Dit spel is gratis en zonder account te spelen.</p></div></details>
+<!-- leercraft:game-info:end -->
     <p>Boven een <b>zwevende kaart van Europa</b> liggen de landen in mistige kleuren naast elkaar.</p>
     <p>Elke opdracht noemt een hoofdstad. Klik op het land waar die hoofdstad bij hoort om een <b>schatkist</b> te openen met de wapperende vlag!</p>
     <button class="play" id="goBtn">▶ Begin de expeditie!</button>

@@ -20,7 +20,7 @@
 .hub-nav a:focus-visible{outline:3px solid #ffd700;outline-offset:3px}
 .outfit-panel{padding:18px;background:#101a15ed;border:4px solid #888;border-right-color:#222;border-bottom-color:#222;color:#fff;font:17px/1.5 Arial,sans-serif}
 .outfit-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
-.outfit-heading h1{font:clamp(16px,3vw,24px)/1.6 'Press Start 2P',monospace;color:#ffd700}
+.outfit-heading :is(h1,h2){font:clamp(16px,3vw,24px)/1.6 'Press Start 2P',monospace;color:#ffd700}
 .outfit-heading #shop-balance{color:#ffe182;background:#0008;border:2px solid #8ade5a;padding:10px 14px;font-size:20px}
 .outfit-layout{display:grid;gap:20px;align-items:start}
 .outfit-inventory{min-width:0}

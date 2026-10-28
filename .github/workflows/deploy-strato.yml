@@ -142,6 +142,7 @@ jobs:
           python3 - <<'PY'
           import urllib.request
           import json
+          import xml.etree.ElementTree as ET
           from pathlib import Path
           entries = sorted(Path('spellen').rglob('index.php'))
           if not entries:
@@ -152,6 +153,8 @@ jobs:
                   html = response.read().decode('utf-8')
                   if response.status != 200 or '<title>' not in html or '<?php' in html:
                       raise SystemExit('Spelroute levert geen spelpagina op: ' + entry.parent.name)
+                  if '<link rel="canonical" href="' + url + '">' not in html:
+                      raise SystemExit('Canonical ontbreekt op: ' + entry.parent.name)
               print('Spelroute bereikbaar: ' + entry.parent.name)
           with urllib.request.urlopen('https://leercraft.nl/winkel/', timeout=30) as response:
               if 'id="shop-catalog"' not in response.read().decode('utf-8'):
@@ -167,6 +170,15 @@ jobs:
               for slot in ['head', 'shoes', 'shirt', 'pants', 'object']:
                   if sum(item['slot'] == slot for item in state['catalog']) != 20:
                       raise SystemExit('Winkelcategorie bevat niet 20 items: ' + slot)
+          expected = {'https://leercraft.nl/'} | {'https://leercraft.nl/' + entry.parent.as_posix() + '/' for entry in entries}
+          with urllib.request.urlopen('https://leercraft.nl/sitemap.xml', timeout=30) as response:
+              sitemap = ET.fromstring(response.read())
+              actual = {node.text for node in sitemap.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')}
+              if actual != expected:
+                  raise SystemExit('Sitemap bevat niet alle publieke pagina\'s.')
+          with urllib.request.urlopen('https://leercraft.nl/robots.txt', timeout=30) as response:
+              if 'Sitemap: https://leercraft.nl/sitemap.xml' not in response.read().decode('utf-8'):
+                  raise SystemExit('Sitemap-verwijzing in robots.txt ontbreekt.')
           PY
 
       - name: Vervallen spelbestanden opruimen na geslaagde routecontrole

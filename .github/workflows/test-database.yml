@@ -28,6 +28,8 @@ jobs:
         run: find api tests spellen winkel -name '*.php' -print0 | xargs -0 -n1 php -l
       - name: Spel-startpaginas controleren
         run: php tests/game-routes.php
+      - name: Zoekmachinegegevens en sitemap controleren
+        run: python3 tests/seo.py
       - name: OTP-invoer en spellogica controleren
         run: |
           node tests/account-otp.cjs

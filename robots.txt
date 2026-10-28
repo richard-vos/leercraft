@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /data/
+Disallow: /scripts/
+Disallow: /tests/
+Disallow: /.git/
+Disallow: /.github/
+Disallow: /.claude/
+Disallow: /.codex/
+Disallow: /.agents/
+Disallow: /.tmp/
+
+Sitemap: https://leercraft.nl/sitemap.xml

@@ -1,5 +1,24 @@
 # LeerCraft
 
+## Vindbaarheid (SEO)
+
+De startpagina en alle twaalf spellen hebben unieke titels, beschrijvingen,
+canonical-links, Open Graph-gegevens en JSON-LD. Speluitleg en links naar verwante
+spellen staan direct in de HTML, achter **Over dit spel**. De sitemap bevat alleen
+publieke pagina's; accountweergaven, API's en redirect-aliases horen daar niet bij.
+
+Beheer de teksten in `scripts/seo-pages.json` en voer na wijzigingen
+`py -3 scripts/build-seo.py` uit. Controleer met `py -3 tests/seo.py`.
+CI controleert de gegenereerde bestanden; de deploy controleert ook de live
+canonicals, sitemap en robots.txt. De social-afbeelding staat in
+`assets/images/social/leercraft.png` (1200 × 630).
+
+Na deployment kan de eigenaar `https://leercraft.nl/sitemap.xml` aanmelden in
+Google Search Console en de startpagina en spelroutes laten inspecteren.
+Daarvoor is toegang tot de bijbehorende Search Console-property nodig.
+Deze repository publiceert geen zoekmachineverificatietokens en verzint geen
+beoordelingen of scores voor gestructureerde gegevens.
+
 Educatieve browserspellen. Accounts en opgeslagen resultaten zijn voorlopig
 beschikbaar op de startpagina, in het provincieklikspel, RekenCraft en Getallenzee.
 

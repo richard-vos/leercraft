@@ -1,9 +1,12 @@
 /* Shared stone panels for Spellen, Winkel and Mijn Steve. */
+.site-home :is(.subject-title,.chapter-title,.card-name){font-weight:400}
+.skip-link{position:absolute;top:8px;left:8px;z-index:1000;padding:14px 18px;background:#172833;color:#ffe385;border:3px solid #ffe385;font:700 18px/1.4 Arial,sans-serif;transform:translateY(-200%)}
+.skip-link:focus{transform:translateY(0)}
 .site-home{--hub-stone:url('/assets/images/ui-stone.svg');--hub-panel:linear-gradient(#111a20d9,#121b21ed);--hub-top:#a3afb7;--hub-left:#929fa9;--hub-right:#333c45;--hub-bottom:#202930;--hub-accent:#ffe079;--hub-green:linear-gradient(#518f2ddd,#2a5c20ed)}
 .site-home :is(.outfit-panel,.subject-header,.subject-dialog){background:var(--hub-panel),var(--hub-stone);border:7px solid #717d87;border-top-color:var(--hub-top);border-left-color:var(--hub-left);border-right-color:var(--hub-right);border-bottom-color:var(--hub-bottom);box-shadow:inset 0 0 0 2px #17222a,0 4px #131e26}
 .site-home .outfit-panel{padding:20px 16px;font:17px/1.5 Arial,sans-serif}
 .site-home .outfit-heading{gap:16px;margin:0 0 24px;padding-bottom:18px;border-bottom:3px solid #566570;align-items:center}
-.site-home .outfit-heading h1{margin:0;color:var(--hub-accent);font-size:clamp(20px,3vw,28px);text-shadow:2px 3px #64501c}
+.site-home .outfit-heading :is(h1,h2){margin:0;color:var(--hub-accent);font-size:clamp(20px,3vw,28px);text-shadow:2px 3px #64501c}
 .shop-wallet{display:flex;align-items:center;gap:10px;min-height:56px;padding:10px 14px;background:#151e26d9;border:3px solid #566572;border-top-color:#8797a2;border-left-color:#7e8e9a;box-shadow:inset 2px 2px #0b1116}
 .shop-wallet img{width:34px;height:34px;image-rendering:pixelated}
 .site-home .outfit-heading #shop-balance{background:none;border:0;padding:0;color:#ffe5a1;font-size:19px;line-height:1.4}

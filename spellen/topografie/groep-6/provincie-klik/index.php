@@ -6,7 +6,28 @@ header('Content-Type: text/html; charset=utf-8');
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Nederland Ontdekker</title>
+<!-- leercraft:seo:start -->
+<title>Provincies oefenen: klikspel voor groep 6 | LeerCraft</title>
+<meta name="description" content="Leer de 12 provincies van Nederland herkennen. Klik de juiste provincie op de kaart in dit gratis topografiespel voor groep 6. Speel direct in je browser.">
+<link rel="canonical" href="https://leercraft.nl/spellen/topografie/groep-6/provincie-klik/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LeerCraft">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="Provincies oefenen: klikspel voor groep 6 | LeerCraft">
+<meta property="og:description" content="Leer de 12 provincies van Nederland herkennen. Klik de juiste provincie op de kaart in dit gratis topografiespel voor groep 6. Speel direct in je browser.">
+<meta property="og:url" content="https://leercraft.nl/spellen/topografie/groep-6/provincie-klik/">
+<meta property="og:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LeerCraft: rekenen en topografie oefenen voor groep 6">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Provincies oefenen: klikspel voor groep 6 | LeerCraft">
+<meta name="twitter:description" content="Leer de 12 provincies van Nederland herkennen. Klik de juiste provincie op de kaart in dit gratis topografiespel voor groep 6. Speel direct in je browser.">
+<meta name="twitter:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<link rel="icon" type="image/svg+xml" href="/assets/images/ui-grass.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://leercraft.nl/#website","url":"https://leercraft.nl/","name":"LeerCraft","inLanguage":"nl-NL"},{"@type":"VideoGame","@id":"https://leercraft.nl/spellen/topografie/groep-6/provincie-klik/#game","url":"https://leercraft.nl/spellen/topografie/groep-6/provincie-klik/","name":"Provincie Klikspel","description":"Leer de 12 provincies van Nederland herkennen. Klik de juiste provincie op de kaart in dit gratis topografiespel voor groep 6. Speel direct in je browser.","image":"https://leercraft.nl/assets/images/social/leercraft.png","inLanguage":"nl-NL","isAccessibleForFree":true,"educationalLevel":"Groep 6","genre":["Educatief","Topografie"],"applicationCategory":"EducationalApplication","gamePlatform":"Webbrowser","isPartOf":{"@id":"https://leercraft.nl/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"LeerCraft","item":"https://leercraft.nl/"},{"@type":"ListItem","position":2,"name":"Provincie Klikspel","item":"https://leercraft.nl/spellen/topografie/groep-6/provincie-klik/"}]}]}</script>
+<!-- leercraft:seo:end -->
 <link href="/assets/fonts/fonts.css" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -66,6 +87,7 @@ h1 small{display:block;font-size:0.65em;color:#aaffaa;text-shadow:2px 2px #00660
 <script src="/assets/responsive.js" defer></script>
 <link rel="stylesheet" href="/assets/theme.css">
 <script src="/assets/theme.js"></script>
+<link rel="stylesheet" href="/assets/game-info.css">
 </head>
 <body class="game-province">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
@@ -77,6 +99,15 @@ h1 small{display:block;font-size:0.65em;color:#aaffaa;text-shadow:2px 2px #00660
 <div class="wrapper">
   <div class="header">
     <h1>🗺️ Nederland Ontdekker<small>Klik de juiste provincie!</small></h1>
+<!-- leercraft:game-info:start -->
+<details class="game-info"><summary>Over dit spel</summary>
+<div class="game-info-content"><h2>Provincie Klikspel voor groep 6</h2>
+<p>Je oefent waar de twaalf Nederlandse provincies liggen. Lees de provincienaam en zoek de juiste plek op de kaart. Herkennen en aanklikken helpt je de kaart van Nederland te leren kennen.</p>
+<h3>Hoe speel je?</h3>
+<p>Klik of tik op de provincie die wordt gevraagd. Na iedere keuze zie je of het antwoord klopt. Probeer in een volgende ronde je eigen score te verbeteren.</p>
+<h3>Verder oefenen</h3><ul><li><a href="/spellen/topografie/groep-6/provincie-schrijf/">Provincies Schrijven</a></li><li><a href="/spellen/topografie/groep-6/atlascode/">De Atlascode</a></li></ul>
+<p>Dit spel is gratis en zonder account te spelen.</p></div></details>
+<!-- leercraft:game-info:end -->
   </div>
   <div data-leercraft-account data-background="true" hidden></div>
   <div class="score-bar">

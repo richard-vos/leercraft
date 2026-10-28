@@ -6,7 +6,28 @@ header('Content-Type: text/html; charset=utf-8');
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>RekenCraft</title>
+<!-- leercraft:seo:start -->
+<title>RekenCraft: rekenen oefenen in een blokkenwereld | LeerCraft</title>
+<meta name="description" content="Oefen optellen, aftrekken, keersommen en delen in RekenCraft. Kies je sommen, verzamel rekenkracht en bereik de finish. Gratis rekenspel voor groep 6.">
+<link rel="canonical" href="https://leercraft.nl/spellen/rekenen/groep-6/rekencraft/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LeerCraft">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="RekenCraft: rekenen oefenen in een blokkenwereld | LeerCraft">
+<meta property="og:description" content="Oefen optellen, aftrekken, keersommen en delen in RekenCraft. Kies je sommen, verzamel rekenkracht en bereik de finish. Gratis rekenspel voor groep 6.">
+<meta property="og:url" content="https://leercraft.nl/spellen/rekenen/groep-6/rekencraft/">
+<meta property="og:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LeerCraft: rekenen en topografie oefenen voor groep 6">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RekenCraft: rekenen oefenen in een blokkenwereld | LeerCraft">
+<meta name="twitter:description" content="Oefen optellen, aftrekken, keersommen en delen in RekenCraft. Kies je sommen, verzamel rekenkracht en bereik de finish. Gratis rekenspel voor groep 6.">
+<meta name="twitter:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<link rel="icon" type="image/svg+xml" href="/assets/images/ui-grass.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://leercraft.nl/#website","url":"https://leercraft.nl/","name":"LeerCraft","inLanguage":"nl-NL"},{"@type":"VideoGame","@id":"https://leercraft.nl/spellen/rekenen/groep-6/rekencraft/#game","url":"https://leercraft.nl/spellen/rekenen/groep-6/rekencraft/","name":"RekenCraft","description":"Oefen optellen, aftrekken, keersommen en delen in RekenCraft. Kies je sommen, verzamel rekenkracht en bereik de finish. Gratis rekenspel voor groep 6.","image":"https://leercraft.nl/assets/images/social/leercraft.png","inLanguage":"nl-NL","isAccessibleForFree":true,"educationalLevel":"Groep 6","genre":["Educatief","Rekenen"],"applicationCategory":"EducationalApplication","gamePlatform":"Webbrowser","isPartOf":{"@id":"https://leercraft.nl/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"LeerCraft","item":"https://leercraft.nl/"},{"@type":"ListItem","position":2,"name":"RekenCraft","item":"https://leercraft.nl/spellen/rekenen/groep-6/rekencraft/"}]}]}</script>
+<!-- leercraft:seo:end -->
 <link href="/assets/fonts/fonts.css" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -163,6 +184,7 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
 <script src="/assets/responsive.js" defer></script>
 <link rel="stylesheet" href="/assets/theme.css">
 <script src="/assets/theme.js"></script>
+<link rel="stylesheet" href="/assets/game-info.css">
 </head>
 <body class="game-rekencraft">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
@@ -206,7 +228,16 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
 </div>
 <div class="screen" id="ss">
   <div class="runner-menu">
-    <header class="runner-menu-heading"><h1>RekenCraft</h1></header>
+    <header class="runner-menu-heading"><h1>RekenCraft</h1>
+<!-- leercraft:game-info:start -->
+<details class="game-info"><summary>Over dit spel</summary>
+<div class="game-info-content"><h2>RekenCraft voor groep 6</h2>
+<p>Je vergelijkt rekenbewerkingen en kiest welke poort de beste uitkomst geeft. Je kunt optellen, aftrekken, vermenigvuldigen en delen oefenen en het getalbereik zelf instellen.</p>
+<h3>Hoe speel je?</h3>
+<p>Stuur Steve door de juiste poort, verzamel genoeg rekenkracht en ontwijk hindernissen. Versla de Creepers en haal de finish. Ingelogde spelers bewaren hun verdiende punten.</p>
+<h3>Verder oefenen</h3><ul><li><a href="/spellen/rekenen/groep-6/getallenzee/">Getallenzee</a></li><li><a href="/spellen/rekenen/groep-6/reken-race/">Reken Race 3D</a></li></ul>
+<p>Dit spel is gratis en zonder account te spelen.</p></div></details>
+<!-- leercraft:game-info:end --></header>
     <div data-leercraft-account data-game="rekencraft" data-dialog-outside="true" data-background="true" hidden></div>
     <fieldset id="math-settings">
       <legend>Sommen</legend>

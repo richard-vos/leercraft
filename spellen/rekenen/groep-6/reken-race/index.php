@@ -6,7 +6,28 @@ header('Content-Type: text/html; charset=utf-8');
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Reken Race 3D</title>
+<!-- leercraft:seo:start -->
+<title>Reken Race 3D: race en oefen rekensommen | LeerCraft</title>
+<meta name="description" content="Race met Steve tegen Minecraft-personages en stuur door het juiste antwoord. Oefen rekensommen in Reken Race 3D, een gratis browserspel voor groep 6.">
+<link rel="canonical" href="https://leercraft.nl/spellen/rekenen/groep-6/reken-race/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LeerCraft">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="Reken Race 3D: race en oefen rekensommen | LeerCraft">
+<meta property="og:description" content="Race met Steve tegen Minecraft-personages en stuur door het juiste antwoord. Oefen rekensommen in Reken Race 3D, een gratis browserspel voor groep 6.">
+<meta property="og:url" content="https://leercraft.nl/spellen/rekenen/groep-6/reken-race/">
+<meta property="og:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LeerCraft: rekenen en topografie oefenen voor groep 6">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reken Race 3D: race en oefen rekensommen | LeerCraft">
+<meta name="twitter:description" content="Race met Steve tegen Minecraft-personages en stuur door het juiste antwoord. Oefen rekensommen in Reken Race 3D, een gratis browserspel voor groep 6.">
+<meta name="twitter:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<link rel="icon" type="image/svg+xml" href="/assets/images/ui-grass.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://leercraft.nl/#website","url":"https://leercraft.nl/","name":"LeerCraft","inLanguage":"nl-NL"},{"@type":"VideoGame","@id":"https://leercraft.nl/spellen/rekenen/groep-6/reken-race/#game","url":"https://leercraft.nl/spellen/rekenen/groep-6/reken-race/","name":"Reken Race 3D","description":"Race met Steve tegen Minecraft-personages en stuur door het juiste antwoord. Oefen rekensommen in Reken Race 3D, een gratis browserspel voor groep 6.","image":"https://leercraft.nl/assets/images/social/leercraft.png","inLanguage":"nl-NL","isAccessibleForFree":true,"educationalLevel":"Groep 6","genre":["Educatief","Rekenen"],"applicationCategory":"EducationalApplication","gamePlatform":"Webbrowser","isPartOf":{"@id":"https://leercraft.nl/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"LeerCraft","item":"https://leercraft.nl/"},{"@type":"ListItem","position":2,"name":"Reken Race 3D","item":"https://leercraft.nl/spellen/rekenen/groep-6/reken-race/"}]}]}</script>
+<!-- leercraft:seo:end -->
 <link href="/assets/fonts/fonts.css" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -92,6 +113,7 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
 <link rel="stylesheet" href="/assets/race.css">
 <link rel="stylesheet" href="/assets/theme.css">
 <script src="/assets/theme.js"></script>
+<link rel="stylesheet" href="/assets/game-info.css">
 </head>
 <body class="game-race">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
@@ -121,6 +143,15 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
 
 <div class="screen" id="startscreen">
   <h1>🏁 Reken Race 3D</h1>
+<!-- leercraft:game-info:start -->
+<details class="game-info"><summary>Over dit spel</summary>
+<div class="game-info-content"><h2>Reken Race 3D voor groep 6</h2>
+<p>Je oefent het uitrekenen van gemengde rekensommen terwijl je een kart bestuurt. Een juist antwoord geeft extra snelheid; zo combineer je rekenen met een race-uitdaging.</p>
+<h3>Hoe speel je?</h3>
+<p>Rijd drie rondes en stuur door het poortje met de juiste uitkomst. Race tegen vier computergestuurde tegenstanders. Zonder account speel je direct; ingelogd kun je punten bewaren.</p>
+<h3>Verder oefenen</h3><ul><li><a href="/spellen/rekenen/groep-6/rekencraft/">RekenCraft</a></li><li><a href="/spellen/rekenen/groep-6/getallenzee/">Getallenzee</a></li></ul>
+<p>Dit spel is gratis en zonder account te spelen.</p></div></details>
+<!-- leercraft:game-info:end -->
   <p>Drie rondes. Vier rivalen. Jouw Steve.<br>Rij langs het <span style="color:#7CFC00">juiste antwoord</span> voor extra snelheid.<br>Fout antwoord? Je draait rond! 💥<br>Pijltjestoetsen of WASD om te rijden.</p>
   <div data-leercraft-account data-background="true" hidden></div>
   <button id="start-race" class="btn" onclick="beginGame()" disabled>▶ Start Race!</button>

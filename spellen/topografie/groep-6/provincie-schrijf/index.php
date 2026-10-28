@@ -6,7 +6,28 @@ header('Content-Type: text/html; charset=utf-8');
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Nederland Schrijfspel</title>
+<!-- leercraft:seo:start -->
+<title>Provincies schrijven en oefenen voor groep 6 | LeerCraft</title>
+<meta name="description" content="Ken jij de namen van de Nederlandse provincies? Typ de naam bij de gemarkeerde provincie en oefen topografie voor groep 6. Gratis te spelen zonder account.">
+<link rel="canonical" href="https://leercraft.nl/spellen/topografie/groep-6/provincie-schrijf/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LeerCraft">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="Provincies schrijven en oefenen voor groep 6 | LeerCraft">
+<meta property="og:description" content="Ken jij de namen van de Nederlandse provincies? Typ de naam bij de gemarkeerde provincie en oefen topografie voor groep 6. Gratis te spelen zonder account.">
+<meta property="og:url" content="https://leercraft.nl/spellen/topografie/groep-6/provincie-schrijf/">
+<meta property="og:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LeerCraft: rekenen en topografie oefenen voor groep 6">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Provincies schrijven en oefenen voor groep 6 | LeerCraft">
+<meta name="twitter:description" content="Ken jij de namen van de Nederlandse provincies? Typ de naam bij de gemarkeerde provincie en oefen topografie voor groep 6. Gratis te spelen zonder account.">
+<meta name="twitter:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<link rel="icon" type="image/svg+xml" href="/assets/images/ui-grass.svg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://leercraft.nl/#website","url":"https://leercraft.nl/","name":"LeerCraft","inLanguage":"nl-NL"},{"@type":"VideoGame","@id":"https://leercraft.nl/spellen/topografie/groep-6/provincie-schrijf/#game","url":"https://leercraft.nl/spellen/topografie/groep-6/provincie-schrijf/","name":"Provincies Schrijven","description":"Ken jij de namen van de Nederlandse provincies? Typ de naam bij de gemarkeerde provincie en oefen topografie voor groep 6. Gratis te spelen zonder account.","image":"https://leercraft.nl/assets/images/social/leercraft.png","inLanguage":"nl-NL","isAccessibleForFree":true,"educationalLevel":"Groep 6","genre":["Educatief","Topografie"],"applicationCategory":"EducationalApplication","gamePlatform":"Webbrowser","isPartOf":{"@id":"https://leercraft.nl/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"LeerCraft","item":"https://leercraft.nl/"},{"@type":"ListItem","position":2,"name":"Provincies Schrijven","item":"https://leercraft.nl/spellen/topografie/groep-6/provincie-schrijf/"}]}]}</script>
+<!-- leercraft:seo:end -->
 <link href="/assets/fonts/fonts.css" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -122,6 +143,7 @@ h1 small{display:block;font-size:0.65em;color:#aaffaa;text-shadow:2px 2px #00660
 <script src="/assets/responsive.js" defer></script>
 <link rel="stylesheet" href="/assets/theme.css">
 <script src="/assets/theme.js"></script>
+<link rel="stylesheet" href="/assets/game-info.css">
 </head>
 <body class="game-province">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
@@ -133,6 +155,15 @@ h1 small{display:block;font-size:0.65em;color:#aaffaa;text-shadow:2px 2px #00660
 <div class="wrapper">
   <div class="header">
     <h1>✏️ Nederland Schrijfspel<small>Typ de naam van de uitgelichte provincie!</small></h1>
+<!-- leercraft:game-info:start -->
+<details class="game-info"><summary>Over dit spel</summary>
+<div class="game-info-content"><h2>Provincies Schrijven voor groep 6</h2>
+<p>Je oefent de ligging en de spelling van de twaalf Nederlandse provincies. In dit schrijfspel haal je de naam zelf uit je geheugen, in plaats van een antwoord te herkennen in een lijst.</p>
+<h3>Hoe speel je?</h3>
+<p>Bekijk de gemarkeerde provincie en typ de naam. De lettervakjes helpen bij het schrijven. Je krijgt meerdere pogingen om het juiste antwoord te vinden.</p>
+<h3>Verder oefenen</h3><ul><li><a href="/spellen/topografie/groep-6/provincie-klik/">Provincie Klikspel</a></li><li><a href="/spellen/topografie/groep-6/atlascode/">De Atlascode</a></li></ul>
+<p>Dit spel is gratis en zonder account te spelen.</p></div></details>
+<!-- leercraft:game-info:end -->
   </div>
   <div data-leercraft-account data-background="true" hidden></div>
   <div class="score-bar">

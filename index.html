@@ -3,7 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>LeerCraft ⛏️</title>
+<!-- leercraft:seo:start -->
+<title>LeerCraft - Rekenspellen en topografie voor groep 6</title>
+<meta name="description" content="Oefen rekenen en topografie voor groep 6 met gratis LeerCraft-spellen. Ontdek provincies, landen en hoofdsteden of speel een rekenavontuur. Zonder account te spelen.">
+<link rel="canonical" href="https://leercraft.nl/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LeerCraft">
+<meta property="og:locale" content="nl_NL">
+<meta property="og:title" content="LeerCraft - Rekenspellen en topografie voor groep 6">
+<meta property="og:description" content="Oefen rekenen en topografie voor groep 6 met gratis LeerCraft-spellen. Ontdek provincies, landen en hoofdsteden of speel een rekenavontuur. Zonder account te spelen.">
+<meta property="og:url" content="https://leercraft.nl/">
+<meta property="og:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LeerCraft: rekenen en topografie oefenen voor groep 6">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LeerCraft - Rekenspellen en topografie voor groep 6">
+<meta name="twitter:description" content="Oefen rekenen en topografie voor groep 6 met gratis LeerCraft-spellen. Ontdek provincies, landen en hoofdsteden of speel een rekenavontuur. Zonder account te spelen.">
+<meta name="twitter:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
+<link rel="icon" type="image/svg+xml" href="/assets/images/ui-grass.svg">
+<link rel="preload" href="/assets/fonts/press-start-2p.ttf" as="font" type="font/ttf" crossorigin>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://leercraft.nl/#website","url":"https://leercraft.nl/","name":"LeerCraft","inLanguage":"nl-NL"},{"@type":"CollectionPage","@id":"https://leercraft.nl/#spellen","url":"https://leercraft.nl/","name":"LeerCraft - Rekenspellen en topografie voor groep 6","description":"Oefen rekenen en topografie voor groep 6 met gratis LeerCraft-spellen. Ontdek provincies, landen en hoofdsteden of speel een rekenavontuur. Zonder account te spelen.","inLanguage":"nl-NL","isPartOf":{"@id":"https://leercraft.nl/#website"},"mainEntity":{"@type":"ItemList","itemListElement":[{"@type":"ListItem","position":1,"name":"Provincie Klikspel","url":"https://leercraft.nl/spellen/topografie/groep-6/provincie-klik/"},{"@type":"ListItem","position":2,"name":"Provincies Schrijven","url":"https://leercraft.nl/spellen/topografie/groep-6/provincie-schrijf/"},{"@type":"ListItem","position":3,"name":"De Atlascode","url":"https://leercraft.nl/spellen/topografie/groep-6/atlascode/"},{"@type":"ListItem","position":4,"name":"Zoek het Land","url":"https://leercraft.nl/spellen/topografie/groep-6/europa-landen-klik/"},{"@type":"ListItem","position":5,"name":"Schrijf het Land","url":"https://leercraft.nl/spellen/topografie/groep-6/europa-landen-schrijf/"},{"@type":"ListItem","position":6,"name":"Zoek de Hoofdstad","url":"https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-klik/"},{"@type":"ListItem","position":7,"name":"Schrijf de Hoofdstad","url":"https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-schrijf/"},{"@type":"ListItem","position":8,"name":"Raster: Zoek het Land","url":"https://leercraft.nl/spellen/topografie/groep-6/europa-raster-landen/"},{"@type":"ListItem","position":9,"name":"Raster: Zoek de Hoofdstad","url":"https://leercraft.nl/spellen/topografie/groep-6/europa-raster-hoofdsteden/"},{"@type":"ListItem","position":10,"name":"RekenCraft","url":"https://leercraft.nl/spellen/rekenen/groep-6/rekencraft/"},{"@type":"ListItem","position":11,"name":"Getallenzee","url":"https://leercraft.nl/spellen/rekenen/groep-6/getallenzee/"},{"@type":"ListItem","position":12,"name":"Reken Race 3D","url":"https://leercraft.nl/spellen/rekenen/groep-6/reken-race/"}]}}]}</script>
+<!-- leercraft:seo:end -->
 <link href="assets/fonts/fonts.css" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -206,6 +228,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
 <link rel="stylesheet" href="/assets/hub.css">
 </head>
 <body class="site-home">
+<a class="skip-link" href="#games-panel">Ga naar de spellen</a>
 
 <div class="sky"></div>
 
@@ -221,11 +244,11 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
   <div class="dirt-row"  id="dirt-row"></div>
 </div>
 
-<div class="wrapper">
+<main class="wrapper" id="site-content">
 
   <header class="adventure-header" aria-label="LeerCraft en jouw voortgang">
     <a class="adventure-brand" href="/#spellen" aria-label="LeerCraft spellen">
-      <span class="adventure-brand-word">Leer<span>Craft</span></span>
+      <h1 class="adventure-brand-word">Leer<span>Craft</span></h1>
       <img src="/assets/images/ui-pickaxe.svg" width="48" height="48" alt="">
     </a>
     <div class="adventure-panel">
@@ -249,7 +272,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
     <a href="#winkel" data-hub="winkel" hidden><img class="hub-nav-icon" src="/assets/images/ui-chest.svg" alt="">Winkel</a>
     <a href="#mijn-steve" data-hub="mijn-steve" hidden><img class="hub-nav-icon" src="/assets/images/steve-portrait.svg" alt="">Mijn Steve</a>
   </nav>
-  <section id="games-panel" aria-label="Spellen">
+  <section id="games-panel" aria-label="Spellen" tabindex="-1">
 
 
   <!-- ══════════════════════════════════════════
@@ -258,7 +281,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
   <div class="subject" id="subj-topo">
     <div class="subject-header">
       <span class="subject-icon">🗺️</span>
-      <span class="subject-title">Topografie</span>
+      <h2 class="subject-title">Topografie</h2>
       <span class="subject-badge">Groep 6 &middot; 2 hoofdstukken · 9 spellen</span>
     </div>
     <p class="learning-path">Groep 6: herkennen &rarr; zelf herinneren &rarr; combineren en toepassen. Tijd en bediening zijn extra speluitdagingen.</p>
@@ -269,7 +292,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="card-banner" style="background:linear-gradient(90deg,#3A86FF,#8AC926);"></div>
         <div class="card-body">
           <span class="card-icon">🖱️</span>
-          <div class="card-name">Provincie<br>Klikspel</div>
+          <h4 class="card-name">Provincie<br>Klikspel</h4>
           <div class="card-desc">Klik de juiste provincie op de kaart van Nederland.</div>
           <p class="didactic-level"><strong>Niveau 1: herkennen</strong><span>Zoek de genoemde provincie op de kaart.</span></p>
           <button class="card-btn">▶ Spelen</button>
@@ -280,7 +303,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="card-banner" style="background:linear-gradient(90deg,#FB5607,#FFBE0B);"></div>
         <div class="card-body">
           <span class="card-icon">✏️</span>
-          <div class="card-name">Provincie<br>Schrijfspel</div>
+          <h4 class="card-name">Provincie<br>Schrijfspel</h4>
           <div class="card-desc">Typ de naam van de uitgelichte provincie.</div>
           <p class="didactic-level"><strong>Niveau 2: zelf herinneren</strong><span>Haal de provincienaam op en schrijf hem, met hints als steun.</span></p>
           <button class="card-btn">▶ Spelen</button>
@@ -295,7 +318,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="new-badge">NIEUW</div>
         <div class="card-body">
           <span class="card-icon" aria-hidden="true">🧭</span>
-          <div class="card-name">De Atlascode 3D</div>
+          <h4 class="card-name">De Atlascode 3D</h4>
           <div class="card-desc">Ren door de atlaswereld, ontdek hoe kaarten werken en vind de verdwenen kaartstukken.</div>
           <p class="didactic-level"><strong>Niveau 3: toepassen</strong><span>Pas verschillende kaartvaardigheden toe in atlasmissies.</span></p>
           <span class="card-btn">▶ Spelen</span>
@@ -307,7 +330,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="new-badge">NIEUW</div>
         <div class="card-body">
           <span class="card-icon" aria-hidden="true">🌍</span>
-          <div class="card-name">Zoek het Land</div>
+          <h4 class="card-name">Zoek het Land</h4>
           <div class="card-desc">Klik het juiste land aan op de zwevende kaart van Europa.</div>
           <p class="didactic-level"><strong>Niveau 1: herkennen</strong><span>Zoek het genoemde land op de kaart.</span></p>
           <span class="card-btn">▶ Spelen</span>
@@ -319,7 +342,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="new-badge">NIEUW</div>
         <div class="card-body">
           <span class="card-icon" aria-hidden="true">✏️</span>
-          <div class="card-name">Schrijf het Land</div>
+          <h4 class="card-name">Schrijf het Land</h4>
           <div class="card-desc">Typ de naam van het land waar de gouden pijl naar wijst.</div>
           <p class="didactic-level"><strong>Niveau 2: zelf herinneren</strong><span>Haal de naam van het gemarkeerde land zelf op.</span></p>
           <span class="card-btn">▶ Spelen</span>
@@ -331,7 +354,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="new-badge">NIEUW</div>
         <div class="card-body">
           <span class="card-icon" aria-hidden="true">🏛️</span>
-          <div class="card-name">Zoek de Hoofdstad</div>
+          <h4 class="card-name">Zoek de Hoofdstad</h4>
           <div class="card-desc">Klik op het land waar de genoemde hoofdstad bij hoort.</div>
           <p class="didactic-level"><strong>Niveau 2: verbanden leggen</strong><span>Koppel een hoofdstad aan het juiste land en vind het op de kaart.</span></p>
           <span class="card-btn">▶ Spelen</span>
@@ -343,7 +366,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="new-badge">NIEUW</div>
         <div class="card-body">
           <span class="card-icon" aria-hidden="true">🖊️</span>
-          <div class="card-name">Schrijf de Hoofdstad</div>
+          <h4 class="card-name">Schrijf de Hoofdstad</h4>
           <div class="card-desc">Typ de hoofdstad van het land waar de gouden pijl naar wijst.</div>
           <p class="didactic-level"><strong>Niveau 3: zelfstandig ophalen</strong><span>Herken het land en schrijf de bijbehorende hoofdstad.</span></p>
           <span class="card-btn">▶ Spelen</span>
@@ -355,7 +378,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="new-badge">NIEUW</div>
         <div class="card-body">
           <span class="card-icon" aria-hidden="true">📐</span>
-          <div class="card-name">Raster:<br>Zoek het Land</div>
+          <h4 class="card-name">Raster:<br>Zoek het Land</h4>
           <div class="card-desc">Klik of typ in welk rastervak (bijv. D5) een land ligt.</div>
           <p class="didactic-level"><strong>Niveau 3: toepassen</strong><span>Zoek een land en lees de bijbehorende rastercoordinaten af.</span></p>
           <span class="card-btn">▶ Spelen</span>
@@ -367,7 +390,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="new-badge">NIEUW</div>
         <div class="card-body">
           <span class="card-icon" aria-hidden="true">📍</span>
-          <div class="card-name">Raster:<br>Zoek de Hoofdstad</div>
+          <h4 class="card-name">Raster:<br>Zoek de Hoofdstad</h4>
           <div class="card-desc">Klik of typ in welk rastervak de hoofdstad van een land ligt.</div>
           <p class="didactic-level"><strong>Niveau 3: combineren</strong><span>Koppel hoofdstad en land en bepaal het juiste rastervak.</span></p>
           <span class="card-btn">▶ Spelen</span>
@@ -384,7 +407,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
   <div class="subject" id="subj-rekenen">
     <div class="subject-header">
       <span class="subject-icon">🔢</span>
-      <span class="subject-title">Rekenen</span>
+      <h2 class="subject-title">Rekenen</h2>
       <span class="subject-badge">Groep 6 &middot; 3 spellen</span>
     </div>
     <div class="cards-grid">
@@ -394,7 +417,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="new-badge">NIEUW</div>
         <div class="card-body">
           <span class="card-icon">🏁</span>
-          <div class="card-name">Reken<br>Race 3D</div>
+          <h4 class="card-name">Reken<br>Race 3D</h4>
           <div class="card-desc">Race tegen 4 tegenstanders! Rij langs het juiste antwoord.</div>
           <p class="didactic-level"><strong>Niveau: rekenen onder tijdsdruk</strong><span>Reken de som uit en stuur naar het juiste antwoord.</span></p>
           <button class="card-btn">▶ Spelen</button>
@@ -405,7 +428,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="card-banner" style="background:#4f963c"></div>
         <div class="card-body">
           <span class="card-icon" aria-hidden="true">✦</span>
-          <div class="card-name">RekenCraft</div>
+          <h4 class="card-name">RekenCraft</h4>
           <div class="card-desc">Een blokkenwereld vol rekensommen. Kies je sommen, ontwijk obstakels en haal de finish!</div>
           <p class="didactic-level"><strong>Niveau: instelbaar</strong><span>Kies bewerkingen en getalbereik. De speluitdaging groeit per level.</span></p>
           <span class="card-btn">Spelen</span>
@@ -417,7 +440,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="new-badge">NIEUW</div>
         <div class="card-body">
           <span class="card-icon" aria-hidden="true">🌊</span>
-          <div class="card-name">Getallenzee</div>
+          <h4 class="card-name">Getallenzee</h4>
           <div class="card-desc">Kies je sommen en ren naar het juiste antwoord voordat de verkeerde tegels verdwijnen!</div>
           <p class="didactic-level"><strong>Niveau: instelbaar</strong><span>Kies plus/min, keersommen of gemengd. Reken voordat de tijd om is.</span></p>
           <span class="card-btn">▶ Spelen</span>
@@ -435,7 +458,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
   <div class="subject locked" id="subj-taal">
     <div class="subject-header">
       <span class="subject-icon">📖</span>
-      <span class="subject-title">Taal</span>
+      <h2 class="subject-title">Taal</h2>
       <span class="subject-badge">Binnenkort</span>
     </div>
     <div class="cards-grid">
@@ -445,8 +468,8 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="lock-badge">🔒</div>
         <div class="card-body">
           <span class="card-icon">🔤</span>
-          <div class="card-name">Spelling<br>Quiz</div>
-          <div class="card-desc">Schrijf de woorden fout-loos op.</div>
+          <h4 class="card-name">Spelling<br>Quiz</h4>
+          <div class="card-desc">Schrijf de woorden foutloos op.</div>
           <div class="card-stars">
             <span class="star on">★</span><span class="star off">★</span><span class="star off">★</span>
           </div>
@@ -459,7 +482,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         <div class="lock-badge">🔒</div>
         <div class="card-body">
           <span class="card-icon">📝</span>
-          <div class="card-name">Dictee<br>Meester</div>
+          <h4 class="card-name">Dictee<br>Meester</h4>
           <div class="card-desc">Luister en schrijf het goede woord.</div>
           <div class="card-stars">
             <span class="star on">★</span><span class="star on">★</span><span class="star off">★</span>
@@ -473,7 +496,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
 
   </section>
   <section id="outfit-panel" class="outfit-panel" hidden aria-labelledby="outfit-heading">
-    <header class="outfit-heading"><h1 id="outfit-heading">Winkel</h1><div class="shop-wallet"><img src="/assets/images/ui-coin.svg" width="34" height="34" alt=""><strong id="shop-balance" role="status">Saldo laden...</strong></div></header>
+    <header class="outfit-heading"><h2 id="outfit-heading">Winkel</h2><div class="shop-wallet"><img src="/assets/images/ui-coin.svg" width="34" height="34" alt=""><strong id="shop-balance" role="status">Saldo laden...</strong></div></header>
     <p id="shop-message" role="status" aria-live="polite"></p>
     <div id="world-theme-setting" class="world-theme-setting" hidden>
       <span>Dark mode · The End</span>
@@ -498,7 +521,6 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
   <footer class="footer site-footer" aria-label="Over LeerCraft">
     <div class="footer-identity">
       <a class="footer-brand" href="/#spellen"><img src="/assets/images/ui-pickaxe.svg" width="32" height="32" alt=""><span>Leer<span>Craft</span></span></a>
-      <p>Meer spellen komen eraan!</p>
       <span class="footer-version">Versie 0.43</span>
     </div>
     <div class="footer-visitors"><img src="/assets/images/steve-portrait.svg" width="36" height="36" alt=""><div><span>Bezoekers</span><strong id="visitor-count">...</strong></div></div>
@@ -508,7 +530,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
     </a>
   </footer>
 
-</div>
+</main>
 
 <script>
 // ── Gras + aarde blokken ──
