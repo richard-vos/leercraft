@@ -69,8 +69,8 @@
       email = me.loggedIn ? me.email : null;
       if(!email||email!==previousEmail)window.LeerCraftAvatar?.clear();
       if (email !== previousEmail) accountListeners.forEach(listener => listener(email));
-      $('[data-account-status]').textContent = email ? `Ingelogd als ${email}` : '';
-      $('[data-account-status]').hidden = !email;
+      $('[data-account-status]').textContent = '';
+      $('[data-account-status]').hidden = true;
       $('[data-login]').hidden = !!email; $('[data-logout]').hidden = !email;
       if (email) {
         const summary = await request('scores/summary.php');

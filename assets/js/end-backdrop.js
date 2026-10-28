@@ -9,11 +9,13 @@ try{
   camera.position.set(0,14,72);camera.lookAt(0,12,-10);
   scene.add(new THREE.HemisphereLight(0xbdb3ec,0x36243b,2));
   const sun=new THREE.DirectionalLight(0xe3ceff,2.4);sun.position.set(-20,40,25);scene.add(sun);
-  const floor=new THREE.Mesh(new THREE.PlaneGeometry(300,300),new THREE.MeshStandardMaterial({color:0xa59aa8,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-3;scene.add(floor);
-  const world=createEndWorld(THREE,scene,{ground:floor.material});
+  const world=createEndWorld(THREE,scene,{camera,backdrop:true});
   const resize=()=>{renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();};resize();addEventListener('resize',resize);
   LeerCraftTheme.subscribe(value=>{canvas.hidden=value!=='end';});
   let previous=performance.now();
-  function frame(now){requestAnimationFrame(frame);const dt=(now-previous)/1000;previous=now;if(canvas.hidden||document.hidden)return;world.update(dt);renderer.render(scene,camera);}
+  function frame(now){
+    requestAnimationFrame(frame);const dt=(now-previous)/1000;previous=now;if(canvas.hidden||document.hidden)return;
+    world.update(dt);renderer.render(scene,camera);
+  }
   requestAnimationFrame(frame);
 }catch{canvas.remove();}

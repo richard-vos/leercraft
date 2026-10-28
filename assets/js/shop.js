@@ -1,6 +1,7 @@
 import * as THREE from '../vendor/three-0.160.0.module.js';
 import {createRunnerCharacter} from './minecraft-runner-visuals.js';
 import {applyRunnerOutfit} from './avatar-cosmetics.js';
+import {itemThumbnail} from './item-preview.js';
 
 const $=id=>document.getElementById(id);
 let busy=false,preview=null,currentKey='',view='winkel',category='head';
@@ -44,10 +45,9 @@ async function change(path,body,message){
 function card(item,state,ownedView){
   const owned=state.owned.includes(item.id),wearing=state.equipped[item.slot]===item.id;
   const card=document.createElement('article');card.className='item-card'+(wearing?' equipped':'');
-  const icon=document.createElement('div');icon.className='item-icon';icon.textContent=item.icon==='crown'?'👑':'👕';icon.setAttribute('aria-hidden','true');
-  const icons={crown:'\u{1f451}',helmet:'\u{1fa96}',hat:'\u{1f452}',cap:'\u{1f9e2}',shoes:'\u{1f462}',pants:'\u{1f456}',sword:'\u{2694}',pickaxe:'\u{26cf}',axe:'\u{1fa93}',shovel:'\u{1f6e0}',torch:'\u{1f525}',lantern:'\u{1f3ee}',shield:'\u{1f6e1}',trident:'\u{1f531}',rod:'\u{1f3a3}',spyglass:'\u{1f52d}',book:'\u{1f4d6}'};
-  icon.textContent=icons[item.icon]||'';
-  if(item.icon==='shirt'){icon.classList.add('pixel-shirt');icon.style.backgroundColor='#'+item.color.toString(16).padStart(6,'0');}
+  const icon=document.createElement('div');icon.className='item-icon';icon.setAttribute('aria-hidden','true');
+  try{const image=document.createElement('img');image.className='item-thumbnail';image.alt='';image.width=120;image.height=100;image.src=itemThumbnail(item);icon.append(image);}
+  catch{icon.textContent=item.name;icon.style.color='#'+item.color.toString(16).padStart(6,'0');icon.style.fontSize='16px';}
   const title=document.createElement('h3');title.textContent=item.name;
   card.append(icon,title);
   if(ownedView){

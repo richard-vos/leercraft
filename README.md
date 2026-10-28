@@ -36,6 +36,12 @@ standaardoutfit. De gedeelde visuele code staat in `avatar-cosmetics.js`.
 
 ## Tablet, telefoon en computer
 
+Bij Mijn Steve wissel je met Dark mode tussen de Overworld en The End.
+De voorkeur wordt lokaal in de browser onthouden en geldt voor de hoofdpagina,
+RekenCraft, Getallenzee en Reken Race. De End-achtergrond bevat obsidiaanpilaren,
+draaiende kristallen en een vliegende draak. De sfeer heeft geen invloed op scores
+of de bereikbaarheid van de baan.
+
 Alle pagina's gebruiken `assets/responsive.css`: een compacte basis met grote
 aanraakvlakken, tabletindeling vanaf 600px en uitbreiding voor computers vanaf
 1100px. De instellingen van RekenCraft krijgen vanaf 800px twee kolommen.

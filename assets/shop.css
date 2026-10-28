@@ -11,7 +11,7 @@
 .subject-dialog::backdrop{background:#000b}
 .subject-dialog h2{color:#ffe182;margin:0 0 14px}.subject-dialog h3{margin:20px 0 6px;font-size:18px}
 .subject-dialog .subject-badge{display:block;margin:0 0 12px;white-space:normal}
-.subject-dialog .didactic-level{display:grid;gap:4px;margin:0 0 16px}.subject-dialog .shop-button{margin-top:20px}
+.subject-dialog .didactic-level{display:grid;gap:4px;margin:0 0 16px}.subject-dialog .shop-button{margin-top:20px;width:100%;box-sizing:border-box}
 #player-history{border-top:2px solid #888;margin-top:24px;padding-top:20px}#player-history h2{color:#ffe182;font-size:22px}#history-total{margin:10px 0 16px}#history-games{display:grid;gap:12px}#history-games article{padding:14px;background:#0005;border:2px solid #555}#history-games h3{font-size:18px;margin:0 0 6px}
 .hub-nav{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:10px;margin:16px 0 22px}
 .logo-block .header-account .account-panel>button{margin-left:auto}
@@ -22,13 +22,15 @@
 .outfit-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
 .outfit-heading h1{font:clamp(16px,3vw,24px)/1.6 'Press Start 2P',monospace;color:#ffd700}
 .outfit-heading #shop-balance{color:#ffe182;background:#0008;border:2px solid #8ade5a;padding:10px 14px;font-size:20px}
-.outfit-layout{display:grid;gap:20px}
+.outfit-layout{display:grid;gap:20px;align-items:start}
 .outfit-inventory{min-width:0}
 .shop-categories{display:flex;overflow-x:auto;gap:10px;padding:3px 3px 14px;margin-bottom:8px}
 .shop-categories .shop-button{flex-shrink:0;min-height:54px}
 .shop-categories [aria-pressed="true"]{background:#7c6230;border-color:#ffe182}
 .outfit-inventory h2{margin-bottom:16px;color:#ffe182;font-size:22px}
 .outfit-panel .avatar-card{position:static;max-height:none;overflow:visible;background:#0005;border-color:#555;padding:14px;min-width:0}
+.outfit-panel .avatar-card{align-self:start}
+.item-thumbnail{display:block;width:120px;height:100px;max-width:100%;object-fit:contain}
 .outfit-panel #avatar-preview{height:340px}
 .outfit-panel .item-card{background:#0008;border-color:#888;border-right-color:#333;border-bottom-color:#333}
 .outfit-panel .item-card.equipped{border-color:#ffe182}

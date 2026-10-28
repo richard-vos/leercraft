@@ -99,3 +99,23 @@
 .game-rekencraft .custom-range summary::before{content:'+';margin-right:10px;font-weight:bold}
 .game-rekencraft .custom-range[open] summary::before{content:'-'}
 .game-rekencraft #ss .runner-menu .menu-controls{margin-top:14px;text-align:center;font-size:13px}
+
+/* Square Minecraft buttons, with gold highlighting the next step. */
+.game-rekencraft #ws .gbtn,.game-rekencraft #ls .gbtn,
+.game-rekencraft #ws .menu-secondary{
+  border-radius:0;min-height:54px;border:3px solid #d4b760;
+  border-top-color:#fff0ad;border-left-color:#fff0ad;
+  border-right-color:#806022;border-bottom-color:#806022;
+  box-shadow:inset 2px 2px #ffffff18,0 4px #35280f;
+  font:700 17px/1.4 Arial,sans-serif;padding:14px 18px;
+}
+.game-rekencraft #ws .gbtn,.game-rekencraft #ls .gbtn{
+  background:linear-gradient(#edcf73,#c59b3d);color:#2b220f;text-shadow:1px 1px #fff1ae70;
+}
+.game-rekencraft #ws .menu-secondary{background:#263524;color:#ffe8a1;text-shadow:none}
+.game-rekencraft #ws :is(.gbtn,.menu-secondary):active,.game-rekencraft #ls .gbtn:active{
+  transform:translateY(3px);box-shadow:inset 2px 2px #0003,0 1px #35280f;
+}
+.game-rekencraft #ws :is(.gbtn,.menu-secondary):focus-visible,.game-rekencraft #ls .gbtn:focus-visible{
+  outline:3px solid #ffe385;outline-offset:5px;
+}

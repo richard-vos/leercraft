@@ -77,6 +77,8 @@ export function heldObject(THREE,model,item,scale,sea=false){
     if(item.kind==='shovel')block(.25,.3,.12,0,.4,0,c);
     if(item.kind==='trident'){block(.08,.9,.08,0,.4,0,c);block(.48,.08,.08,0,.75,0,c);for(const x of [-.2,0,.2])block(.08,.3,.08,x,.9,0,c);}
   }else if(item.kind==='torch'){
+    // Tilt the flame forward, away from the forearm, while the fist grips the shaft.
+    group.rotation.x=-Math.PI/3;group.position.z=-.22*scale;
     block(.12,.5,.12,0,.1,0,0x805832);block(.2,.23,.2,0,.45,0,0xffbe3e);block(.13,.14,.13,0,.62,0,0xffe894);
   }else if(item.kind==='lantern'){
     block(.14,.28,.14,0,.12,0,0x394b59);block(.32,.4,.32,0,-.15,0,0xffce58);block(.4,.07,.4,0,-.38,0,0x394b59);
