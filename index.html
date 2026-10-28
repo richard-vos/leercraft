@@ -202,6 +202,7 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
 <link rel="stylesheet" href="/assets/shop.css">
 <link rel="stylesheet" href="/assets/theme.css">
 <script src="/assets/theme.js"></script>
+<link rel="stylesheet" href="/assets/header.css">
 </head>
 <body class="site-home">
 
@@ -221,25 +222,31 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
 
 <div class="wrapper">
 
-  <!-- LOGO -->
-  <div class="logo-block">
-    <div class="logo-title">⛏️ Leer<span class="logo-craft">Craft</span></div>
-    <div class="logo-sub">Kies een vak en begin je avontuur! ⚔️</div>
-    <div data-leercraft-account class="header-account"></div>
-    <div class="coin-bar" aria-label="Je munten"><span>Munten</span><strong id="header-coins">0</strong></div>
-    <div class="xp-wrap">
-      <div class="xp-lbl">⚡ Voortgang</div>
-      <div class="xp-outer">
-        <div class="xp-fill" id="xp-fill"></div>
-        <span class="xp-text" id="xp-text">0 / 100 XP</span>
+  <header class="adventure-header" aria-label="LeerCraft en jouw voortgang">
+    <a class="adventure-brand" href="/#spellen" aria-label="LeerCraft spellen">
+      <span class="adventure-brand-word">Leer<span>Craft</span></span>
+      <img src="/assets/images/ui-pickaxe.svg" width="48" height="48" alt="">
+    </a>
+    <div class="adventure-panel">
+      <div class="adventure-portrait"><img id="header-avatar" src="/assets/images/steve-portrait.svg" width="256" height="256" alt="Jouw Steve"></div>
+      <div class="adventure-progress">
+        <div class="adventure-level">Level <strong id="header-level-number">1</strong></div>
+        <div class="adventure-xp-row">
+          <span class="adventure-xp-total" id="xp-text">0 XP</span>
+          <div class="adventure-xp-track" id="header-xp-track" role="progressbar" aria-label="Voortgang naar het volgende level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="adventure-xp-fill" id="xp-fill"></div></div>
+          <span class="adventure-xp-next" id="xp-next">100 XP tot level 2</span>
+        </div>
+      </div>
+      <div class="adventure-actions">
+        <div class="adventure-wallet" aria-label="Beschikbare munten"><img src="/assets/images/ui-coin.svg" width="40" height="40" alt=""><strong id="header-coins">0</strong><span>munten</span></div>
+        <div data-leercraft-account class="header-account"></div>
       </div>
     </div>
-  </div>
-
+  </header>
   <nav class="hub-nav" aria-label="Hoofdmenu">
-    <a href="#spellen" data-hub="spellen">Spellen</a>
-    <a href="#winkel" data-hub="winkel" hidden>Winkel</a>
-    <a href="#mijn-steve" data-hub="mijn-steve" hidden>Mijn Steve</a>
+    <a href="#spellen" data-hub="spellen"><img class="hub-nav-icon" src="/assets/images/ui-grass.svg" alt="">Spellen</a>
+    <a href="#winkel" data-hub="winkel" hidden><img class="hub-nav-icon" src="/assets/images/ui-chest.svg" alt="">Winkel</a>
+    <a href="#mijn-steve" data-hub="mijn-steve" hidden><img class="hub-nav-icon" src="/assets/images/steve-portrait.svg" alt="">Mijn Steve</a>
   </nav>
   <section id="games-panel" aria-label="Spellen">
 
@@ -495,9 +502,6 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
 </div>
 
 <script>
-const logo=document.querySelector('.logo-block');
-function updateHeader(){logo.classList.toggle('compact',window.scrollY>90)}
-window.addEventListener('scroll',updateHeader,{passive:true});updateHeader();
 // ── Gras + aarde blokken ──
 function fillRow(id, cls){
   const row = document.getElementById(id);

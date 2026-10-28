@@ -1,7 +1,7 @@
 import * as THREE from '../vendor/three-0.160.0.module.js';
 import {createRunnerCharacter} from './minecraft-runner-visuals.js';
 import {applyRunnerOutfit} from './avatar-cosmetics.js';
-import {itemThumbnail} from './item-preview.js';
+import {itemThumbnail,avatarPortrait} from './item-preview.js';
 
 const $=id=>document.getElementById(id);
 let busy=false,preview=null,currentKey='',view='winkel',category='head';
@@ -27,7 +27,10 @@ LeerCraft.onChange(navigate);
 LeerCraft.ready.then(navigate);
 const themeToggle=$('world-theme-toggle');
 themeToggle.addEventListener('change',()=>LeerCraftTheme.set(themeToggle.checked?'end':'overworld'));
-LeerCraftTheme.subscribe(value=>{themeToggle.checked=value==='end';});
+LeerCraftTheme.subscribe(value=>{themeToggle.checked=value==='end';updatePortrait(LeerCraftAvatar.state);});
+function updatePortrait(state){
+  try{$('header-avatar').src=avatarPortrait(state.equipped,LeerCraftTheme.value);}catch{/* Keep the default pixel portrait if WebGL is unavailable. */}
+}
 
 function button(text,action,disabled=false){
   const element=document.createElement('button');element.type='button';element.className='shop-button';element.textContent=text;element.disabled=disabled||busy;element.addEventListener('click',action);return element;
@@ -52,7 +55,7 @@ function card(item,state,ownedView){
   card.append(icon,title);
   if(ownedView){
     const label=document.createElement('p');label.className='item-status';label.textContent=wearing?'Draag je nu':'In je garderobe';card.append(label);
-    card.append(button(wearing?'Afzetten':'Dragen',()=>change('equip.php',{slot:item.slot,item_id:wearing?null:item.id},wearing?'Je draagt dit item niet meer.':'Je outfit is opgeslagen en gaat mee naar je spellen.')));
+    card.append(button(wearing?'Afzetten':'Dragen',()=>change('equip.php',{slot:item.slot,item_id:wearing?null:item.id},'')));
   }else{
     const price=document.createElement('p');price.className='item-price';price.textContent=item.price+' punten';card.append(price);
     if(owned)card.append(button('Al gekocht',()=>{},true));
@@ -66,7 +69,8 @@ function card(item,state,ownedView){
 }
 function render(state){
   $('shop-balance').textContent=state.loggedIn?(state.wallet.unlimited?'Onbeperkte munten':state.wallet.balance+' punten'):'Log in voor je punten';
-  $('header-coins').textContent=state.loggedIn?(state.wallet.unlimited?'\u221e':state.wallet.balance):0;
+  $('header-coins').textContent=state.loggedIn?(state.wallet.unlimited?'\u221e':state.wallet.balance.toLocaleString('nl-NL')):0;
+  updatePortrait(state);
   const ownedView=view==='mijn-steve';
   $('shop-categories').replaceChildren(...categories.map(([id,label])=>{
     const tab=button(label,()=>{category=id;render(LeerCraftAvatar.state);$('shop-categories').querySelector('[aria-pressed="true"]').focus({preventScroll:true});});

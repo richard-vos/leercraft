@@ -25,6 +25,17 @@
   const $ = selector => host.querySelector(selector) || dialog.querySelector(selector);
   let email = null, pendingEmail = '';
   const accountListeners = new Set();
+  function updateProgress(points) {
+    const fill=document.getElementById('xp-fill'),xp=document.getElementById('xp-text');
+    if(!xp||!fill)return;
+    const level=Math.floor(points/100)+1,remaining=100-points%100;
+    const number=document.getElementById('header-level-number'),next=document.getElementById('xp-next'),track=document.getElementById('header-xp-track');
+    xp.textContent=number?`${points.toLocaleString('nl-NL')} XP`:`Level ${level} · ${points} XP · ${remaining} tot volgend level`;
+    fill.style.width=`${points%100}%`;
+    if(number)number.textContent=level;
+    if(next)next.textContent=`${remaining} XP tot level ${level+1}`;
+    if(track){track.setAttribute('aria-valuenow',String(points%100));track.setAttribute('aria-valuetext',`${remaining} XP tot level ${level+1}`);}
+  }
   function renderHistory(summary) {
     const total=document.getElementById('history-total'),games=document.getElementById('history-games');
     if(!total||!games)return;
@@ -61,12 +72,12 @@
   async function refresh() {
     renderHistory(null);
     $('[data-account-progress]').textContent = '';
-    const fill = document.getElementById('xp-fill'), xp = document.getElementById('xp-text');
-    if(xp){xp.textContent='0 XP';fill.style.width='0%';}
+    if(!email)updateProgress(0);
     try {
       const me = await request('auth/me.php');
       const previousEmail = email;
       email = me.loggedIn ? me.email : null;
+      if(!email||email!==previousEmail)updateProgress(0);
       if(!email||email!==previousEmail)window.LeerCraftAvatar?.clear();
       if (email !== previousEmail) accountListeners.forEach(listener => listener(email));
       $('[data-account-status]').textContent = '';
@@ -84,7 +95,7 @@
         if(sea)details.push(`Getallenzee: ${sea.plays} races gewonnen · ${sea.totalScore*10} punten`);
         $('[data-account-progress]').textContent = `${summary.totalPoints} punten${details.length?' · '+details.join(' · '):' · nog geen spellen afgerond'}`;
         if(summary.wallet)$('[data-account-progress]').textContent += summary.wallet.unlimited?' · onbeperkte testmunten':` · ${summary.wallet.balance} te besteden`;
-        if(xp){const points=summary.totalPoints;xp.textContent=`Level ${Math.floor(points/100)+1} · ${points} XP · ${100-points%100} tot volgend level`;fill.style.width=`${points%100}%`;}
+        updateProgress(summary.totalPoints);
       }
     } catch(error) { $('[data-account-status]').textContent = error.message; $('[data-account-status]').hidden = false; }
     await window.LeerCraftAvatar?.refresh();

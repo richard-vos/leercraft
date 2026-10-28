@@ -31,6 +31,7 @@ jobs:
       - name: OTP-invoer en spellogica controleren
         run: |
           node tests/account-otp.cjs
+          node tests/account-header.cjs
           node tests/province-game.cjs
           node tests/province-write-game.cjs
           node --experimental-default-type=module tests/rekencraft-visuals.cjs
