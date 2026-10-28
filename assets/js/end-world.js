@@ -1,3 +1,5 @@
+import {createEndCrystal,createObsidianTexture,createCrystalFireTexture} from './end-crystal.js';
+
 function pixelTexture(THREE,colors,repeat=1){
   const pixels=new Uint8Array(32*32*4);let seed=91;
   for(let i=0;i<32*32;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const hex=colors[(seed>>>16)%colors.length];pixels.set([hex>>16&255,hex>>8&255,hex&255,255],i*4);}
@@ -9,10 +11,12 @@ export function createEndWorld(THREE,scene,{center=()=>({x:0,z:0}),hide=[],groun
   const textures=[];
   function texture(colors,repeat){const map=pixelTexture(THREE,colors,repeat);textures.push(map);return map;}
   const stoneColors=[0xc5c18b,0xd6d29e,0xb2b17e,0xe0dba8,0xbdbb87];
-  const obsidian=new THREE.MeshStandardMaterial({color:0xbdb2cf,map:texture([0x17131e,0x21182f,0x30223c,0x1d1828]),roughness:1});
+  const obsidianMap=createObsidianTexture(THREE);textures.push(obsidianMap);
+  const obsidian=new THREE.MeshStandardMaterial({color:0xffffff,map:obsidianMap,roughness:.9,emissiveMap:obsidianMap,emissive:0x66507d,emissiveIntensity:.32});
   const bedrock=new THREE.MeshStandardMaterial({map:texture([0x28282b,0x555358,0x858087,0x464349]),roughness:1});
   const iron=new THREE.MeshStandardMaterial({color:0x9d9da3,roughness:.55,metalness:.35});
-  const pink=new THREE.MeshBasicMaterial({color:0xf38aff}),glass=new THREE.MeshBasicMaterial({color:0xd0c8ee,wireframe:true}),flame=new THREE.MeshBasicMaterial({color:0xffb72f});
+  const fireMap=createCrystalFireTexture(THREE);textures.push(fireMap);
+  const pink=new THREE.MeshBasicMaterial({color:0xf38aff}),flame=new THREE.MeshBasicMaterial({map:fireMap,transparent:true,alphaTest:.35,depthWrite:false,side:THREE.DoubleSide});
   function box(parent,w,h,d,x,y,z,material){const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);mesh.position.set(x,y,z);parent.add(mesh);return mesh;}
   const floorY=ground?0:-3,dummy=new THREE.Object3D();
   // A stepped End-stone island, with a shared surface under every pillar.
@@ -24,16 +28,16 @@ export function createEndWorld(THREE,scene,{center=()=>({x:0,z:0}),hide=[],groun
     dummy.position.set(x*16,floorY-height/2,z*16-15);dummy.scale.set(16,height,16);dummy.updateMatrix();terrain.setMatrixAt(terrainCount++,dummy.matrix);
   }
   terrain.count=terrainCount;terrain.receiveShadow=true;terrain.visible=!ground;group.add(terrain);
-  const pillars=[],crystals=[],cages=[];
+  const pillars=[],crystals=[],cages=[],crystalTemplate=createEndCrystal(THREE);
   for(let i=0;i<10;i++){
     const pillar=new THREE.Group(),height=15+(i%5)*4,width=3.8+(i%3)*.6,angle=i/10*Math.PI*2;
     pillar.name='obsidian-pillar-'+i;pillar.position.set(Math.cos(angle)*55,0,Math.sin(angle)*55-20);
     pillar.userData={base:floorY,top:floorY+height};const top=floorY+height;
     box(pillar,width,height,width,0,floorY+height/2,0,obsidian);box(pillar,1.6,.6,1.6,0,top+.3,0,bedrock);
-    for(const x of [-.55,.55])box(pillar,.35,.45,.45,x,top+.8,0,flame);
-    const crystal=new THREE.Group();crystal.position.y=top+1.8;pillar.add(crystal);
-    crystal.add(new THREE.Mesh(new THREE.OctahedronGeometry(.85),pink));
-    const shell=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.8,1.8),glass);shell.rotation.set(.65,.3,.7);crystal.add(shell);
+    for(const angle of [0,Math.PI/2]){
+      const fire=new THREE.Mesh(new THREE.PlaneGeometry(1.35,1.25),flame);fire.position.y=top+1.05;fire.rotation.y=angle;pillar.add(fire);
+    }
+    const crystal=crystalTemplate.clone(true);crystal.position.y=top+2.3;pillar.add(crystal);
     if(i===2||i===7){
       const cage=new THREE.Group();cage.name='end-crystal-cage-'+i;cage.position.y=top;pillar.add(cage);cages.push(cage);
       // Stationary iron bars surrounding the rotating crystal, with a barred roof.
@@ -47,9 +51,15 @@ export function createEndWorld(THREE,scene,{center=()=>({x:0,z:0}),hide=[],groun
   }
   group.updateMatrixWorld(true);const inverse=new THREE.Matrix4().copy(group.matrixWorld).invert();
   // Pillars and cage bars share four draw calls.
-  for(const material of [obsidian,bedrock,iron,flame]){
+  for(const material of [obsidian,bedrock,iron]){
     const blocks=[];pillars.forEach(pillar=>pillar.traverse(mesh=>{if(mesh.isMesh&&mesh.material===material)blocks.push(mesh);}));
-    const instances=new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1),material,blocks.length);
+    const geometry=new THREE.BoxGeometry(1,1,1);
+    if(material===obsidian){
+      // Repeat the block pattern along the actual height, rather than stretching it over the tower.
+      const uv=geometry.attributes.uv;
+      for(let i=0;i<uv.count;i++){const face=Math.floor(i/4);if(face!==2&&face!==3)uv.setXY(i,uv.getX(i)*1.5,uv.getY(i)*9);}
+    }
+    const instances=new THREE.InstancedMesh(geometry,material,blocks.length);
     blocks.forEach((mesh,i)=>{const p=mesh.geometry.parameters;instances.setMatrixAt(i,new THREE.Matrix4().multiplyMatrices(inverse,mesh.matrixWorld).scale(new THREE.Vector3(p.width,p.height,p.depth)));mesh.removeFromParent();mesh.geometry.dispose();});
     group.add(instances);
   }
@@ -110,7 +120,8 @@ export function createEndWorld(THREE,scene,{center=()=>({x:0,z:0}),hide=[],groun
   return {group,dragon,pillars,cages,endermen,wings,terrain,get enabled(){return enabled;},update(seconds){
     if(!enabled)return;time+=Math.min(seconds,.05)*(reduced?.matches?.7:1);
     const p=center();group.position.set(p.x||0,0,p.z||0);
-    crystals.forEach((crystal,i)=>{crystal.rotation.y=time*.7;crystal.position.y=pillars[i].userData.top+1.8+Math.sin(time*1.8+i)*.12;});
+    fireMap.offset.y=(Math.floor(time*7)%2)*.5;
+    crystals.forEach((crystal,i)=>{crystal.rotation.y=time*.7;crystal.position.y=pillars[i].userData.top+2.3+Math.sin(time*1.8+i)*.12;});
     endermen.forEach((ender,i)=>{
       const angle=Math.sin(time*.12+i)*.7,walk=Math.sin(time*2.2+ender.phase)*.3,x=ender.x+Math.sin(time*.18+ender.phase)*2,z=ender.z+Math.cos(time*.18+ender.phase)*2;
       const parts=[[.65,1.35,.4,0,2.7,0,0],[.8,.8,.8,0,3.82,0,0],[.16,2,.2,-.2,1,0,walk],[.16,2,.2,.2,1,0,-walk],[.14,2.45,.17,-.49,2.35,0,-walk*.6],[.14,2.45,.17,.49,2.35,0,walk*.6]];
@@ -128,6 +139,7 @@ export function createEndWorld(THREE,scene,{center=()=>({x:0,z:0}),hide=[],groun
     tail.forEach((joint,i)=>{joint.rotation.y=Math.sin(time*1.7-i*.45)*.14;joint.rotation.x=Math.cos(time*1.1-i*.4)*.06;});
   },dispose(){
     unsubscribe?.();group.removeFromParent();const materials=new Set(),geometries=new Set();group.traverse(mesh=>{if(mesh.geometry)geometries.add(mesh.geometry);if(mesh.material)materials.add(mesh.material);});
-    geometries.forEach(geometry=>geometry.dispose());materials.forEach(material=>material.dispose());textures.forEach(map=>map.dispose());
+    const maps=new Set(textures);materials.forEach(material=>{if(material.map)maps.add(material.map);});
+    geometries.forEach(geometry=>geometry.dispose());materials.forEach(material=>material.dispose());maps.forEach(map=>map.dispose());
   }};
 }
