@@ -30,6 +30,8 @@ canvas{display:block;width:100%;height:100%}
 <link rel="stylesheet" href="/assets/navigation.css">
 <link rel="stylesheet" href="/assets/responsive.css">
 <script src="/assets/responsive.js" defer></script>
+<link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/theme.js"></script>
 </head>
 <body class="game-europe">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>

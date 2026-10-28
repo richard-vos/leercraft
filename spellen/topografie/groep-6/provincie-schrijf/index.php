@@ -120,6 +120,8 @@ h1 small{display:block;font-size:0.65em;color:#aaffaa;text-shadow:2px 2px #00660
 <link rel="stylesheet" href="/assets/navigation.css">
 <link rel="stylesheet" href="/assets/responsive.css">
 <script src="/assets/responsive.js" defer></script>
+<link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/theme.js"></script>
 </head>
 <body class="game-province">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>

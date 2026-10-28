@@ -161,6 +161,8 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
 <link rel="stylesheet" href="/assets/responsive.css">
 <link rel="stylesheet" href="/assets/rekencraft.css">
 <script src="/assets/responsive.js" defer></script>
+<link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/theme.js"></script>
 </head>
 <body class="game-rekencraft">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
@@ -261,6 +263,7 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
 import * as THREE from '/assets/vendor/three-0.160.0.module.js';
 import {createRunnerCharacter, createRunnerScenery} from '/assets/js/minecraft-runner-visuals.js';
 import {RekencraftProgress} from '/assets/js/rekencraft-progress.js';
+import {createEndWorld} from '/assets/js/end-world.js';
 import {requiredRunnerTiles} from '/assets/js/runner-track.js';
 import {applyRunnerOutfit} from '/assets/js/avatar-cosmetics.js';
 
@@ -1921,9 +1924,11 @@ function loop(ts){
   sun.target.position.set(0,0,steveC.z-16);
   updateCamera(dt);
   updateBadgePos();
+  endWorld.update(dt);
   renderer.render(scene,camera);
 }
 
+const endWorld=createEndWorld(THREE,scene,{center:()=>({x:0,z:steveZ}),hide:[scenery.group]});
 loop(performance.now());
 </script>
 <script src="/assets/visitor-counter.js" data-root="/"></script>

@@ -18,11 +18,15 @@ function navigate(){
   });
   $('outfit-heading').textContent=view==='winkel'?'Winkel':'Mijn Steve';
   $('player-history').hidden=games||view!=='mijn-steve';
+  $('world-theme-setting').hidden=games||view!=='mijn-steve';
   render(LeerCraftAvatar.state);
 }
 window.addEventListener('hashchange',navigate);
 LeerCraft.onChange(navigate);
 LeerCraft.ready.then(navigate);
+const themeToggle=$('world-theme-toggle');
+themeToggle.addEventListener('change',()=>LeerCraftTheme.set(themeToggle.checked?'end':'overworld'));
+LeerCraftTheme.subscribe(value=>{themeToggle.checked=value==='end';});
 
 function button(text,action,disabled=false){
   const element=document.createElement('button');element.type='button';element.className='shop-button';element.textContent=text;element.disabled=disabled||busy;element.addEventListener('click',action);return element;

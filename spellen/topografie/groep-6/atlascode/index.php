@@ -31,6 +31,8 @@ h1{margin:0;color:#ffe15b;font-size:clamp(30px,6vw,55px);text-shadow:4px 4px #73
 <link rel="stylesheet" href="/assets/navigation.css">
 <link rel="stylesheet" href="/assets/responsive.css">
 <script src="/assets/responsive.js" defer></script>
+<link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/theme.js"></script>
 </head>
 <body class="game-atlas">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>

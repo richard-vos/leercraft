@@ -90,6 +90,8 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
 <link rel="stylesheet" href="/assets/responsive.css">
 <script src="/assets/responsive.js" defer></script>
 <link rel="stylesheet" href="/assets/race.css">
+<link rel="stylesheet" href="/assets/theme.css">
+<script src="/assets/theme.js"></script>
 </head>
 <body class="game-race">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
@@ -145,6 +147,7 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
 <script type="module">
 import * as THREE from '/assets/vendor/three-0.160.0.module.js';
 import {createKart,decorateCircuit,batchEnvironment} from '/assets/js/race-kart.js';
+import {createEndWorld} from '/assets/js/end-world.js';
 import {RaceProgress} from '/assets/js/race-progress.js';
 import {sampleTrack,steerKart,crossedGate,resampleLoop} from '/assets/js/race-motion.js';
 const progress=new RaceProgress(LeerCraft,run=>{
@@ -894,6 +897,7 @@ function loop(ts){
   if(!gameRunning||paused){
     // Idle: toon startopstelling met camera erachter
     updateCam(seconds);
+    endWorld.update(seconds);
     renderer.render(scene,camera);
     return;
   }
@@ -937,6 +941,7 @@ function loop(ts){
   updateCam(seconds);
   updateHUD();
   drawMM();
+  endWorld.update(seconds);
   renderer.render(scene,camera);
 }
 
@@ -1008,6 +1013,7 @@ function endRace(){
 // Zet auto's alvast neer op startlijn
 racers.forEach(r=>placeRacer(r));
 // Start idle render loop
+const endWorld=createEndWorld(THREE,scene,{center:()=>tAt(player.t),ground:ground.material});
 lastTS=performance.now();
 rafId=requestAnimationFrame(loop);
 </script>

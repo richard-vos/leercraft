@@ -149,6 +149,7 @@ export function createRunnerScenery(scene) {
   const cloudInstances=new THREE.InstancedMesh(geo,cloudMat,clouds.length*4);
   group.add(cloudInstances);
   return {
+    group,
     update(time,dt) {
       texture.offset.set(time*.004,time*.002);
       let index=0;
