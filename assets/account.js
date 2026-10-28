@@ -4,9 +4,9 @@
   style.rel = 'stylesheet'; style.href = `${root}/assets/account.css`; document.head.append(style);
   const host = document.querySelector('[data-leercraft-account]');
   host.innerHTML = `<section class="account-panel" aria-label="Je account">
-    <p data-account-status role="status">Account laden…</p>
+    <p data-account-status role="status" hidden></p>
     <p data-account-progress></p>
-    <button type="button" data-login>Inloggen met e-mail</button>
+    <button type="button" data-login>Inloggen</button>
     <button type="button" data-logout hidden>Uitloggen</button>
     <dialog class="account-dialog" aria-label="Inloggen bij LeerCraft"><form data-email-form>
       <h2>Inloggen bij LeerCraft</h2><p>Ontvang een code per e-mail. Je hebt geen wachtwoord nodig.</p>
@@ -61,14 +61,15 @@
     renderHistory(null);
     $('[data-account-progress]').textContent = '';
     const fill = document.getElementById('xp-fill'), xp = document.getElementById('xp-text');
-    if(xp){xp.textContent='Log in om punten te bewaren';fill.style.width='0%';}
+    if(xp){xp.textContent='0 XP';fill.style.width='0%';}
     try {
       const me = await request('auth/me.php');
       const previousEmail = email;
       email = me.loggedIn ? me.email : null;
       if(!email||email!==previousEmail)window.LeerCraftAvatar?.clear();
       if (email !== previousEmail) accountListeners.forEach(listener => listener(email));
-      $('[data-account-status]').textContent = email ? `Ingelogd als ${email}` : 'Speel als gast of log in om je punten te bewaren.';
+      $('[data-account-status]').textContent = email ? `Ingelogd als ${email}` : '';
+      $('[data-account-status]').hidden = !email;
       $('[data-login]').hidden = !!email; $('[data-logout]').hidden = !email;
       if (email) {
         const summary = await request('scores/summary.php');
@@ -84,7 +85,7 @@
         if(summary.wallet)$('[data-account-progress]').textContent += summary.wallet.unlimited?' · onbeperkte testmunten':` · ${summary.wallet.balance} te besteden`;
         if(xp){const points=summary.totalPoints;xp.textContent=`Level ${Math.floor(points/100)+1} · ${points} XP · ${100-points%100} tot volgend level`;fill.style.width=`${points%100}%`;}
       }
-    } catch(error) { $('[data-account-status]').textContent = error.message; }
+    } catch(error) { $('[data-account-status]').textContent = error.message; $('[data-account-status]').hidden = false; }
     await window.LeerCraftAvatar?.refresh();
   }
   const dialog = $('dialog');

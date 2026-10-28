@@ -13,7 +13,8 @@
 .subject-dialog .subject-badge{display:block;margin:0 0 12px;white-space:normal}
 .subject-dialog .didactic-level{display:grid;gap:4px;margin:0 0 16px}.subject-dialog .shop-button{margin-top:20px}
 #player-history{border-top:2px solid #888;margin-top:24px;padding-top:20px}#player-history h2{color:#ffe182;font-size:22px}#history-total{margin:10px 0 16px}#history-games{display:grid;gap:12px}#history-games article{padding:14px;background:#0005;border:2px solid #555}#history-games h3{font-size:18px;margin:0 0 6px}
-.hub-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0 22px}
+.hub-nav{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:10px;margin:16px 0 22px}
+.logo-block .header-account .account-panel>button{margin-left:auto}
 .hub-nav a{display:flex;align-items:center;justify-content:center;min-height:58px;padding:12px 6px;background:#333;color:#fff;border:4px solid #888;border-right-color:#111;border-bottom-color:#111;text-decoration:none;font:700 17px/1.4 Arial,sans-serif;text-align:center}
 .hub-nav a[aria-current]{background:#5d9e3a;border-top-color:#8ade5a;border-left-color:#8ade5a}
 .hub-nav a:focus-visible{outline:3px solid #ffd700;outline-offset:3px}

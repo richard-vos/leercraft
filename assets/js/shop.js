@@ -8,9 +8,11 @@ const categories=[['head','Petjes'],['shoes','Schoenen'],['shirt','T-shirts'],['
 function navigate(){
   const route=location.hash.slice(1);
   view=route==='mijn-steve'?'mijn-steve':'winkel';
-  const games=!['winkel','mijn-steve'].includes(route);
+  const authenticated=!!LeerCraft.email;
+  const games=!authenticated||!['winkel','mijn-steve'].includes(route);
   $('games-panel').hidden=!games;$('outfit-panel').hidden=games;
   document.querySelectorAll('[data-hub]').forEach(link=>{
+    link.hidden=link.dataset.hub!=='spellen'&&!authenticated;
     if(link.dataset.hub===(games?'spellen':view))link.setAttribute('aria-current','page');
     else link.removeAttribute('aria-current');
   });
@@ -19,6 +21,8 @@ function navigate(){
   render(LeerCraftAvatar.state);
 }
 window.addEventListener('hashchange',navigate);
+LeerCraft.onChange(navigate);
+LeerCraft.ready.then(navigate);
 
 function button(text,action,disabled=false){
   const element=document.createElement('button');element.type='button';element.className='shop-button';element.textContent=text;element.disabled=disabled||busy;element.addEventListener('click',action);return element;
