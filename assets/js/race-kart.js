@@ -1,8 +1,9 @@
 import * as THREE from '../vendor/three-0.160.0.module.js';
 import {createRunnerCharacter} from './minecraft-runner-visuals.js';
 import {applyRunnerOutfit} from './avatar-cosmetics.js';
+import {createRival} from './race-rivals.js';
 
-export function createKart(color,equipped={}){
+export function createKart(color,equipped={},kind='steve'){
   const kart=new THREE.Group(),wheels=[];
   const paint=new THREE.MeshStandardMaterial({color,roughness:.4,metalness:.2});
   const black=new THREE.MeshStandardMaterial({color:0x202735,roughness:.85});
@@ -20,8 +21,9 @@ export function createKart(color,equipped={}){
     const tire=new THREE.Mesh(new THREE.CylinderGeometry(.48,.48,.45,12),black);tire.rotation.z=Math.PI/2;wheel.add(tire);
     const rim=new THREE.Mesh(new THREE.CylinderGeometry(.27,.27,.47,8),metal);rim.rotation.z=Math.PI/2;wheel.add(rim);kart.add(wheel);wheels.push(wheel);
   }
-  const driver=createRunnerCharacter('steve',.9,equipped);
-  driver.rotation.y=Math.PI;driver.position.set(0,.65,-.25);
+  const driver=kind==='steve'?createRunnerCharacter('steve',.9,equipped):createRival(kind);
+  driver.userData.kind=kind;
+  driver.rotation.y=kind==='creeper'?0:Math.PI;driver.position.set(0,.65,-.25);
   for(const limb of driver.children){
     if(limb.userData.li!==undefined)limb.rotation.x=-Math.PI/2;
     if(limb.userData.ai!==undefined)limb.rotation.x=-.65;
@@ -29,12 +31,40 @@ export function createKart(color,equipped={}){
   kart.add(driver);
   const steering=new THREE.Mesh(new THREE.TorusGeometry(.32,.06,5,12),black);steering.position.set(0,1.65,.6);steering.rotation.x=-.5;kart.add(steering);
   kart.userData.driver=driver;
-  kart.userData.equip=outfit=>applyRunnerOutfit(THREE,driver,outfit);
+  kart.userData.equip=outfit=>{if(kind==='steve')applyRunnerOutfit(THREE,driver,outfit);};
   kart.userData.update=(speed,steer,time)=>{
-    wheels.forEach(w=>{w.children.forEach(mesh=>mesh.rotation.x+=speed);w.rotation.y=w.position.z>0?steer*.35:0;});
+    wheels.forEach(w=>{w.children.forEach(mesh=>mesh.rotation.x+=speed);w.rotation.y=w.position.z>0?-steer*.42:0;});
+    steering.rotation.z=steer*.5;
     driver.rotation.z=-steer*.07;driver.position.y=.65+Math.sin(time*18)*Math.min(.025,speed*.01);
   };
+  // Dynamic karts use a cheap contact shadow; scenery shadows can be baked once.
+  kart.traverse(mesh=>{if(mesh.isMesh)mesh.castShadow=false;});
+  const shadow=new THREE.Mesh(new THREE.CircleGeometry(1.8,12),new THREE.MeshBasicMaterial({color:0x122019,transparent:true,opacity:.28,depthWrite:false}));
+  shadow.rotation.x=-Math.PI/2;shadow.scale.y=1.25;shadow.position.y=.025;kart.add(shadow);
   return kart;
+}
+
+export function batchEnvironment(scene){
+  const batches=new Map();scene.updateMatrixWorld(true);
+  for(const mesh of scene.children){
+    if(!mesh.isMesh||mesh.isInstancedMesh||Array.isArray(mesh.material))continue;
+    const m=mesh.material;
+    const key=[m.type,m.color?.getHex(),m.map?.uuid,m.transparent,m.opacity,m.side,mesh.castShadow,mesh.receiveShadow,!!mesh.geometry.attributes.uv].join(':');
+    if(!batches.has(key))batches.set(key,[]);batches.get(key).push(mesh);
+  }
+  for(const meshes of batches.values()){
+    if(meshes.length<2)continue;
+    const positions=[],normals=[],uvs=[];
+    for(const mesh of meshes){
+      const geo=mesh.geometry.index?mesh.geometry.toNonIndexed():mesh.geometry.clone();geo.applyMatrix4(mesh.matrixWorld);
+      positions.push(...geo.attributes.position.array);normals.push(...geo.attributes.normal.array);
+      if(geo.attributes.uv)uvs.push(...geo.attributes.uv.array);geo.dispose();
+    }
+    const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geometry.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));
+    if(uvs.length)geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));
+    const merged=new THREE.Mesh(geometry,meshes[0].material);merged.castShadow=meshes[0].castShadow;merged.receiveShadow=meshes[0].receiveShadow;
+    meshes.forEach(mesh=>{scene.remove(mesh);mesh.geometry.dispose();});scene.add(merged);
+  }
 }
 
 export function decorateCircuit(scene,at,tangent,width){

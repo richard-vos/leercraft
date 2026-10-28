@@ -18,5 +18,11 @@ const path=require('node:path');
     }
   }
   assert(!createKart(0xff0000).userData.driver.getObjectByName('avatar-crown'),'Other racers must keep their own outfit');
+  for(const kind of ['witch','villager','creeper','enderman']){
+    const rival=createKart(0xff0000,{},kind);
+    assert.equal(rival.userData.driver.userData.kind,kind);
+    rival.userData.equip({head:'gouden-kroon'});
+    assert(!rival.userData.driver.getObjectByName('avatar-crown'),'Rivals must not receive Steve outfits');
+  }
   console.log('Passed: open kart, equipped driver, steering, default guest and racer isolation.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

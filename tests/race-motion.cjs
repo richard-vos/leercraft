@@ -1,0 +1,21 @@
+const assert=require('node:assert/strict');
+const {pathToFileURL}=require('node:url');
+const path=require('node:path');
+(async()=>{
+  const {sampleTrack,steerKart,crossedGate,resampleLoop}=await import(pathToFileURL(path.resolve('assets/js/race-motion.js')));
+  const uniform=resampleLoop([{x:0,z:0},{x:20,z:0},{x:20,z:5},{x:0,z:5}],50);
+  assert.equal(uniform.length,50);
+  uniform.points.forEach((point,i)=>assert(Math.abs(Math.hypot(point.x-uniform.points[(i+1)%50].x,point.z-uniform.points[(i+1)%50].z)-1)<.00001,'Uneven control points must not cause speed changes'));
+  const spline=[{x:0,z:0,tx:1,tz:0},{x:10,z:0,tx:1,tz:0},{x:10,z:10,tx:0,tz:1},{x:0,z:10,tx:-1,tz:0}];
+  assert.equal(sampleTrack(spline,.125).x,5);
+  assert(Math.abs(sampleTrack(spline,.1251).x-sampleTrack(spline,.125).x)<.01,'No jumps between samples');
+  assert.equal(crossedGate(.1,.11,.12),false,'Approaching a gate must not reveal it');
+  assert.equal(crossedGate(.119,.121,.12),true);
+  assert.equal(crossedGate(.12,.12,.12),false,'Standing still must not award an answer');
+  assert.equal(crossedGate(.999,.002,.001),true,'Finish-line wrap must remain valid');
+  const run=fps=>{const r={steer:0,heading:0,off:0,spd:1,maxSpd:1};for(let i=0;i<fps;i++)steerKart(r,1,1/fps,100);return r;};
+  const slow=run(30),fast=run(120);assert(Math.abs(slow.off-fast.off)<.4,'Steering should not depend on frame rate');
+  assert(slow.heading<0&&slow.off>0,'Heading and lateral motion must agree');
+  const stopped={steer:0,heading:0,off:0,spd:0,maxSpd:1};steerKart(stopped,1,1,15);assert.equal(stopped.off,0);
+  console.log('Passed: continuous track sampling, frame-rate independent steering, stopped kart and gate-plane crossing.');
+})().catch(error=>{console.error(error);process.exitCode=1;});

@@ -144,8 +144,9 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
 <script src="/assets/account.js" data-root="/"></script>
 <script type="module">
 import * as THREE from '/assets/vendor/three-0.160.0.module.js';
-import {createKart,decorateCircuit} from '/assets/js/race-kart.js';
+import {createKart,decorateCircuit,batchEnvironment} from '/assets/js/race-kart.js';
 import {RaceProgress} from '/assets/js/race-progress.js';
+import {sampleTrack,steerKart,crossedGate,resampleLoop} from '/assets/js/race-motion.js';
 const progress=new RaceProgress(LeerCraft,run=>{
   if(progress.current!==run)return;
   const messages={guest:`${run.points} oefenpunten. Log in en start een nieuwe race om punten te bewaren.`,
@@ -239,6 +240,8 @@ for(let i=0;i<TRES;i++){
   const [x,z] = cmPoint(i0, g-i0);
   spline.push({x,z,tx:0,tz:0,nx:0,nz:0});
 }
+const uniformTrack=resampleLoop(spline,TRES);spline.splice(0,spline.length,...uniformTrack.points);
+const TRACK_LENGTH=uniformTrack.length;
 // Tangenten over 6 punten voor extra soepel
 for(let i=0;i<TRES;i++){
   const a=spline[(i-6+TRES)%TRES], b=spline[(i+6)%TRES];
@@ -260,15 +263,8 @@ function rampHeight(t){
   return h;
 }
 
-function tAt(t, off=0){
-  const i=Math.floor(((t%1+1)%1)*TRES);
-  const p=spline[i];
-  return new THREE.Vector3(p.x+p.nx*off, 0, p.z+p.nz*off);
-}
-function tTan(t){
-  const i=Math.floor(((t%1+1)%1)*TRES);
-  return new THREE.Vector3(spline[i].tx,0,spline[i].tz);
-}
+function tAt(t, off=0){const p=sampleTrack(spline,t,off);return new THREE.Vector3(p.x,0,p.z);}
+function tTan(t){const p=sampleTrack(spline,t);return new THREE.Vector3(p.tx,0,p.tz);}
 
 // Bouw schans-meshes op de baan
 function buildRamps(){
@@ -472,10 +468,12 @@ for(let i=0;i<TRES;i+=8){
 // ═══════════════════════════════════════════
 // AUTO BOUWEN
 // ═══════════════════════════════════════════
-function makeCar(col){
-  const kart=createKart(col);scene.add(kart);return kart;
+function makeCar(col,kind){
+  const kart=createKart(col,{},kind);scene.add(kart);return kart;
 }
 decorateCircuit(scene,tAt,tTan,ROAD_W);
+batchEnvironment(scene);
+renderer.shadowMap.autoUpdate=false;renderer.shadowMap.needsUpdate=true;
 
 
 const SOMMEN=[
@@ -617,16 +615,17 @@ const START_T=0;
 const OFFSETS=[0, -ROAD_W*0.42, ROAD_W*0.42, -ROAD_W*0.78, ROAD_W*0.78];
 
 const RACER_DEFS=[
-  {col:0x229922,name:'Jij',   css:'#22AA44', maxSpd:0.00048, cpu:false},
-  {col:0xCC2200,name:'Rood',  css:'#CC2200', maxSpd:0.00043, cpu:true},
-  {col:0x2244CC,name:'Blauw', css:'#2244CC', maxSpd:0.00040, cpu:true},
-  {col:0xDD6600,name:'Oranje',css:'#DD6600', maxSpd:0.00046, cpu:true},
-  {col:0x882299,name:'Paars', css:'#882299', maxSpd:0.00038, cpu:true},
+  {col:0x229922,name:'Jij',kind:'steve',   css:'#22AA44', maxSpd:0.00048, cpu:false},
+  {col:0xCC2200,name:'Heks',kind:'witch',  css:'#CC2200', maxSpd:0.00043, cpu:true},
+  {col:0x2244CC,name:'Villager',kind:'villager', css:'#2244CC', maxSpd:0.00040, cpu:true},
+  {col:0xDD6600,name:'Creeper',kind:'creeper',css:'#DD6600', maxSpd:0.00046, cpu:true},
+  {col:0x882299,name:'Enderman',kind:'enderman', css:'#882299', maxSpd:0.00038, cpu:true},
 ];
 
 const racers=RACER_DEFS.map((d,i)=>({
   ...d,
-  car:makeCar(d.col),
+  car:makeCar(d.col,d.kind),
+  steer:0,heading:0,previousT:START_T,trackLength:TRACK_LENGTH,
   t:START_T, off:OFFSETS[i], spd:0,
   lap:1, lastT:START_T, finished:false,
   spin:0, spinAng:0, slow:0,
@@ -646,6 +645,8 @@ function spawnObjects(){
   gameObjs.forEach(o=>{
     if(o.group) scene.remove(o.group);
     if(o.mesh)  scene.remove(o.mesh);
+    const materials=new Set();o.group?.traverse(mesh=>{mesh.geometry?.dispose();if(mesh.material)materials.add(mesh.material);});
+    materials.forEach(material=>{material.map?.dispose();material.dispose();});
   });
   gameObjs=[];
   activeSomIdx=-1;
@@ -730,11 +731,10 @@ function showSom(txt){
 // ═══════════════════════════════════════════
 // COLLISION
 // ═══════════════════════════════════════════
-const T_TOL=0.018, OFF_TOL=ROAD_W*0.52;
+const T_TOL=0.018, OFF_TOL=ROAD_W*.2;
 
 function checkCol(){
   if(player.spin>0) return;
-  const playerPos = tAt(player.t, player.off);
 
   gameObjs.forEach(obj=>{
     if(obj.done) return;
@@ -747,22 +747,14 @@ function checkCol(){
         showSom(obj.som.q+' = ?');
       }
     } else if(obj.type==='a'){
-      // Reveal op basis van echte 3D-afstand, niet t-verschil
-      if(!obj.done && obj.group.userData.reveal && !obj.group.userData.revealed){
-        const gp = obj.group.position;
-        const dx = gp.x - playerPos.x;
-        const dz = gp.z - playerPos.z;
-        const dist = Math.sqrt(dx*dx + dz*dz);
-        if(dist < 30) obj.group.userData.reveal();
-      }
-
-      // Collision
-      if(dt > T_TOL) return;
+      // Only crossing the gate plane resolves an answer; proximity reveals nothing.
+      if(!crossedGate(player.previousT,player.t,obj.t))return;
       const doff = Math.abs(obj.lane*ROAD_W*0.6 - player.off);
       if(doff > OFF_TOL) return;
       progress.recordGate(obj.somIdx,obj.ok);
       gameObjs.forEach(answer=>{
-        if(answer.type==='a'&&answer.somIdx===obj.somIdx){answer.done=true;scene.remove(answer.group);}
+        if(answer.type==='a'&&answer.somIdx===obj.somIdx){answer.done=true;}
+        if(answer===obj)answer.group.userData.reveal();
       });
 
       if(obj.ok){
@@ -865,27 +857,27 @@ function updateJump(r, dt){
   }
 }
 
-function placeRacer(r){
+function placeRacer(r,frameStep=0){
   const pos=tAt(r.t,r.off), tan=tTan(r.t);
   r.car.position.set(pos.x, r.jumpY, pos.z);
   // Lichte pitch omhoog als auto in de lucht is
   r.car.rotation.x = r.inAir ? Math.min(0.25, r.jumpVY*0.8) : 0;
-  r.car.rotation.y = r.spin>0 ? r.spinAng : Math.atan2(tan.x,tan.z);
-  r.car.userData.update(r.spd*100, r===player?((K.left||touchDrive.left?1:0)-(K.right||touchDrive.right?1:0)):0,raceTime);
+  r.car.rotation.y = r.spin>0 ? r.spinAng : Math.atan2(tan.x,tan.z)+(r.heading||0);
+  r.car.userData.update(r.spd*100*frameStep,r.steer||0,raceTime);
 }
 
 // ═══════════════════════════════════════════
 // CAMERA
 // ═══════════════════════════════════════════
 const _cp=new THREE.Vector3(), _cl=new THREE.Vector3(), _camLook=new THREE.Vector3();
-function updateCam(){
+function updateCam(seconds=1/60){
   const tan=tTan(player.t), pos=tAt(player.t,player.off);
   const jy=player.jumpY;
   const distance=innerWidth<600?13:10.5;
   _cp.set(pos.x-tan.x*distance, 5.2+jy*.6, pos.z-tan.z*distance);
   _cl.set(pos.x+tan.x*7,   1.4+jy,     pos.z+tan.z*7);
-  camera.position.lerp(_cp, 0.09);
-  _camLook.lerp(_cl, 0.12);
+  camera.position.lerp(_cp,1-Math.exp(-6*seconds));
+  _camLook.lerp(_cl,1-Math.exp(-8*seconds));
   camera.lookAt(_camLook);
 }
 
@@ -896,12 +888,12 @@ let lastTS=performance.now(), rafId;
 
 function loop(ts){
   rafId=requestAnimationFrame(loop);
-  const dt=Math.min((ts-lastTS)/16.667, 1.0); // max 1 frame, nooit meer
+  const seconds=Math.min(Math.max(0,(ts-lastTS)/1000),.05),dt=seconds*60;
   lastTS=ts;
 
   if(!gameRunning||paused){
     // Idle: toon startopstelling met camera erachter
-    updateCam();
+    updateCam(seconds);
     renderer.render(scene,camera);
     return;
   }
@@ -910,38 +902,39 @@ function loop(ts){
 
   // ── Speler ──
   if(player.spin>0){
-    player.spin-=dt; player.spinAng+=0.18*dt; player.spd*=0.88;
+    player.spin-=dt; player.spinAng+=0.18*dt; player.spd*=Math.pow(.88,dt);
   } else {
     const eff=player.slow>0 ? player.maxSpd*0.25 : player.maxSpd;
     if(K.gas||touchDrive.gas)   player.spd=Math.min(eff, player.spd+0.000055*dt);
     else        player.spd=Math.max(0,   player.spd-0.000030*dt);
     if(K.brake||touchDrive.brake) player.spd=Math.max(0,   player.spd-0.000080*dt);
-    const steer=Math.min(1,player.spd/player.maxSpd)*0.26*dt;
-    if(K.left||touchDrive.left)  player.off=Math.max(-ROAD_W*0.82, player.off-steer);
-    if(K.right||touchDrive.right) player.off=Math.min( ROAD_W*0.82, player.off+steer);
+    const input=(K.right||touchDrive.right?1:0)-(K.left||touchDrive.left?1:0);
+    steerKart(player,input,seconds,ROAD_W);
   }
   if(player.slow>0) player.slow-=dt;
-  player.t=(player.t+player.spd*dt+1)%1;
+  player.previousT=player.t;
+  player.t=(player.t+player.spd*dt*Math.cos(player.heading)+1)%1;
   if(player.t<0.02&&player.lastT>0.9){ player.lap++; if(player.lap>LAPS&&!player.finished){player.finished=true;endRace();} }
   player.lastT=player.t;
 
   // ── CPU's ──
-  racers.slice(1).forEach(r=>{
+  racers.slice(1).forEach((r,index)=>{
     if(r.finished) return;
     const v=0.88+Math.sin(raceTime*0.9+r.maxSpd*5000)*0.12;
     r.spd=r.maxSpd*v;
     r.t=(r.t+r.spd*dt+1)%1;
     if(r.t<0.02&&r.lastT>0.9){r.lap++;if(r.lap>LAPS)r.finished=true;}
     r.lastT=r.t;
-    r.off+=(Math.random()-0.5)*0.06*dt;
+    const target=Math.max(-ROAD_W*.6,Math.min(ROAD_W*.6,OFFSETS[index+1]))+Math.sin(raceTime*.65+index)*.3;
+    r.off+=(target-r.off)*(1-Math.exp(-2*seconds));
     r.off=Math.max(-ROAD_W*0.6,Math.min(ROAD_W*0.6,r.off));
   });
 
   checkCol();
   updateJump(player, dt);
   racers.slice(1).forEach(r=>updateJump(r,dt));
-  racers.forEach(placeRacer);
-  updateCam();
+  racers.forEach(r=>placeRacer(r,dt));
+  updateCam(seconds);
   updateHUD();
   drawMM();
   renderer.render(scene,camera);
@@ -963,7 +956,7 @@ window.beginGame=function(){
   racers.forEach((r,i)=>{
     r.t=START_T; r.off=OFFSETS[i]; r.spd=0;
     r.lap=1; r.lastT=START_T; r.finished=false;
-    r.spin=0; r.spinAng=0; r.slow=0;
+    r.spin=0; r.spinAng=0; r.slow=0; r.steer=0; r.heading=0; r.previousT=START_T;
     r.correct=0; r.wrong=0; r.somCount=0;
     r.jumpY=0; r.jumpVY=0; r.inAir=false;
   });
@@ -971,7 +964,7 @@ window.beginGame=function(){
   spawnObjects();
 
   // Zet auto's neer
-  racers.forEach(placeRacer);
+  racers.forEach(r=>placeRacer(r));
 
   // Countdown
   const cdEl=document.getElementById('cd'), cdN=document.getElementById('cdnum');
@@ -1013,7 +1006,7 @@ function endRace(){
 // BOOT
 // ═══════════════════════════════════════════
 // Zet auto's alvast neer op startlijn
-racers.forEach(placeRacer);
+racers.forEach(r=>placeRacer(r));
 // Start idle render loop
 lastTS=performance.now();
 rafId=requestAnimationFrame(loop);
