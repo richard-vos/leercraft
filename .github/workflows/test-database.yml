@@ -35,6 +35,7 @@ jobs:
           node tests/province-write-game.cjs
           node --experimental-default-type=module tests/rekencraft-visuals.cjs
           node --experimental-default-type=module tests/rekencraft-progress.cjs
+          node --experimental-default-type=module tests/runner-track.cjs
           node --experimental-default-type=module tests/getallenzee-progress.cjs
           node --experimental-default-type=module tests/avatar-cosmetics.cjs
           node --experimental-default-type=module tests/race-kart.cjs

@@ -76,7 +76,7 @@ h1 small{display:block;font-size:0.65em;color:#aaffaa;text-shadow:2px 2px #00660
   <div class="header">
     <h1>🗺️ Nederland Ontdekker<small>Klik de juiste provincie!</small></h1>
   </div>
-  <div data-leercraft-account></div>
+  <div data-leercraft-account data-background="true" hidden></div>
   <div class="score-bar">
     <div class="sc-block"><div class="sc-label">Score</div><div class="sc-val" id="score-disp">0</div></div>
     <div class="sc-block"><div class="sc-label">Fout</div><div class="sc-val" id="wrong-disp" style="color:#ff8888;">0</div></div>
@@ -124,7 +124,7 @@ h1 small{display:block;font-size:0.65em;color:#aaffaa;text-shadow:2px 2px #00660
   <div class="end-score" id="end-score">0 / 12</div>
   <div class="end-msg" id="end-msg"></div>
   <div id="save-result" class="end-msg" role="status"></div>
-  <button id="end-login" type="button" class="mc-btn" style="max-width:260px" onclick="LeerCraft.openLogin()" hidden>Inloggen</button>
+  <a id="end-login" type="button" class="mc-btn" style="max-width:260px" onclick="LeerCraft.openLogin()" hidden href="/">Hoofdpagina</a>
   <button id="retry-save" class="mc-btn" style="max-width:260px" hidden>Opnieuw opslaan</button>
   <button class="mc-btn red" onclick="closeEnd()" style="max-width:260px;">🔄 Opnieuw spelen</button>
 </div>

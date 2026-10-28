@@ -3,6 +3,7 @@
   const style = document.createElement('link');
   style.rel = 'stylesheet'; style.href = `${root}/assets/account.css`; document.head.append(style);
   const host = document.querySelector('[data-leercraft-account]');
+  const background = host.dataset?.background === 'true';
   host.innerHTML = `<section class="account-panel" aria-label="Je account">
     <p data-account-status role="status" hidden></p>
     <p data-account-progress></p>
@@ -148,11 +149,11 @@
     try{await request('auth/logout.php',{});await refresh();}catch(error){$('[data-account-status]').textContent=error.message;}
     finally{$('[data-logout]').disabled=false;}
   };
-  window.LeerCraft={request,refresh,openLogin:()=>dialog.showModal(),
+  window.LeerCraft={request,refresh,openLogin:()=>{if(background){window.location.href='/';return;}dialog.showModal();},
     onChange(listener){accountListeners.add(listener);return ()=>accountListeners.delete(listener);},
     get email(){return email;}};
   window.LeerCraft.ready = refresh();
-  if (host.dataset?.dialogOutside === 'true') {
+  if (!background && host.dataset?.dialogOutside === 'true') {
     // Full-screen games hide their menu while playing. Keep login outside that hidden ancestor.
     const portal=document.createElement('div');
     portal.className='account-panel account-dialog-portal';

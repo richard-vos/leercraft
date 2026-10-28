@@ -204,33 +204,32 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
 </div>
 <div class="screen" id="ss">
   <div class="runner-menu">
-    <header class="runner-menu-heading"><p class="menu-eyebrow">GROEP 6 &middot; REKENAVONTUUR</p><h1>RekenCraft</h1><p>Kies je sommen. Maak je rekenkracht groot genoeg om de Creepers te verslaan.</p></header>
-    <div data-leercraft-account data-game="rekencraft" data-dialog-outside="true"></div>
+    <header class="runner-menu-heading"><h1>RekenCraft</h1></header>
+    <div data-leercraft-account data-game="rekencraft" data-dialog-outside="true" data-background="true" hidden></div>
     <fieldset id="math-settings">
-      <legend><span class="menu-step">1</span> Welke sommen wil je oefenen?</legend>
-      <p class="setting-help">Kies een of meer bewerkingen.</p>
+      <legend>Sommen</legend>
       <div class="operator-grid">
         <label class="operator-choice"><input type="checkbox" value="+" aria-label="Optellen" checked><span><b>+</b><small>Optellen</small></span></label>
         <label class="operator-choice"><input type="checkbox" value="-" aria-label="Aftrekken" checked><span><b>&minus;</b><small>Aftrekken</small></span></label>
         <label class="operator-choice"><input type="checkbox" value="&#215;" aria-label="Vermenigvuldigen"><span><b>&times;</b><small>Keersommen</small></span></label>
         <label class="operator-choice"><input type="checkbox" value="&#247;" aria-label="Delen"><span><b>:</b><small>Deelsommen</small></span></label>
       </div>
-      <label for="math-max" class="max-label"><span><span class="menu-step">2</span> Getallen op de poortjes</span><output id="math-max-value">10</output></label>
+      <label for="math-max" class="max-label"><span>Getallen tot</span><output id="math-max-value">10</output></label>
       <div class="range-presets" role="group" aria-label="Kies je getalbereik">
         <button type="button" data-math-max="5" aria-pressed="false">Tot 5</button>
         <button type="button" data-math-max="10" aria-pressed="true">Tot 10</button>
         <button type="button" data-math-max="20" aria-pressed="false">Tot 20</button>
       </div>
+      <details class="custom-range"><summary>Zelf kiezen</summary>
       <input id="math-max" type="range" min="3" max="20" value="10" aria-describedby="range-help">
-      <p id="range-help" class="setting-help">Getallen van 1 t/m 10 op de poortjes. Je rekenkracht kan hoger worden.</p>
+      <p id="range-help" class="setting-help" hidden>Getallen van 1 t/m 10 op de poortjes. Je rekenkracht kan hoger worden.</p>
+      </details>
     </fieldset>
-    <div class="menu-reward"><strong>Verdien punten met goede keuzes</strong><p>10 punten per goede poort + 50 bonus als je het level haalt. Je punten worden bij een voltooid level bewaard als je bent ingelogd.</p></div>
-    <p id="menu-selection" class="menu-selection" aria-live="polite">Optellen en aftrekken &middot; getallen t/m 10</p>
+    <p id="menu-selection" class="menu-selection" hidden aria-live="polite">Optellen en aftrekken &middot; getallen t/m 10</p>
     <button id="start-run" class="gbtn" onclick="window.startNewGame()" disabled>Spel laden...</button>
     <p id="pending-scores" class="setting-help" role="status"></p>
     <button id="retry-pending" type="button" class="menu-secondary" hidden>Punten opnieuw opslaan</button>
-    <a class="menu-secondary outfit-link" href="/winkel/">Winkel &amp; mijn spullen</a>
-    <p class="menu-controls">Houd Links of Rechts ingedrukt, of swipe over het speelveld. Op de computer werken ook A/D en de pijltjestoetsen.</p>
+    <p class="menu-controls">Swipe of gebruik de pijltjes om te sturen.</p>
   </div>
 </div>
 <div class="screen hidden" id="ws">
@@ -244,7 +243,7 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
     <div class="earn">+<span id="wearn">0</span> punten</div>
     <p id="runner-save-status" role="status"></p>
     <button id="runner-retry-save" type="button" class="menu-secondary" hidden>Opnieuw opslaan</button>
-    <button id="runner-login" type="button" class="menu-secondary" hidden>Inloggen</button>
+    <a id="runner-login" type="button" class="menu-secondary" hidden href="/">Hoofdpagina</a>
     <button class="gbtn" onclick="window.nextLevel()">VOLGENDE LEVEL &#9654;</button>
     <button type="button" class="menu-secondary" onclick="window.openGameMenu()">Andere sommen kiezen</button>
   </div>
@@ -262,6 +261,7 @@ body{overflow:hidden;font-family:'Press Start 2P',monospace;touch-action:none;ba
 import * as THREE from '/assets/vendor/three-0.160.0.module.js';
 import {createRunnerCharacter, createRunnerScenery} from '/assets/js/minecraft-runner-visuals.js';
 import {RekencraftProgress} from '/assets/js/rekencraft-progress.js';
+import {requiredRunnerTiles} from '/assets/js/runner-track.js';
 import {applyRunnerOutfit} from '/assets/js/avatar-cosmetics.js';
 
 // ═══════════════════════════════════════════════════
@@ -505,7 +505,7 @@ let waterFall=0;
 const TILE   = 2;      // blokgrootte
 const PAD_HW = 5;      // halve breedte in tegels → totaal 22 units breed
 const PAD_W  = PAD_HW*TILE; // 10 units
-const PAD_TILES_Z = 150; // aantal tegels in de diepte
+let PAD_TILES_Z = 150; // aantal tegels in de diepte
 
 // ═══════════════════════════════════════════════════
 // WERELD BOUWEN
@@ -1820,6 +1820,12 @@ window.startGame=function(){
   gateLop=null;gateRop=null;
 
   genLevel(level);
+  const requiredTiles=requiredRunnerTiles(segs.at(-1).z,TILE,PAD_TILES_Z);
+  if(requiredTiles>PAD_TILES_Z){
+    const geometries=new Set();worldGroup.traverse(mesh=>{if(mesh.geometry)geometries.add(mesh.geometry);});
+    worldGroup.clear();geometries.forEach(geometry=>geometry.dispose());
+    PAD_TILES_Z=requiredTiles;buildWorld();
+  }
   progress.begin(level,segs.filter(seg=>seg.type==='gate').length,mathSettings);
   segIdx=0;
   spawnSeg(segs[0]);

@@ -85,3 +85,17 @@
  .game-rekencraft .operator-choice span{min-height:120px}
  .game-rekencraft .result-card{padding:32px}
 }
+
+/* Compact setup: the optional custom range stays collapsed. */
+.game-rekencraft .runner-menu{width:min(640px,100%);padding:22px}
+.game-rekencraft .runner-menu-heading{margin-bottom:16px}
+.game-rekencraft .runner-menu-heading h1{font-size:clamp(22px,4vw,30px);margin:0}
+.game-rekencraft #ss #math-settings{margin:16px 0 20px}
+.game-rekencraft .operator-grid{gap:10px;margin:10px 0 18px}
+.game-rekencraft .operator-choice span{min-height:84px;padding:12px 6px;gap:8px}
+.game-rekencraft .operator-choice b{font-size:24px}
+.game-rekencraft .operator-choice small{font-size:14px}
+.game-rekencraft .custom-range summary{min-height:44px;display:flex;align-items:center;color:#dcebd4;cursor:pointer;font-size:14px}
+.game-rekencraft .custom-range summary::before{content:'+';margin-right:10px;font-weight:bold}
+.game-rekencraft .custom-range[open] summary::before{content:'-'}
+.game-rekencraft #ss .runner-menu .menu-controls{margin-top:14px;text-align:center;font-size:13px}

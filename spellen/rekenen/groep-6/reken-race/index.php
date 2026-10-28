@@ -120,14 +120,14 @@ body{background:#000;overflow:hidden;font-family:'Press Start 2P',monospace;}
 <div class="screen" id="startscreen">
   <h1>🏁 Reken Race 3D</h1>
   <p>Drie rondes. Vier rivalen. Jouw Steve.<br>Rij langs het <span style="color:#7CFC00">juiste antwoord</span> voor extra snelheid.<br>Fout antwoord? Je draait rond! 💥<br>Pijltjestoetsen of WASD om te rijden.</p>
-  <div data-leercraft-account></div>
+  <div data-leercraft-account data-background="true" hidden></div>
   <button id="start-race" class="btn" onclick="beginGame()" disabled>▶ Start Race!</button>
 </div>
 
 <div class="screen hidden" id="endscreen">
   <p id="race-points" role="status" aria-live="polite"></p>
   <button type="button" class="btn" id="race-save-retry" hidden>Opnieuw opslaan</button>
-  <button type="button" class="btn" id="race-login" onclick="LeerCraft.openLogin()" hidden>Inloggen</button>
+  <a type="button" class="btn" id="race-login" onclick="LeerCraft.openLogin()" hidden href="/">Hoofdpagina</a>
   <div id="endtitle" style="font-size:clamp(16px,2.5vw,26px);color:#FFD700;text-shadow:3px 3px #7A5A00;line-height:1.7;"></div>
   <div class="sgrid">
     <div class="sbox"><div class="sboxn" id="epos">-</div><div class="sboxl">POSITIE</div></div>
