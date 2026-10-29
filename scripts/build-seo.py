@@ -27,7 +27,7 @@ def structured(page):
         return {'@context': 'https://schema.org', '@graph': [site, content]}
     game = {'@type': 'VideoGame', '@id': url + '#game', 'url': url, 'name': page['name'],
             'description': page['description'], 'image': IMAGE, 'inLanguage': 'nl-NL',
-            'isAccessibleForFree': True, 'educationalLevel': 'Groep 6',
+            'isAccessibleForFree': True, 'educationalLevel': page.get('educationalLevel', 'Groep 6'),
             'genre': ['Educatief', page['subject']], 'applicationCategory': 'EducationalApplication',
             'gamePlatform': 'Webbrowser', 'isPartOf': {'@id': site['@id']}}
     breadcrumbs = {'@type': 'BreadcrumbList', 'itemListElement': [
@@ -66,7 +66,7 @@ def head(page):
 def game_info(page):
     links = ''.join('<li><a href="' + GAMES[slug]['path'] + '">' + html.escape(GAMES[slug]['name']) + '</a></li>' for slug in page['related'])
     return '\n'.join([INFO_START, '<details class="game-info"><summary>Over dit spel</summary>',
-                      '<div class="game-info-content"><h2>' + html.escape(page['name']) + ' voor groep 6</h2>',
+                      '<div class="game-info-content"><h2>' + html.escape(page['name']) + ' voor ' + html.escape(page.get('educationalLevel', 'Groep 6').lower()) + '</h2>',
                       '<p>' + html.escape(page['learn']) + '</p>', '<h3>Hoe speel je?</h3>',
                       '<p>' + html.escape(page['play']) + '</p>',
                       '<h3>Verder oefenen</h3><ul>' + links + '</ul>',

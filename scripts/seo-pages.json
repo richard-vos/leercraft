@@ -1,15 +1,184 @@
 [
-  {"file":"index.html","path":"/","name":"LeerCraft","title":"LeerCraft - Rekenspellen en topografie voor groep 6","description":"Oefen rekenen en topografie voor groep 6 met gratis LeerCraft-spellen. Ontdek provincies, landen en hoofdsteden of speel een rekenavontuur. Zonder account te spelen."},
-  {"file":"spellen/topografie/groep-6/provincie-klik/index.php","path":"/spellen/topografie/groep-6/provincie-klik/","name":"Provincie Klikspel","title":"Provincies oefenen: klikspel voor groep 6 | LeerCraft","subject":"Topografie","description":"Leer de 12 provincies van Nederland herkennen. Klik de juiste provincie op de kaart in dit gratis topografiespel voor groep 6. Speel direct in je browser.","learn":"Je oefent waar de twaalf Nederlandse provincies liggen. Lees de provincienaam en zoek de juiste plek op de kaart. Herkennen en aanklikken helpt je de kaart van Nederland te leren kennen.","play":"Klik of tik op de provincie die wordt gevraagd. Na iedere keuze zie je of het antwoord klopt. Probeer in een volgende ronde je eigen score te verbeteren.","related":["provincie-schrijf","atlascode"]},
-  {"file":"spellen/topografie/groep-6/provincie-schrijf/index.php","path":"/spellen/topografie/groep-6/provincie-schrijf/","name":"Provincies Schrijven","title":"Provincies schrijven en oefenen voor groep 6 | LeerCraft","subject":"Topografie","description":"Ken jij de namen van de Nederlandse provincies? Typ de naam bij de gemarkeerde provincie en oefen topografie voor groep 6. Gratis te spelen zonder account.","learn":"Je oefent de ligging en de spelling van de twaalf Nederlandse provincies. In dit schrijfspel haal je de naam zelf uit je geheugen, in plaats van een antwoord te herkennen in een lijst.","play":"Bekijk de gemarkeerde provincie en typ de naam. De lettervakjes helpen bij het schrijven. Je krijgt meerdere pogingen om het juiste antwoord te vinden.","related":["provincie-klik","atlascode"]},
-  {"file":"spellen/topografie/groep-6/atlascode/index.php","path":"/spellen/topografie/groep-6/atlascode/","name":"De Atlascode","title":"De Atlascode: atlasvaardigheden oefenen in 3D | LeerCraft","subject":"Topografie","description":"Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 6.","learn":"Je past kaartvaardigheden toe in een avontuur. Oefen met windrichtingen, kaarten en informatie uit de atlas. De missies combineren verschillende topografische vaardigheden.","play":"Verken de blokkenwereld en voer de atlasmissies uit om de verdwenen kaart te herstellen. Lees de opdracht en kies het antwoord dat bij de kaartvraag past.","related":["provincie-klik","europa-raster-landen"]},
-  {"file":"spellen/topografie/groep-6/europa-landen-klik/index.php","path":"/spellen/topografie/groep-6/europa-landen-klik/","name":"Zoek het Land","title":"Landen van Europa oefenen: klikspel | LeerCraft","subject":"Topografie","description":"Oefen de landen van Europa voor groep 6. Lees de landnaam en klik het juiste land op de kaart. Gratis topografie oefenen op tablet, telefoon of computer.","learn":"Je leert Europese landen herkennen op de kaart. Door een landnaam aan de juiste vorm en ligging te koppelen, bouw je kennis van de kaart van Europa op.","play":"Lees welk land je zoekt en klik of tik op de juiste plek. De feedback laat zien of je keuze klopt. Oefen daarna verder met zelf de landnamen schrijven.","related":["europa-landen-schrijf","europa-hoofdsteden-klik"]},
-  {"file":"spellen/topografie/groep-6/europa-landen-schrijf/index.php","path":"/spellen/topografie/groep-6/europa-landen-schrijf/","name":"Schrijf het Land","title":"Europese landnamen schrijven en oefenen | LeerCraft","subject":"Topografie","description":"Typ de naam van het gemarkeerde Europese land. Oefen de ligging en spelling van landen met dit gratis topografiespel van LeerCraft voor groep 6.","learn":"Je oefent het zelfstandig herinneren en schrijven van Europese landnamen. De vorm en ligging op de kaart zijn je aanwijzingen; de naam bedenk je zelf.","play":"Bekijk het gemarkeerde land op de kaart en typ de juiste naam. Gebruik de terugkoppeling om landen die je lastig vindt opnieuw te oefenen.","related":["europa-landen-klik","europa-hoofdsteden-schrijf"]},
-  {"file":"spellen/topografie/groep-6/europa-hoofdsteden-klik/index.php","path":"/spellen/topografie/groep-6/europa-hoofdsteden-klik/","name":"Zoek de Hoofdstad","title":"Hoofdsteden van Europa oefenen: klikspel | LeerCraft","subject":"Topografie","description":"Koppel Europese hoofdsteden aan het juiste land op de kaart. Oefen topografie voor groep 6 met het gratis spel Zoek de Hoofdstad van LeerCraft.","learn":"Je legt het verband tussen Europese landen en hun hoofdsteden. Je combineert kennis van een hoofdstad met de ligging van het bijbehorende land.","play":"Lees de gevraagde hoofdstad en zoek het juiste land op de kaart. Klik of tik op je antwoord en ontdek of je de combinatie goed hebt onthouden.","related":["europa-hoofdsteden-schrijf","europa-landen-klik"]},
-  {"file":"spellen/topografie/groep-6/europa-hoofdsteden-schrijf/index.php","path":"/spellen/topografie/groep-6/europa-hoofdsteden-schrijf/","name":"Schrijf de Hoofdstad","title":"Europese hoofdsteden schrijven en oefenen | LeerCraft","subject":"Topografie","description":"Weet jij de hoofdstad van het gemarkeerde Europese land? Typ het antwoord en oefen landen en hoofdsteden in dit gratis leerspel voor groep 6.","learn":"Je oefent het zelfstandig ophalen van hoofdsteden. Je herkent eerst het land op de kaart en herinnert je vervolgens welke hoofdstad daarbij hoort.","play":"Bekijk het gemarkeerde Europese land en schrijf de bijbehorende hoofdstad. Oefen de combinatie van kaartkennis en het zelf formuleren van een antwoord.","related":["europa-hoofdsteden-klik","europa-landen-schrijf"]},
-  {"file":"spellen/topografie/groep-6/europa-raster-landen/index.php","path":"/spellen/topografie/groep-6/europa-raster-landen/","name":"Raster: Zoek het Land","title":"Kaartcoördinaten en Europese landen oefenen | LeerCraft","subject":"Topografie","description":"Zoek Europese landen en lees het juiste rastervak af. Oefen kaartcoördinaten en topografie met dit gratis LeerCraft-spel voor kinderen in groep 6.","learn":"Je combineert het herkennen van Europese landen met het aflezen van een raster. Daarmee oefen je zowel topografie als het gebruiken van kaartcoördinaten.","play":"Lees welk land je zoekt en bepaal in welk rastervak het ligt. Gebruik de letters en cijfers van het raster om het antwoord te vinden.","related":["europa-raster-hoofdsteden","europa-landen-klik"]},
-  {"file":"spellen/topografie/groep-6/europa-raster-hoofdsteden/index.php","path":"/spellen/topografie/groep-6/europa-raster-hoofdsteden/","name":"Raster: Zoek de Hoofdstad","title":"Hoofdsteden en kaartcoördinaten oefenen | LeerCraft","subject":"Topografie","description":"Koppel een Europese hoofdstad aan het juiste land en rastervak. Oefen hoofdsteden, landen en kaartlezen met dit gratis topografiespel voor groep 6.","learn":"Je combineert drie vaardigheden: de hoofdstad bij een land kennen, het land vinden en het juiste rastervak aflezen. Dit bouwt voort op de andere Europaspellen.","play":"Lees de hoofdstad, zoek het bijbehorende land op de kaart en bepaal het rastervak. De opdracht vraagt om het combineren van kennis en kaartvaardigheid.","related":["europa-raster-landen","europa-hoofdsteden-klik"]},
-  {"file":"spellen/rekenen/groep-6/rekencraft/index.php","path":"/spellen/rekenen/groep-6/rekencraft/","name":"RekenCraft","title":"RekenCraft: rekenen oefenen in een blokkenwereld | LeerCraft","subject":"Rekenen","description":"Oefen optellen, aftrekken, keersommen en delen in RekenCraft. Kies je sommen, verzamel rekenkracht en bereik de finish. Gratis rekenspel voor groep 6.","learn":"Je vergelijkt rekenbewerkingen en kiest welke poort de beste uitkomst geeft. Je kunt optellen, aftrekken, vermenigvuldigen en delen oefenen en het getalbereik zelf instellen.","play":"Stuur Steve door de juiste poort, verzamel genoeg rekenkracht en ontwijk hindernissen. Versla de Creepers en haal de finish. Ingelogde spelers bewaren hun verdiende punten.","related":["getallenzee","reken-race"]},
-  {"file":"spellen/rekenen/groep-6/getallenzee/index.php","path":"/spellen/rekenen/groep-6/getallenzee/","name":"Getallenzee","title":"Getallenzee: rekensommen oefenen in een 3D-spel | LeerCraft","subject":"Rekenen","description":"Reken snel en kies het juiste antwoord voordat de tegels zinken. Speel Getallenzee met plus- en minsommen of keersommen. Gratis rekenspel voor groep 6.","learn":"Je oefent het uitrekenen van sommen en het herkennen van de juiste uitkomst. Kies plus- en minsommen, keersommen of verschillende bewerkingen door elkaar.","play":"Bekijk de som en beweeg naar de tegel met het juiste antwoord voordat de tijd om is. Probeer de overkant te bereiken. Je kunt zonder account spelen of ingelogd punten bewaren.","related":["rekencraft","reken-race"]},
-  {"file":"spellen/rekenen/groep-6/reken-race/index.php","path":"/spellen/rekenen/groep-6/reken-race/","name":"Reken Race 3D","title":"Reken Race 3D: race en oefen rekensommen | LeerCraft","subject":"Rekenen","description":"Race met Steve tegen Minecraft-personages en stuur door het juiste antwoord. Oefen rekensommen in Reken Race 3D, een gratis browserspel voor groep 6.","learn":"Je oefent het uitrekenen van gemengde rekensommen terwijl je een kart bestuurt. Een juist antwoord geeft extra snelheid; zo combineer je rekenen met een race-uitdaging.","play":"Rijd drie rondes en stuur door het poortje met de juiste uitkomst. Race tegen vier computergestuurde tegenstanders. Zonder account speel je direct; ingelogd kun je punten bewaren.","related":["rekencraft","getallenzee"]}
+  {
+    "file": "index.html",
+    "path": "/",
+    "name": "LeerCraft",
+    "title": "LeerCraft - Rekenspellen en topografie voor kinderen",
+    "description": "Speel gratis rekenspellen voor groep 6 en oefen topografie voor groep 5 t/m 8. Ontdek provincies, Europese landen en hoofdsteden. Direct spelen zonder account."
+  },
+  {
+    "file": "spellen/topografie/groep-6/provincie-klik/index.php",
+    "path": "/spellen/topografie/groep-6/provincie-klik/",
+    "name": "Provincie Klikspel",
+    "title": "Provincies oefenen: klikspel voor groep 6 | LeerCraft",
+    "subject": "Topografie",
+    "description": "Leer de 12 provincies van Nederland herkennen. Klik de juiste provincie op de kaart in dit gratis topografiespel voor groep 6. Speel direct in je browser.",
+    "learn": "Je oefent waar de twaalf Nederlandse provincies liggen. Lees de provincienaam en zoek de juiste plek op de kaart. Herkennen en aanklikken helpt je de kaart van Nederland te leren kennen.",
+    "play": "Klik of tik op de provincie die wordt gevraagd. Na iedere keuze zie je of het antwoord klopt. Probeer in een volgende ronde je eigen score te verbeteren.",
+    "related": [
+      "provincie-schrijf",
+      "atlascode"
+    ]
+  },
+  {
+    "file": "spellen/topografie/groep-6/provincie-schrijf/index.php",
+    "path": "/spellen/topografie/groep-6/provincie-schrijf/",
+    "name": "Provincies Schrijven",
+    "title": "Provincies schrijven en oefenen voor groep 6 | LeerCraft",
+    "subject": "Topografie",
+    "description": "Ken jij de namen van de Nederlandse provincies? Typ de naam bij de gemarkeerde provincie en oefen topografie voor groep 6. Gratis te spelen zonder account.",
+    "learn": "Je oefent de ligging en de spelling van de twaalf Nederlandse provincies. In dit schrijfspel haal je de naam zelf uit je geheugen, in plaats van een antwoord te herkennen in een lijst.",
+    "play": "Bekijk de gemarkeerde provincie en typ de naam. De lettervakjes helpen bij het schrijven. Je krijgt meerdere pogingen om het juiste antwoord te vinden.",
+    "related": [
+      "provincie-klik",
+      "atlascode"
+    ]
+  },
+  {
+    "file": "spellen/topografie/groep-6/atlascode/index.php",
+    "path": "/spellen/topografie/groep-6/atlascode/",
+    "name": "De Atlascode",
+    "title": "De Atlascode: atlasvaardigheden oefenen in 3D | LeerCraft",
+    "subject": "Topografie",
+    "description": "Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 5 t/m 8.",
+    "learn": "Je past kaartvaardigheden toe in een avontuur. Oefen met windrichtingen, kaarten en informatie uit de atlas. De missies combineren verschillende topografische vaardigheden.",
+    "play": "Verken de blokkenwereld en voer de atlasmissies uit om de verdwenen kaart te herstellen. Lees de opdracht en kies het antwoord dat bij de kaartvraag past. Je verdient 10 punten per direct goed antwoord en 50 bij de finish. Ingelogd worden die punten bewaard; zonder account speel je ook gewoon.",
+    "related": [
+      "provincie-klik",
+      "europa-raster-landen"
+    ],
+    "educationalLevel": "Groep 5 t/m 8"
+  },
+  {
+    "file": "spellen/topografie/groep-6/europa-landen-klik/index.php",
+    "path": "/spellen/topografie/groep-6/europa-landen-klik/",
+    "name": "Zoek het Land",
+    "title": "Landen van Europa oefenen: klikspel | LeerCraft",
+    "subject": "Topografie",
+    "description": "Oefen de landen van Europa voor groep 5 t/m 8. Lees de landnaam en klik het juiste land op de kaart. Gratis topografie oefenen op tablet, telefoon of computer.",
+    "learn": "Je leert Europese landen herkennen op de kaart. Door een landnaam aan de juiste vorm en ligging te koppelen, bouw je kennis van de kaart van Europa op. Groep 5 en 6 oefenen de 19 landen van Europa 1; groep 7 en 8 ook de 20 extra landen van Europa 2.",
+    "play": "Lees welk land je zoekt en klik of tik op de juiste plek. De feedback laat zien of je keuze klopt. Oefen daarna verder met zelf de landnamen schrijven. Je verdient 10 punten per direct goed antwoord en 50 bij de finish. Ingelogd worden die punten bewaard; zonder account speel je ook gewoon.",
+    "related": [
+      "europa-landen-schrijf",
+      "europa-hoofdsteden-klik"
+    ],
+    "educationalLevel": "Groep 5 t/m 8"
+  },
+  {
+    "file": "spellen/topografie/groep-6/europa-landen-schrijf/index.php",
+    "path": "/spellen/topografie/groep-6/europa-landen-schrijf/",
+    "name": "Schrijf het Land",
+    "title": "Europese landnamen schrijven en oefenen | LeerCraft",
+    "subject": "Topografie",
+    "description": "Typ de naam van het gemarkeerde Europese land. Oefen de ligging en spelling van landen met dit gratis topografiespel van LeerCraft voor groep 5 t/m 8.",
+    "learn": "Je oefent het zelfstandig herinneren en schrijven van Europese landnamen. De vorm en ligging op de kaart zijn je aanwijzingen; de naam bedenk je zelf. Groep 5 en 6 oefenen de 19 landen van Europa 1; groep 7 en 8 ook de 20 extra landen van Europa 2.",
+    "play": "Bekijk het gemarkeerde land op de kaart en typ de juiste naam. Gebruik de terugkoppeling om landen die je lastig vindt opnieuw te oefenen. Je verdient 10 punten per direct goed antwoord en 50 bij de finish. Ingelogd worden die punten bewaard; zonder account speel je ook gewoon.",
+    "related": [
+      "europa-landen-klik",
+      "europa-hoofdsteden-schrijf"
+    ],
+    "educationalLevel": "Groep 5 t/m 8"
+  },
+  {
+    "file": "spellen/topografie/groep-6/europa-hoofdsteden-klik/index.php",
+    "path": "/spellen/topografie/groep-6/europa-hoofdsteden-klik/",
+    "name": "Zoek de Hoofdstad",
+    "title": "Hoofdsteden van Europa oefenen: klikspel | LeerCraft",
+    "subject": "Topografie",
+    "description": "Koppel Europese hoofdsteden aan het juiste land op de kaart. Oefen topografie voor groep 5 t/m 8 met het gratis spel Zoek de Hoofdstad van LeerCraft.",
+    "learn": "Je legt het verband tussen Europese landen en hun hoofdsteden. Je combineert kennis van een hoofdstad met de ligging van het bijbehorende land. Groep 5 en 6 oefenen de 19 landen van Europa 1; groep 7 en 8 ook de 20 extra landen van Europa 2.",
+    "play": "Lees de gevraagde hoofdstad en zoek het juiste land op de kaart. Klik of tik op je antwoord en ontdek of je de combinatie goed hebt onthouden. Je verdient 10 punten per direct goed antwoord en 50 bij de finish. Ingelogd worden die punten bewaard; zonder account speel je ook gewoon.",
+    "related": [
+      "europa-hoofdsteden-schrijf",
+      "europa-landen-klik"
+    ],
+    "educationalLevel": "Groep 5 t/m 8"
+  },
+  {
+    "file": "spellen/topografie/groep-6/europa-hoofdsteden-schrijf/index.php",
+    "path": "/spellen/topografie/groep-6/europa-hoofdsteden-schrijf/",
+    "name": "Schrijf de Hoofdstad",
+    "title": "Europese hoofdsteden schrijven en oefenen | LeerCraft",
+    "subject": "Topografie",
+    "description": "Weet jij de hoofdstad van het gemarkeerde Europese land? Typ het antwoord en oefen landen en hoofdsteden in dit gratis leerspel voor groep 5 t/m 8.",
+    "learn": "Je oefent het zelfstandig ophalen van hoofdsteden. Je herkent eerst het land op de kaart en herinnert je vervolgens welke hoofdstad daarbij hoort. Groep 5 en 6 oefenen de 19 landen van Europa 1; groep 7 en 8 ook de 20 extra landen van Europa 2.",
+    "play": "Bekijk het gemarkeerde Europese land en schrijf de bijbehorende hoofdstad. Oefen de combinatie van kaartkennis en het zelf formuleren van een antwoord. Je verdient 10 punten per direct goed antwoord en 50 bij de finish. Ingelogd worden die punten bewaard; zonder account speel je ook gewoon.",
+    "related": [
+      "europa-hoofdsteden-klik",
+      "europa-landen-schrijf"
+    ],
+    "educationalLevel": "Groep 5 t/m 8"
+  },
+  {
+    "file": "spellen/topografie/groep-6/europa-raster-landen/index.php",
+    "path": "/spellen/topografie/groep-6/europa-raster-landen/",
+    "name": "Raster: Zoek het Land",
+    "title": "Kaartcoördinaten en Europese landen oefenen | LeerCraft",
+    "subject": "Topografie",
+    "description": "Zoek Europese landen en lees het juiste rastervak af. Oefen kaartcoördinaten en topografie met dit gratis LeerCraft-spel voor kinderen in groep 5 t/m 8.",
+    "learn": "Je combineert het herkennen van Europese landen met het aflezen van een raster. Daarmee oefen je zowel topografie als het gebruiken van kaartcoördinaten. Groep 5 en 6 oefenen de 19 landen van Europa 1; groep 7 en 8 ook de 20 extra landen van Europa 2.",
+    "play": "Zoek het gevraagde land en het gouden puntje binnen dat land. Tik het rastervak met dat puntje, of typ de letter en het cijfer. Zo is ook bij landen die over meerdere vakken liggen duidelijk welk vak wordt bedoeld. Je verdient 10 punten per direct goed antwoord en 50 bij de finish. Ingelogd worden die punten bewaard; zonder account speel je ook gewoon.",
+    "related": [
+      "europa-raster-hoofdsteden",
+      "europa-landen-klik"
+    ],
+    "educationalLevel": "Groep 5 t/m 8"
+  },
+  {
+    "file": "spellen/topografie/groep-6/europa-raster-hoofdsteden/index.php",
+    "path": "/spellen/topografie/groep-6/europa-raster-hoofdsteden/",
+    "name": "Raster: Zoek de Hoofdstad",
+    "title": "Hoofdsteden en kaartcoördinaten oefenen | LeerCraft",
+    "subject": "Topografie",
+    "description": "Koppel een Europese hoofdstad aan het juiste land en rastervak. Oefen hoofdsteden, landen en kaartlezen met dit gratis topografiespel voor groep 5 t/m 8.",
+    "learn": "Je combineert drie vaardigheden: de hoofdstad bij een land kennen, het land vinden en het juiste rastervak aflezen. Dit bouwt voort op de andere Europaspellen. Groep 5 en 6 oefenen de 19 landen van Europa 1; groep 7 en 8 ook de 20 extra landen van Europa 2.",
+    "play": "Lees de hoofdstad en vind het gouden stadspuntje op de kaart. Tik het bijbehorende rastervak of typ de coördinaat. De stad ligt op haar werkelijke locatie; het rastervak is niet gebaseerd op het midden van het land. Je verdient 10 punten per direct goed antwoord en 50 bij de finish. Ingelogd worden die punten bewaard; zonder account speel je ook gewoon.",
+    "related": [
+      "europa-raster-landen",
+      "europa-hoofdsteden-klik"
+    ],
+    "educationalLevel": "Groep 5 t/m 8"
+  },
+  {
+    "file": "spellen/rekenen/groep-6/rekencraft/index.php",
+    "path": "/spellen/rekenen/groep-6/rekencraft/",
+    "name": "RekenCraft",
+    "title": "RekenCraft: rekenen oefenen in een blokkenwereld | LeerCraft",
+    "subject": "Rekenen",
+    "description": "Oefen optellen, aftrekken, keersommen en delen in RekenCraft. Kies je sommen, verzamel rekenkracht en bereik de finish. Gratis rekenspel voor groep 6.",
+    "learn": "Je vergelijkt rekenbewerkingen en kiest welke poort de beste uitkomst geeft. Je kunt optellen, aftrekken, vermenigvuldigen en delen oefenen en het getalbereik zelf instellen.",
+    "play": "Stuur Steve door de juiste poort, verzamel genoeg rekenkracht en ontwijk hindernissen. Versla de Creepers en haal de finish. Ingelogde spelers bewaren hun verdiende punten.",
+    "related": [
+      "getallenzee",
+      "reken-race"
+    ]
+  },
+  {
+    "file": "spellen/rekenen/groep-6/getallenzee/index.php",
+    "path": "/spellen/rekenen/groep-6/getallenzee/",
+    "name": "Getallenzee",
+    "title": "Getallenzee: rekensommen oefenen in een 3D-spel | LeerCraft",
+    "subject": "Rekenen",
+    "description": "Reken snel en kies het juiste antwoord voordat de tegels zinken. Speel Getallenzee met plus- en minsommen of keersommen. Gratis rekenspel voor groep 6.",
+    "learn": "Je oefent het uitrekenen van sommen en het herkennen van de juiste uitkomst. Kies plus- en minsommen, keersommen of verschillende bewerkingen door elkaar.",
+    "play": "Bekijk de som en beweeg naar de tegel met het juiste antwoord voordat de tijd om is. Probeer de overkant te bereiken. Je kunt zonder account spelen of ingelogd punten bewaren.",
+    "related": [
+      "rekencraft",
+      "reken-race"
+    ]
+  },
+  {
+    "file": "spellen/rekenen/groep-6/reken-race/index.php",
+    "path": "/spellen/rekenen/groep-6/reken-race/",
+    "name": "Reken Race 3D",
+    "title": "Reken Race 3D: race en oefen rekensommen | LeerCraft",
+    "subject": "Rekenen",
+    "description": "Race met Steve tegen Minecraft-personages en stuur door het juiste antwoord. Oefen rekensommen in Reken Race 3D, een gratis browserspel voor groep 6.",
+    "learn": "Je oefent het uitrekenen van gemengde rekensommen terwijl je een kart bestuurt. Een juist antwoord geeft extra snelheid; zo combineer je rekenen met een race-uitdaging.",
+    "play": "Rijd drie rondes en stuur door het poortje met de juiste uitkomst. Race tegen vier computergestuurde tegenstanders. Zonder account speel je direct; ingelogd kun je punten bewaren.",
+    "related": [
+      "rekencraft",
+      "getallenzee"
+    ]
+  }
 ]

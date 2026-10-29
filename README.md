@@ -1,5 +1,8 @@
 # LeerCraft
 
+Hoofdstuk 2 (De Atlascode) ondersteunt groep 5–8, Europa 1/2, punten en outfits.
+Zie [de atlasdocumentatie](docs/atlas-games.md) voor de lesstof en het onderhoud.
+
 ## Vindbaarheid (SEO)
 
 De startpagina en alle twaalf spellen hebben unieke titels, beschrijvingen,

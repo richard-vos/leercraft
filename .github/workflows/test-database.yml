@@ -45,6 +45,7 @@ jobs:
           node --experimental-default-type=module tests/race-kart.cjs
           node --experimental-default-type=module tests/race-motion.cjs
           node --experimental-default-type=module tests/race-progress.cjs
+          node --experimental-default-type=module tests/atlas-games.cjs
           node --experimental-default-type=module tests/shop-catalog.cjs
           node --experimental-default-type=module tests/item-preview.cjs
       - name: Puntentoekenning controleren

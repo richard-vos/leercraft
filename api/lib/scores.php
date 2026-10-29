@@ -15,6 +15,24 @@ function validate_game_score(array $body): array
     $meta = null;
     if (in_array($slug, ['provincie-klikspel', 'provincie-schrijfspel'], true)) {
         if ($max !== 12 || $score < 0 || $score > 12) throw new InvalidArgumentException('Ongeldige provinciescore.');
+    } elseif (in_array($slug, ['atlascode', 'europa-landen-klik', 'europa-landen-schrijf',
+        'europa-hoofdsteden-klik', 'europa-hoofdsteden-schrijf', 'europa-raster-landen', 'europa-raster-hoofdsteden'], true)) {
+        $meta = $body['meta'] ?? null;
+        if (!is_array($meta) || !in_array($meta['group'] ?? null, [5, 6, 7, 8], true)) {
+            throw new InvalidArgumentException('Ongeldige atlasgroep.');
+        }
+        $atlas = $slug === 'atlascode';
+        $curriculum = $atlas ? 'atlas' : ($meta['group'] <= 6 ? 'europa-1' : 'europa-1-2');
+        $allowed = $atlas ? [5] : [10, $meta['group'] <= 6 ? 19 : 39];
+        $total = $meta['total_questions'] ?? null;
+        $correct = $meta['correct_answers'] ?? null;
+        if (($meta['curriculum'] ?? null) !== $curriculum || !in_array($total, $allowed, true)
+            || !is_int($correct) || $correct < 0 || $correct > $total
+            || $score !== $correct + 5 || $max !== $total + 5) {
+            throw new InvalidArgumentException('De score past niet bij deze atlasexpeditie.');
+        }
+        $meta = ['group' => $meta['group'], 'curriculum' => $curriculum,
+            'total_questions' => $total, 'correct_answers' => $correct];
     } elseif ($slug === 'rekencraft') {
         $meta = $body['meta'] ?? null;
         if (!is_array($meta)) throw new InvalidArgumentException('Levelgegevens ontbreken.');

@@ -117,3 +117,6 @@ html[data-world-theme=end] .site-home .footer-donate{border-top-color:#c9a7e2;bo
 @media(min-width:700px){.site-home .site-footer{grid-template-columns:minmax(0,1fr) minmax(130px,auto);gap:20px 24px;padding:24px}.footer-donate{grid-column:1/-1}}
 @media(min-width:1000px){.site-home .site-footer{grid-template-columns:minmax(0,1fr) minmax(150px,auto) minmax(250px,auto)}.footer-donate{grid-column:auto}}
 @media(max-width:360px){.site-home .site-footer{padding:18px 12px}.site-home .footer-brand{font-size:16px}.site-home .footer-donate{font-size:16px;padding:12px 10px;gap:8px}}
+.atlas-hub-config{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:12px 16px;margin-bottom:16px;background:#25313b;border:3px solid;border-color:#93a4ad #121b22 #121b22 #93a4ad;font:700 16px/1.5 Arial,sans-serif}
+.atlas-hub-config select{min-height:48px;padding:8px 12px;font:700 16px Arial;background:#17232b;color:#fff;border:2px solid #81959e;border-radius:0}
+.atlas-hub-config span{color:#ffe17b}

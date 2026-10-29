@@ -33,6 +33,25 @@ foreach(['provincie-klikspel','provincie-schrijfspel'] as $slug){
     }
 }
 echo "Passed: RekenCraft points and bounds, settings, invalid submissions and province compatibility.\n";
+foreach (['atlascode','europa-landen-klik','europa-landen-schrijf','europa-hoofdsteden-klik',
+    'europa-hoofdsteden-schrijf','europa-raster-landen','europa-raster-hoofdsteden'] as $slug) {
+    foreach ([5,6,7,8] as $group) {
+        foreach ($slug==='atlascode'?[5]:[10,$group<=6?19:39] as $total) {
+            $body=['game_slug'=>$slug,'score'=>$total+5,'max_score'=>$total+5,'run_id'=>$valid['run_id'],
+                'meta'=>['group'=>$group,'curriculum'=>$slug==='atlascode'?'atlas':($group<=6?'europa-1':'europa-1-2'),
+                    'correct_answers'=>$total,'total_questions'=>$total]];
+            if(validate_game_score($body)['score']!==$total+5)throw new RuntimeException('Atlas score rejected.');
+            foreach ([['score'=>999],['max_score'=>999],['meta'=>array_replace($body['meta'],['group'=>4])],
+                ['meta'=>array_replace($body['meta'],['correct_answers'=>$total+1])],
+                ['meta'=>array_replace($body['meta'],['curriculum'=>'unknown'])],
+                ['meta'=>array_replace($body['meta'],['total_questions'=>1000])]] as $change) {
+                try{validate_game_score(array_replace($body,$change));}catch(InvalidArgumentException $expected){continue;}
+                throw new RuntimeException('Invalid atlas result accepted.');
+            }
+        }
+    }
+}
+echo "Passed: all seven atlas games, curricula, groups and reward bounds.\n";
 $sea=['game_slug'=>'getallenzee','score'=>8,'max_score'=>11,'run_id'=>$valid['run_id'],
     'meta'=>['rounds'=>6,'correct_answers'=>3,'mode'=>'all']];
 if(validate_game_score($sea)['score']!==8)throw new RuntimeException('Sea score rejected.');

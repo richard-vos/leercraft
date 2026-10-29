@@ -7,14 +7,14 @@ header('Content-Type: text/html; charset=utf-8');
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- leercraft:seo:start -->
 <title>De Atlascode: atlasvaardigheden oefenen in 3D | LeerCraft</title>
-<meta name="description" content="Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 6.">
+<meta name="description" content="Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 5 t/m 8.">
 <link rel="canonical" href="https://leercraft.nl/spellen/topografie/groep-6/atlascode/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="LeerCraft">
 <meta property="og:locale" content="nl_NL">
 <meta property="og:title" content="De Atlascode: atlasvaardigheden oefenen in 3D | LeerCraft">
-<meta property="og:description" content="Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 6.">
+<meta property="og:description" content="Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 5 t/m 8.">
 <meta property="og:url" content="https://leercraft.nl/spellen/topografie/groep-6/atlascode/">
 <meta property="og:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
 <meta property="og:image:width" content="1200">
@@ -22,10 +22,10 @@ header('Content-Type: text/html; charset=utf-8');
 <meta property="og:image:alt" content="LeerCraft: rekenen en topografie oefenen voor groep 6">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="De Atlascode: atlasvaardigheden oefenen in 3D | LeerCraft">
-<meta name="twitter:description" content="Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 6.">
+<meta name="twitter:description" content="Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 5 t/m 8.">
 <meta name="twitter:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
 <link rel="icon" type="image/svg+xml" href="/assets/images/ui-grass.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://leercraft.nl/#website","url":"https://leercraft.nl/","name":"LeerCraft","inLanguage":"nl-NL"},{"@type":"VideoGame","@id":"https://leercraft.nl/spellen/topografie/groep-6/atlascode/#game","url":"https://leercraft.nl/spellen/topografie/groep-6/atlascode/","name":"De Atlascode","description":"Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 6.","image":"https://leercraft.nl/assets/images/social/leercraft.png","inLanguage":"nl-NL","isAccessibleForFree":true,"educationalLevel":"Groep 6","genre":["Educatief","Topografie"],"applicationCategory":"EducationalApplication","gamePlatform":"Webbrowser","isPartOf":{"@id":"https://leercraft.nl/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"LeerCraft","item":"https://leercraft.nl/"},{"@type":"ListItem","position":2,"name":"De Atlascode","item":"https://leercraft.nl/spellen/topografie/groep-6/atlascode/"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://leercraft.nl/#website","url":"https://leercraft.nl/","name":"LeerCraft","inLanguage":"nl-NL"},{"@type":"VideoGame","@id":"https://leercraft.nl/spellen/topografie/groep-6/atlascode/#game","url":"https://leercraft.nl/spellen/topografie/groep-6/atlascode/","name":"De Atlascode","description":"Ga op avontuur in De Atlascode. Oefen kaartlezen, windrichtingen en atlasvaardigheden met missies in een 3D-blokkenwereld. Een gratis leerspel voor groep 5 t/m 8.","image":"https://leercraft.nl/assets/images/social/leercraft.png","inLanguage":"nl-NL","isAccessibleForFree":true,"educationalLevel":"Groep 5 t/m 8","genre":["Educatief","Topografie"],"applicationCategory":"EducationalApplication","gamePlatform":"Webbrowser","isPartOf":{"@id":"https://leercraft.nl/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"LeerCraft","item":"https://leercraft.nl/"},{"@type":"ListItem","position":2,"name":"De Atlascode","item":"https://leercraft.nl/spellen/topografie/groep-6/atlascode/"}]}]}</script>
 <!-- leercraft:seo:end -->
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07121b;font-family:Arial,sans-serif;touch-action:none}
@@ -55,8 +55,10 @@ h1{margin:0;color:#ffe15b;font-size:clamp(30px,6vw,55px);text-shadow:4px 4px #73
 <link rel="stylesheet" href="/assets/theme.css">
 <script src="/assets/theme.js"></script>
 <link rel="stylesheet" href="/assets/game-info.css">
+<link rel="stylesheet" href="/assets/atlas.css">
+<link rel="stylesheet" href="/assets/atlas-world.css">
 </head>
-<body class="game-atlas">
+<body class="game-atlas atlas-modern">
 <a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
 <canvas id="game"></canvas>
 <div id="ui">
@@ -71,26 +73,42 @@ h1{margin:0;color:#ffe15b;font-size:clamp(30px,6vw,55px);text-shadow:4px 4px #73
  <h1>DE ATLASCODE</h1>
 <!-- leercraft:game-info:start -->
 <details class="game-info"><summary>Over dit spel</summary>
-<div class="game-info-content"><h2>De Atlascode voor groep 6</h2>
+<div class="game-info-content"><h2>De Atlascode voor groep 5 t/m 8</h2>
 <p>Je past kaartvaardigheden toe in een avontuur. Oefen met windrichtingen, kaarten en informatie uit de atlas. De missies combineren verschillende topografische vaardigheden.</p>
 <h3>Hoe speel je?</h3>
-<p>Verken de blokkenwereld en voer de atlasmissies uit om de verdwenen kaart te herstellen. Lees de opdracht en kies het antwoord dat bij de kaartvraag past.</p>
+<p>Verken de blokkenwereld en voer de atlasmissies uit om de verdwenen kaart te herstellen. Lees de opdracht en kies het antwoord dat bij de kaartvraag past. Je verdient 10 punten per direct goed antwoord en 50 bij de finish. Ingelogd worden die punten bewaard; zonder account speel je ook gewoon.</p>
 <h3>Verder oefenen</h3><ul><li><a href="/spellen/topografie/groep-6/provincie-klik/">Provincie Klikspel</a></li><li><a href="/spellen/topografie/groep-6/europa-raster-landen/">Raster: Zoek het Land</a></li></ul>
 <p>Dit spel is gratis en zonder account te spelen.</p></div></details>
-<!-- leercraft:game-info:end --><h2>De verdwenen kaart</h2>
- <p>O nee! De kaart van Nederland is in vijf stukken uit de magische Bosatlas gevlogen. Ren door het Atlaslokaal, vang sterren en kraak vijf actieve atlasmissies.</p>
- <p><b>Computer:</b> WASD/pijlen + spatie. <b>iPad:</b> gebruik de grote knoppen.</p>
- <button class="play" id="go">START AVONTUUR</button>
+<!-- leercraft:game-info:end -->
+<div class="atlas-config"><label>Mijn groep<select id="atlas-group"><option value="5">Groep 5</option><option value="6" selected>Groep 6</option><option value="7">Groep 7</option><option value="8">Groep 8</option></select></label></div>
+<p>Vind de vijf kaartstukken.</p><p>10 punten per direct goede missie &middot; 50 bij de finish</p>
+<button class="play" id="go">START AVONTUUR</button>
 </div></div>
-<div id="overlay" class="hidden"><div class="card"><h1 id="ovTitle"></h1><p id="ovText"></p><div class="choices" id="choices"></div></div></div>
+<div id="overlay" class="hidden"><div class="card"><h2 id="ovTitle"></h2><p id="ovText"></p><p id="atlas-save" role="status"></p><button id="atlas-retry" hidden>Opnieuw bewaren</button><div class="choices" id="choices"></div></div></div>
 
+<div data-leercraft-account data-background="true" hidden></div>
+<script src="/assets/avatar-profile.js"></script><script src="/assets/account.js" data-root="/"></script>
 <script type="module">
-import * as THREE from '/assets/vendor/three-r128.module.js';
-const R=new THREE.WebGLRenderer({canvas:document.querySelector('#game'),antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));R.setSize(innerWidth,innerHeight);R.shadowMap.enabled=true;
+import * as THREE from '/assets/vendor/three-0.160.0.module.js';
+import {createRunnerCharacter} from '/assets/js/minecraft-runner-visuals.js';
+import {applyRunnerOutfit} from '/assets/js/avatar-cosmetics.js';
+import {animateAtlasSteve} from '/assets/js/atlas-guide.js';
+import {AtlasProgress} from '/assets/js/atlas-progress.js';
+import {schoolGroup} from '/assets/js/atlas-session.js';
+const atlasProgress=new AtlasProgress(window.LeerCraft,run=>{
+ document.querySelector('#atlas-save').textContent=({saved:'Punten opgeslagen!',saving:'Punten bewaren\u2026',guest:'',error:'Bewaren lukt nog niet.','needs-login':'Punten nog niet opgeslagen.','account-changed':'Je account is gewijzigd.'})[run.state]||'';
+ document.querySelector('#atlas-retry').hidden=!['error','needs-login'].includes(run.state);
+});
+document.querySelector('#atlas-retry').onclick=()=>atlasProgress.retryPending();
+let savedGroup;try{savedGroup=localStorage.getItem('leercraft-atlas-group')}catch{}
+document.querySelector('#atlas-group').value=schoolGroup(new URLSearchParams(location.search).get('groep')||savedGroup);
+document.querySelector('#atlas-group').onchange=e=>{try{localStorage.setItem('leercraft-atlas-group',e.target.value)}catch{}};
+const stageAttempts=[0,0,0,0,0];
+const R=new THREE.WebGLRenderer({canvas:document.querySelector('#game'),antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,1.5));R.setSize(innerWidth,innerHeight);R.shadowMap.enabled=true;
 const S=new THREE.Scene();S.background=new THREE.Color(0x77bce4);S.fog=new THREE.Fog(0x9fc7cf,58,125);
 const C=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,150);
-S.add(new THREE.HemisphereLight(0xe6f6ff,0x315528,1.15));const sun=new THREE.DirectionalLight(0xfff0ca,1.7);sun.position.set(-20,30,15);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-35;sun.shadow.camera.right=35;sun.shadow.camera.top=45;sun.shadow.camera.bottom=-45;S.add(sun);
-R.outputEncoding=THREE.sRGBEncoding;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;
+S.add(new THREE.HemisphereLight(0xe6f6ff,0x315528,1.15));const sun=new THREE.DirectionalLight(0xfff0ca,1.7);sun.position.set(-20,30,15);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-35;sun.shadow.camera.right=35;sun.shadow.camera.top=45;sun.shadow.camera.bottom=-45;S.add(sun);
+R.outputColorSpace=THREE.SRGBColorSpace;R.toneMapping=THREE.ACESFilmicToneMapping;R.toneMappingExposure=1.05;
 const M=c=>new THREE.MeshLambertMaterial({color:c}), floorM=M(0xb99a6c), green=M(0x4f8b3d), wood=M(0x704629), paper=M(0xe9dfbd);
 const brick=M(0xb97855), trim=M(0xf0e5cf), metal=M(0x555e61), leaf=M(0x4e8a42), leaf2=M(0x6ca653), pathM=M(0x9b8665), waterM=new THREE.MeshLambertMaterial({color:0x4a9fca,transparent:true,opacity:.8});
 const obstacles=[];
@@ -207,17 +225,9 @@ for(let z of [-24,-11,2,15,28]){
     for(let dx of [-.34,.34])box(x+dx,.79,z,.22,.24,.22,M(0xd3b36d));
   }
 }
-const player=new THREE.Group();S.add(player);player.position.set(0,0,30);
-function part(w,h,d,c){let o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),M(c));o.castShadow=true;player.add(o);return o}
-const body=part(.92,1.15,.52,0x3c9b57);body.position.y=1.55;
-const shirt2=part(.94,.25,.54,0x2f7f49);shirt2.position.y=1.22;
-const head=part(.78,.78,.78,0xd7a071);head.position.y=2.53;
-const hair=part(.8,.18,.8,0x5a3825);hair.position.set(0,2.86,.02);
-const leg1=part(.34,.88,.4,0x344d87),leg2=part(.34,.88,.4,0x344d87);leg1.position.set(-.23,.5,0);leg2.position.set(.23,.5,0);
-const armL=part(.25,.95,.3,0xd7a071),armR=part(.25,.95,.3,0xd7a071);armL.position.set(-.62,1.5,0);armR.position.set(.62,1.5,0);
-const shoeL=part(.36,.22,.62,0x292929),shoeR=part(.36,.22,.62,0x292929);shoeL.position.set(-.23,.12,-.09);shoeR.position.set(.23,.12,-.09);
-/* simple face */
-const eyeMat=new THREE.MeshBasicMaterial({color:0x202020});for(let x of [-.17,.17]){let e=new THREE.Mesh(new THREE.BoxGeometry(.09,.11,.03),eyeMat);e.position.set(x,2.58,-.405);player.add(e)}
+const player=createRunnerCharacter('steve',1.25);S.add(player);player.position.set(0,0,30);
+window.LeerCraftAvatar.subscribe(state=>applyRunnerOutfit(THREE,player,state.loggedIn?state.equipped:{}));
+window.LeerCraftTheme.subscribe(theme=>{S.background.set(theme==='end'?0x171024:0x77bce4);S.fog.color.copy(S.background);});
 
 const stars=[];function star(x,z){let m=new THREE.Mesh(new THREE.OctahedronGeometry(.35),new THREE.MeshBasicMaterial({color:0xffdf3e}));m.position.set(x,1.1,z);S.add(m);stars.push(m)}
 for(let i=0;i<32;i++)star((Math.random()-.5)*44,28-i*1.8+(Math.random()-.5)*4);
@@ -236,12 +246,12 @@ const missions=[
  ['MISSIE 2 · LEGENDA-JACHT','Ren naar de legenda. Daar moet je symbolen aan de juiste plek koppelen.'],
  ['MISSIE 3 · KOMPAS-RACE','Sprint naar het kompas en kies razendsnel de juiste richting.'],
  ['MISSIE 4 · SCHAAL-EXPEDITIE','Bereik de schaaltafel en meet welke reis ongeveer 10 km is.'],
- ['FINALE · RED NEDERLAND!','Breng de vier kaartstukken naar de grote kaart en voltooi de Atlascode!']
+ ['FINALE · RED NEDERLAND!','Breng de vijf kaartstukken naar de grote kaart en voltooi de Atlascode!']
 ];
 function mission(){title.textContent=missions[stage][0];text.textContent=missions[stage][1];document.querySelector('#fill').style.width=(stage/5*100)+'%';beams.forEach((b,i)=>b.visible=i===stage)}
 function pop(t,c='#ffe45b'){toast.textContent=t;toast.style.color=c;toast.classList.add('on');setTimeout(()=>toast.classList.remove('on'),750)}
-function overlay(h,p,opts,correct){active=false;document.querySelector('#overlay').classList.remove('hidden');document.querySelector('#ovTitle').textContent=h;document.querySelector('#ovText').textContent=p;let c=document.querySelector('#choices');c.innerHTML='';opts.forEach((o,i)=>{let b=document.createElement('button');b.className='play';b.textContent=o;b.onclick=()=>{if(i===correct){pop('GOED!','#72ff65');document.querySelector('#overlay').classList.add('hidden');piece();active=true}else pop('PROBEER NOG EENS','#ff6868')};c.appendChild(b)})}
-function piece(){pieces++;document.querySelector('#pieces').textContent=pieces;pop('KAARTSTUK GEVONDEN!');stage++;if(stage>=5){finish();return}mission()}
+function overlay(h,p,opts,correct){active=false;keys={};document.querySelector('#overlay').classList.remove('hidden');document.querySelector('#ovTitle').textContent=h;document.querySelector('#ovText').textContent=p;let c=document.querySelector('#choices');c.innerHTML='';opts.forEach((o,i)=>{let b=document.createElement('button');b.className='play';b.textContent=o;b.onclick=()=>{stageAttempts[stage]++;if(i===correct){pop('GOED!','#72ff65');document.querySelector('#overlay').classList.add('hidden');piece();active=true}else pop('PROBEER NOG EENS','#ff6868')};c.appendChild(b)})}
+function piece(){atlasProgress.recordGate(stage,stageAttempts[stage]===1);pieces++;document.querySelector('#pieces').textContent=pieces;pop('KAARTSTUK GEVONDEN!');stage++;if(stage>=5){finish();return}mission()}
 /* Each area has fifteen prompts. A shuffled deck persists across reloads, so
    replaying gives a fresh prompt until that area's full set has appeared. */
 const questions=[
@@ -347,10 +357,23 @@ function challenge(){
  for(let i=choices.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]]}
  overlay(['De atlas vliegt open!','Legenda-jacht','KOMPAS-RACE','Schaal-expeditie','De laatste code'][stage],prompt,choices.map(c=>c.label),choices.findIndex(c=>c.correct));
 }
-function finish(){active=false;document.querySelector('#fill').style.width='100%';document.querySelector('#overlay').classList.remove('hidden');document.querySelector('#ovTitle').textContent='NEDERLAND IS GERED!';document.querySelector('#ovText').textContent=`Je vond alle 5 kaartstukken en verzamelde ${score} sterren. De magische atlas is weer compleet!`;document.querySelector('#choices').innerHTML='<button class="play" onclick="location.reload()">NOG EEN KEER</button><button class="play" onclick="history.back()">TERUG</button>'}
-document.querySelector('#go').onclick=()=>{document.querySelector('#start').classList.add('hidden');active=true;mission()};
-addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space')jump()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
-document.querySelectorAll('[data-k]').forEach(b=>{let k=b.dataset.k;b.onpointerdown=e=>{e.preventDefault();keys[k]=true};b.onpointerup=()=>keys[k]=false;b.onpointerleave=()=>keys[k]=false});document.querySelector('#jump').onpointerdown=jump;
+function finish(){
+ active=false;keys={};document.querySelector('#fill').style.width='100%';document.querySelector('#overlay').classList.remove('hidden');
+ document.querySelector('#ovTitle').textContent='Atlas compleet!';
+ document.querySelector('#ovText').textContent=`+${(atlasProgress.current.correct+5)*10} punten \u00b7 ${score} sterren gevonden`;
+ document.querySelector('#choices').innerHTML='<button class="primary" onclick="location.reload()">Nieuw avontuur</button><a class="atlas-button" href="/">Alle spellen</a>';
+ atlasProgress.finishAtlas();
+}
+document.querySelector('#go').onclick=async()=>{
+ document.querySelector('#go').disabled=true;await window.LeerCraft.ready;
+ atlasProgress.beginAtlas('atlascode',schoolGroup(document.querySelector('#atlas-group').value),5);
+ document.querySelector('#start').classList.add('hidden');active=true;mission();
+};
+const keyMap={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'};
+addEventListener('keydown',e=>{if(!active)return;const k=keyMap[e.key]||e.key.toLowerCase();if(['up','down','left','right','w','a','s','d'].includes(k)||e.code==='Space')e.preventDefault();keys[k]=true;if(e.code==='Space')jump()});
+addEventListener('keyup',e=>keys[keyMap[e.key]||e.key.toLowerCase()]=false);
+addEventListener('blur',()=>keys={});document.addEventListener('visibilitychange',()=>{if(document.hidden)keys={};});
+document.querySelectorAll('[data-k]').forEach(b=>{let k=b.dataset.k;b.onpointerdown=e=>{e.preventDefault();keys[k]=true};b.onpointerup=()=>keys[k]=false;b.onpointercancel=()=>keys[k]=false;b.onpointerleave=()=>keys[k]=false});document.querySelector('#jump').onpointerdown=jump;
 function jump(){if(onGround&&active){vy=7;onGround=false}}
 /* Horizontal circle against furniture footprints, with independent axes for smooth sliding.
    Jumping cannot bypass tables. Decorative floor markings and platforms stay walkable. */
@@ -390,8 +413,7 @@ function loop(now){requestAnimationFrame(loop);let dt=Math.min((now-last)/1000,.
   }
   let moving=drive!==0;
   vy-=17*dt;player.position.y+=vy*dt;if(player.position.y<=0){player.position.y=0;vy=0;onGround=true}
-  let gait=moving&&onGround?Math.sin(now*.014)*.65*(drive<0?-1:1):0;leg1.rotation.x=gait;leg2.rotation.x=-gait;armL.rotation.x=-gait*.75;armR.rotation.x=gait*.75;
-  if(moving&&onGround)body.position.y=1.55+Math.abs(Math.sin(now*.014))*.035;else body.position.y+=(1.55-body.position.y)*.15;
+  animateAtlasSteve(player,now/1000,moving&&onGround);
   stars.forEach(s=>{if(!s.visible)return;s.rotation.y+=dt*3;s.position.y=1.1+Math.sin(now*.004+s.position.x)*.15;if(s.position.distanceTo(player.position)<1.4){s.visible=false;score++;document.querySelector('#stars').textContent=score;pop('+1 ★')}})
   let q=checkpoints[stage];if(q&&Math.hypot(player.position.x-q.p[0],player.position.z-q.p[1])<2.2)challenge();
  }

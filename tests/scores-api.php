@@ -63,3 +63,27 @@ foreach([1,2] as $_){
 $summary=call_score_api('scores/summary.php',null,$token);
 if($summary['totalPoints']!==430||$summary['wallet']['balance']!==430)throw new RuntimeException('Race points counted incorrectly.');
 echo "Passed: race points, wallet and retry deduplication.\n";
+$atlasSlugs=['atlascode','europa-landen-klik','europa-landen-schrijf','europa-hoofdsteden-klik',
+    'europa-hoofdsteden-schrijf','europa-raster-landen','europa-raster-hoofdsteden'];
+$expectedTotal=430;
+foreach($atlasSlugs as $i=>$slug){
+    $total=$slug==='atlascode'?5:10;
+    $entry=['game_slug'=>$slug,'account_email'=>$user['email'],
+        'run_id'=>sprintf('aaaa%04x-aaaa-4aaa-8aaa-aaaaaaaaaaaa',$i),
+        'score'=>$total+5,'max_score'=>$total+5,
+        'meta'=>['group'=>7,'curriculum'=>$slug==='atlascode'?'atlas':'europa-1-2',
+            'total_questions'=>$total,'correct_answers'=>$total]];
+    foreach([1,2] as $_){
+        $saved=call_score_api('scores/submit.php',$entry,$token);
+        if(!($saved['saved']??false)||$saved['points']!==($total+5)*10)throw new RuntimeException('Atlas save failed: '.$slug);
+    }
+    if(call_score_api('scores/submit.php',$entry,null)['saved']!==false)throw new RuntimeException('Guest atlas score persisted.');
+    $expectedTotal+=($total+5)*10;
+}
+$summary=call_score_api('scores/summary.php',null,$token);
+if($summary['totalPoints']!==$expectedTotal||$summary['wallet']['balance']!==$expectedTotal)throw new RuntimeException('Atlas wallet total is wrong.');
+foreach($atlasSlugs as $slug){
+    $rows=array_values(array_filter($summary['games'],static fn($game)=>$game['gameSlug']===$slug));
+    if(count($rows)!==1||$rows[0]['plays']!==1)throw new RuntimeException('Atlas history/deduplication failed.');
+}
+echo "Passed: all seven atlas games save once to the same wallet and history; guests remain playable.\n";

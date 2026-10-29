@@ -2,19 +2,18 @@
 header('Content-Type: text/html; charset=utf-8');
 ?>
 <!doctype html>
-<html lang="nl">
-<head>
+<html lang="nl"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- leercraft:seo:start -->
 <title>Europese hoofdsteden schrijven en oefenen | LeerCraft</title>
-<meta name="description" content="Weet jij de hoofdstad van het gemarkeerde Europese land? Typ het antwoord en oefen landen en hoofdsteden in dit gratis leerspel voor groep 6.">
+<meta name="description" content="Weet jij de hoofdstad van het gemarkeerde Europese land? Typ het antwoord en oefen landen en hoofdsteden in dit gratis leerspel voor groep 5 t/m 8.">
 <link rel="canonical" href="https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-schrijf/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="LeerCraft">
 <meta property="og:locale" content="nl_NL">
 <meta property="og:title" content="Europese hoofdsteden schrijven en oefenen | LeerCraft">
-<meta property="og:description" content="Weet jij de hoofdstad van het gemarkeerde Europese land? Typ het antwoord en oefen landen en hoofdsteden in dit gratis leerspel voor groep 6.">
+<meta property="og:description" content="Weet jij de hoofdstad van het gemarkeerde Europese land? Typ het antwoord en oefen landen en hoofdsteden in dit gratis leerspel voor groep 5 t/m 8.">
 <meta property="og:url" content="https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-schrijf/">
 <meta property="og:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
 <meta property="og:image:width" content="1200">
@@ -22,201 +21,36 @@ header('Content-Type: text/html; charset=utf-8');
 <meta property="og:image:alt" content="LeerCraft: rekenen en topografie oefenen voor groep 6">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Europese hoofdsteden schrijven en oefenen | LeerCraft">
-<meta name="twitter:description" content="Weet jij de hoofdstad van het gemarkeerde Europese land? Typ het antwoord en oefen landen en hoofdsteden in dit gratis leerspel voor groep 6.">
+<meta name="twitter:description" content="Weet jij de hoofdstad van het gemarkeerde Europese land? Typ het antwoord en oefen landen en hoofdsteden in dit gratis leerspel voor groep 5 t/m 8.">
 <meta name="twitter:image" content="https://leercraft.nl/assets/images/social/leercraft.png">
 <link rel="icon" type="image/svg+xml" href="/assets/images/ui-grass.svg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://leercraft.nl/#website","url":"https://leercraft.nl/","name":"LeerCraft","inLanguage":"nl-NL"},{"@type":"VideoGame","@id":"https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-schrijf/#game","url":"https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-schrijf/","name":"Schrijf de Hoofdstad","description":"Weet jij de hoofdstad van het gemarkeerde Europese land? Typ het antwoord en oefen landen en hoofdsteden in dit gratis leerspel voor groep 6.","image":"https://leercraft.nl/assets/images/social/leercraft.png","inLanguage":"nl-NL","isAccessibleForFree":true,"educationalLevel":"Groep 6","genre":["Educatief","Topografie"],"applicationCategory":"EducationalApplication","gamePlatform":"Webbrowser","isPartOf":{"@id":"https://leercraft.nl/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"LeerCraft","item":"https://leercraft.nl/"},{"@type":"ListItem","position":2,"name":"Schrijf de Hoofdstad","item":"https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-schrijf/"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://leercraft.nl/#website","url":"https://leercraft.nl/","name":"LeerCraft","inLanguage":"nl-NL"},{"@type":"VideoGame","@id":"https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-schrijf/#game","url":"https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-schrijf/","name":"Schrijf de Hoofdstad","description":"Weet jij de hoofdstad van het gemarkeerde Europese land? Typ het antwoord en oefen landen en hoofdsteden in dit gratis leerspel voor groep 5 t/m 8.","image":"https://leercraft.nl/assets/images/social/leercraft.png","inLanguage":"nl-NL","isAccessibleForFree":true,"educationalLevel":"Groep 5 t/m 8","genre":["Educatief","Topografie"],"applicationCategory":"EducationalApplication","gamePlatform":"Webbrowser","isPartOf":{"@id":"https://leercraft.nl/#website"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"LeerCraft","item":"https://leercraft.nl/"},{"@type":"ListItem","position":2,"name":"Schrijf de Hoofdstad","item":"https://leercraft.nl/spellen/topografie/groep-6/europa-hoofdsteden-schrijf/"}]}]}</script>
 <!-- leercraft:seo:end -->
-<style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07121b;font-family:Arial,sans-serif;touch-action:none}
-canvas{display:block;width:100%;height:100%}
-#ui{position:fixed;inset:0;pointer-events:none;color:#fff;text-shadow:2px 2px 0 #000}
-#mission{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:min(760px,92vw);background:#162b1ddd;border:4px solid #78b84f;border-right-color:#29491f;border-bottom-color:#29491f;padding:10px 14px;text-align:center}
-#mission b{display:block;color:#ffe25a;font-size:clamp(16px,2.6vw,24px)}
-#mission span{font-size:clamp(12px,1.8vw,16px);line-height:1.4}
-#score{position:absolute;top:12px;right:12px;background:#172118dd;border:3px solid #879b82;padding:9px 12px;font-weight:bold;font-size:13px;line-height:1.7;min-width:150px}
-#score .row{display:flex;justify-content:space-between;gap:10px}
-#toast{position:absolute;top:100px;left:50%;transform:translateX(-50%);background:#000c;border:3px solid #ffe25a;padding:10px 18px;font-size:15px;opacity:0;transition:opacity .25s;text-align:center;max-width:90vw}
-#toast.show{opacity:1}
-#loading{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;color:#cfe8bc;font-size:16px;background:#07121b}
-#answerBar{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);display:flex;gap:10px;background:#0e1a24dd;border:3px solid #4a7a9c;padding:10px 14px;pointer-events:auto}
-#answerInput{font-size:16px;padding:8px 12px;border:2px solid #4a7a9c;background:#0b1a24;color:#fff;width:min(240px,46vw)}
-#answerInput::placeholder{color:#6f8ea3}
-#dots{display:flex;gap:6px;justify-content:center;margin-top:4px}
-.dot{width:8px;height:8px;border-radius:50%;background:#2a3a30;border:1px solid #6f8ea3}
-.dot.used{background:#cc3322;border-color:#cc3322}
-.btn{pointer-events:auto;border:4px solid #9cc88a;border-right-color:#2a4b24;border-bottom-color:#2a4b24;background:#497c3c;color:#fff;font-size:16px;font-weight:900;padding:8px 20px;cursor:pointer}
-#start,#overlay{position:fixed;inset:0;z-index:10;background:radial-gradient(circle,#2e6439,#07121b);display:flex;align-items:center;justify-content:center;padding:20px}
-.hidden{display:none!important}
-.card{width:min(780px,95vw);background:#132019;border:5px solid #75a858;border-right-color:#24391e;border-bottom-color:#24391e;padding:24px;text-align:center;color:#fff;box-shadow:0 15px 40px #0008;pointer-events:auto}
-.card h1{margin:0;color:#ffe15b;font-size:clamp(26px,5vw,44px);text-shadow:4px 4px #735800}
-.card p{font-size:clamp(13px,2vw,17px);line-height:1.6}
-.card p b{color:#ffe25a}
-.play{pointer-events:auto;border:4px solid #a8d68c;border-right-color:#294a21;border-bottom-color:#294a21;background:#4e8b3e;color:#fff;font-size:19px;font-weight:900;padding:14px 24px;margin:6px;cursor:pointer}
-</style>
-<link rel="stylesheet" href="/assets/navigation.css">
-<link rel="stylesheet" href="/assets/responsive.css">
-<script src="/assets/responsive.js" defer></script>
-<link rel="stylesheet" href="/assets/theme.css">
-<script src="/assets/theme.js"></script>
 <link rel="stylesheet" href="/assets/game-info.css">
-</head>
-<body class="game-europe">
-<a class="site-menu" href="/" aria-label="Terug naar alle spellen">Menu</a>
-<canvas id="game"></canvas>
-<div id="loading">🗺️ Kaart van Europa laden...</div>
-
-<div id="ui">
-  <div id="mission"><b id="missionTitle">Wat is de hoofdstad?</b><span id="missionSub">Typ de hoofdstad van het land met de gouden pijl erboven.</span></div>
-  <div id="score">
-    <div class="row"><span>Gevonden:</span><span id="scoreFound">0/0</span></div>
-    <div class="row"><span>Tijd:</span><span id="scoreTime">0:00</span></div>
-  </div>
-  <div id="toast"></div>
-  <div id="answerBar">
-    <div>
-      <input type="text" id="answerInput" placeholder="Naam van de hoofdstad..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-      <div id="dots"></div>
-    </div>
-    <button class="btn" id="submitBtn">✓ Check</button>
-  </div>
-</div>
-
-<div id="start">
-  <div class="card">
-    <h1>✏️ Schrijf de Hoofdstad</h1>
+<link rel="stylesheet" href="/assets/atlas.css">
+<script src="/assets/theme.js"></script>
+<script src="/assets/responsive.js" defer></script>
+</head><body class="atlas-modern game-europe" data-game="europa-hoofdsteden-schrijf">
+<div id="map-stage"><canvas id="game" aria-label="Interactieve 3D-kaart van Europa"></canvas>
+<div class="atlas-zoom" aria-label="Kaartweergave"><button id="zoom-in" aria-label="Inzoomen">+</button><button id="zoom-out" aria-label="Uitzoomen">&#8722;</button><button id="zoom-reset" aria-label="Hele kaart">&#8634;</button></div></div>
+<header class="atlas-hud"><div class="atlas-mission atlas-stone"><strong id="mission-title">Schrijf de Hoofdstad</strong><span id="mission-help">Kies je groep en vertrek.</span><div class="atlas-progress"><span id="round-fill"></span></div></div><div class="atlas-score atlas-stone"><strong id="round-count">0 / 10</strong><span id="round-points">0 punten</span></div></header>
+<p id="atlas-feedback" role="status" aria-live="polite"></p>
+<footer class="atlas-footer atlas-stone"><canvas id="atlas-guide" aria-label="Jouw Steve als expeditiegids"></canvas><form id="answer-form" class="atlas-answer" autocomplete="off"><label><span id="answer-label">Antwoord</span><input id="answer-input" autocapitalize="off" spellcheck="false" autocomplete="off" enterkeyhint="done" required></label><button class="primary">Kies</button></form><p id="click-instruction" class="atlas-instruction">Tik op de kaart. Sleep om te bewegen.<br>Gebruik + om kleine landen te vergroten.</p><a class="atlas-button" href="/">Menu</a></footer>
+<div id="start"><section class="card"><h1>Schrijf de Hoofdstad</h1>
 <!-- leercraft:game-info:start -->
 <details class="game-info"><summary>Over dit spel</summary>
-<div class="game-info-content"><h2>Schrijf de Hoofdstad voor groep 6</h2>
-<p>Je oefent het zelfstandig ophalen van hoofdsteden. Je herkent eerst het land op de kaart en herinnert je vervolgens welke hoofdstad daarbij hoort.</p>
+<div class="game-info-content"><h2>Schrijf de Hoofdstad voor groep 5 t/m 8</h2>
+<p>Je oefent het zelfstandig ophalen van hoofdsteden. Je herkent eerst het land op de kaart en herinnert je vervolgens welke hoofdstad daarbij hoort. Groep 5 en 6 oefenen de 19 landen van Europa 1; groep 7 en 8 ook de 20 extra landen van Europa 2.</p>
 <h3>Hoe speel je?</h3>
-<p>Bekijk het gemarkeerde Europese land en schrijf de bijbehorende hoofdstad. Oefen de combinatie van kaartkennis en het zelf formuleren van een antwoord.</p>
+<p>Bekijk het gemarkeerde Europese land en schrijf de bijbehorende hoofdstad. Oefen de combinatie van kaartkennis en het zelf formuleren van een antwoord. Je verdient 10 punten per direct goed antwoord en 50 bij de finish. Ingelogd worden die punten bewaard; zonder account speel je ook gewoon.</p>
 <h3>Verder oefenen</h3><ul><li><a href="/spellen/topografie/groep-6/europa-hoofdsteden-klik/">Zoek de Hoofdstad</a></li><li><a href="/spellen/topografie/groep-6/europa-landen-schrijf/">Schrijf het Land</a></li></ul>
 <p>Dit spel is gratis en zonder account te spelen.</p></div></details>
 <!-- leercraft:game-info:end -->
-    <p>Boven een <b>zwevende kaart van Europa</b> wijst steeds een gouden pijl een land aan.</p>
-    <p>Typ de hoofdstad van dat land om een <b>schatkist</b> te openen met de wapperende vlag!</p>
-    <button class="play" id="goBtn">▶ Begin de expeditie!</button>
-  </div>
-</div>
-
-<div id="overlay" class="hidden">
-  <div class="card">
-    <h1 id="endTitle">🏆 Expeditie voltooid!</h1>
-    <p id="endText"></p>
-    <button class="play" id="againBtn">🔄 Nog een keer</button>
-    <button class="play" id="backBtn" style="background:#8a4a2e;border-color:#d6a078">🏠 Terug</button>
-  </div>
-</div>
-
-<script type="module">
-import {
-  THREE, createRenderer, createSceneAndCamera, loadCountries, buildCountryMeshes,
-  spawnTreasure, createPulseMarker, shuffle, normalizeText, buildClouds, updateClouds, updateCountryBob,
-} from '/assets/js/europa-kaart-engine.js';
-
-const R=createRenderer(document.querySelector('#game'));
-const {scene:S, camera:C}=createSceneAndCamera(R);
-const clouds=buildClouds(S);
-
-const MAX_ATTEMPTS=3;
-let countries=[], pool=[], currentTarget=null, found=0, startTime=0, timerInt=null;
-let active=false, gameOver=false, attempts=0, pulseMarker=null;
-const waveFlags=[];
-
-function toast(msg){
-  const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
-  clearTimeout(toast._t); toast._t=setTimeout(()=>el.classList.remove('show'),2000);
-}
-function setMission(title,sub){document.getElementById('missionTitle').textContent=title;document.getElementById('missionSub').textContent=sub;}
-function updateScore(){ document.getElementById('scoreFound').textContent=`${found}/${pool.length+found}`; }
-function updateDots(){
-  const el=document.getElementById('dots'); el.innerHTML='';
-  for(let i=0;i<MAX_ATTEMPTS;i++){ const d=document.createElement('div'); d.className='dot'+(i<attempts?' used':''); el.appendChild(d); }
-}
-
-function nextTarget(){
-  if(!pool.length){ endGame(); return; }
-  currentTarget=pool.shift();
-  attempts=0; updateDots();
-  if(pulseMarker) pulseMarker.dispose();
-  pulseMarker=createPulseMarker(S,currentTarget.country);
-  setMission('Wat is de hoofdstad?','Typ de hoofdstad van het land met de gouden pijl erboven.');
-  const inp=document.getElementById('answerInput'); inp.value=''; inp.focus();
-}
-
-function handleAnswer(){
-  if(!active||gameOver||!currentTarget) return;
-  const inp=document.getElementById('answerInput');
-  const typed=normalizeText(inp.value);
-  if(!typed) return;
-  if(typed===normalizeText(currentTarget.country.hoofdstad)){
-    if(pulseMarker){ pulseMarker.dispose(); pulseMarker=null; }
-    spawnTreasure(S,currentTarget.country,waveFlags);
-    found++; updateScore();
-    toast(`🎉 Juist! ${currentTarget.country.hoofdstad} is de hoofdstad van ${currentTarget.country.naam}!`);
-    const done=currentTarget; currentTarget=null;
-    setMission('Goed gedaan!','Zo meteen de volgende opdracht...');
-    setTimeout(nextTarget,1700);
-  } else {
-    attempts++; updateDots();
-    inp.value=''; inp.focus();
-    if(attempts>=MAX_ATTEMPTS){
-      const land=currentTarget.country.naam, cap=currentTarget.country.hoofdstad;
-      if(pulseMarker){ pulseMarker.dispose(); pulseMarker=null; }
-      toast(`❌ De hoofdstad van ${land} is: ${cap}`);
-      currentTarget=null;
-      setTimeout(nextTarget,2200);
-    } else {
-      toast('🔍 Nog niet helemaal — probeer opnieuw!');
-    }
-  }
-}
-document.getElementById('submitBtn').addEventListener('click',handleAnswer);
-document.getElementById('answerInput').addEventListener('keydown',e=>{ if(e.key==='Enter') handleAnswer(); });
-
-function startTimer(){
-  startTime=Date.now();
-  clearInterval(timerInt);
-  timerInt=setInterval(()=>{
-    const s=Math.floor((Date.now()-startTime)/1000);
-    document.getElementById('scoreTime').textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
-  },500);
-}
-function endGame(){
-  gameOver=true; clearInterval(timerInt);
-  const s=Math.floor((Date.now()-startTime)/1000);
-  document.getElementById('endTitle').textContent='🏆 Expeditie voltooid!';
-  document.getElementById('endText').innerHTML=`Je hebt alle ${pool.length+found} hoofdsteden gehad in <b>${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}</b>! Score: ${found}/${pool.length+found}.`;
-  document.getElementById('overlay').classList.remove('hidden');
-}
-document.getElementById('againBtn').addEventListener('click',()=>location.reload());
-document.getElementById('backBtn').addEventListener('click',()=>location.href='/');
-document.getElementById('goBtn').addEventListener('click',()=>{
-  document.getElementById('start').classList.add('hidden');
-  pool=shuffle(countries.map(c=>({country:c})));
-  found=0; gameOver=false;
-  updateScore(); startTimer(); active=true;
-  nextTarget();
-});
-
-let clock=new THREE.Clock();
-function loop(){
-  requestAnimationFrame(loop);
-  const dt=clock.getDelta(), t=clock.elapsedTime;
-  waveFlags.forEach((f,i)=>{ f.rotation.y=Math.sin(t*3+i)*0.18; f.rotation.z=Math.sin(t*2.2+i*1.3)*0.06; });
-  if(pulseMarker) pulseMarker.update(t);
-  updateClouds(clouds,dt);
-  updateCountryBob(countries,t);
-  R.render(S,C);
-}
-loop();
-
-loadCountries('/assets/data/europe-countries.json').then(res=>{
-  countries=res.countries;
-  buildCountryMeshes(S,countries);
-  document.getElementById('loading').classList.add('hidden');
-});
-</script>
-</body>
-</html>
+<div class="atlas-config"><label>Mijn groep<select id="atlas-group"><option value="5">Groep 5</option><option value="6" selected>Groep 6</option><option value="7">Groep 7</option><option value="8">Groep 8</option></select></label><label>Expeditie<select id="atlas-count"><option value="10">10 opdrachten</option><option value="all">Alle landen</option></select></label></div>
+<p id="curriculum" class="atlas-curriculum">Europa 1 &middot; 19 landen</p><p>10 punten per direct goed antwoord &middot; 50 bij de finish</p><button id="goBtn" class="primary" disabled>Start expeditie</button></section></div>
+<div id="overlay" hidden><section class="card"><h2>Expeditie voltooid!</h2><p id="end-text"></p><p id="end-points" class="atlas-result-points"></p><p id="save-status" role="status"></p><button id="retry-save" hidden>Opnieuw bewaren</button><div class="atlas-result-actions"><button id="againBtn" class="primary">Nieuwe expeditie</button><a href="/" class="atlas-button">Alle spellen</a></div></section></div>
+<div id="loading" role="status">De Europakaart wordt gebouwd&#8230;</div>
+<div data-leercraft-account data-background="true" hidden></div>
+<script src="/assets/avatar-profile.js"></script><script src="/assets/account.js" data-root="/"></script>
+<script type="module" src="/assets/js/europe-game.js"></script>
+</body></html>

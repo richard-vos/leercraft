@@ -1,0 +1,56 @@
+@font-face{font-family:AtlasPixel;src:url('/assets/fonts/press-start-2p.ttf') format('truetype');font-display:swap}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#8abce0;color:#f4f3df;font:17px/1.5 Arial,sans-serif}
+.atlas-modern{--stone:#27333c;--gold:#ffe17b;touch-action:manipulation}
+.atlas-modern [hidden],.atlas-modern .hidden{display:none!important}
+.atlas-modern button,.atlas-modern select,.atlas-modern input,.atlas-modern a{font:700 17px/1.3 Arial,sans-serif}
+.atlas-modern button,.atlas-modern .atlas-button{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:12px 18px;background:linear-gradient(#657782,#414e59);border:3px solid;border-color:#a7b7bd #182229 #182229 #a7b7bd;color:white;border-radius:0;cursor:pointer;text-decoration:none;box-shadow:inset 2px 2px #ffffff16,0 3px #101a22}
+.atlas-modern button:disabled{opacity:.5;cursor:wait}
+.atlas-modern button.primary{background:linear-gradient(#80ad45,#4a7b2a);border-color:#d1e79b #294a1b #294a1b #d1e79b;color:#fff8ce}
+.atlas-modern button:focus-visible,.atlas-modern a:focus-visible,.atlas-modern input:focus-visible,.atlas-modern select:focus-visible{outline:3px solid #ffe17b;outline-offset:3px}
+.atlas-modern h1,.atlas-modern h2{font-family:AtlasPixel,monospace;color:var(--gold);line-height:1.7;text-shadow:2px 3px #111}
+.atlas-modern h1{font-size:clamp(19px,3vw,30px);margin:0 0 12px}
+.atlas-modern h2{font-size:clamp(18px,2.5vw,25px);margin:0 0 14px}
+.atlas-stone,.atlas-modern .card{background:repeating-linear-gradient(0deg,#ffffff02 0 12px,transparent 12px 25px),repeating-linear-gradient(90deg,#ffffff02 0 22px,transparent 22px 45px),linear-gradient(135deg,#303d46,#1a252d);border:4px solid;border-color:#a3b1b8 #111a21 #111a21 #a3b1b8;box-shadow:inset 0 0 0 3px #151e26,0 8px 0 #111a2166}
+.atlas-modern #start,.atlas-modern #overlay{position:fixed;inset:0;bottom:auto;height:var(--visible-height,100dvh);z-index:20;background:#101a26ba;display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto;touch-action:pan-y}
+.atlas-modern .card{width:min(680px,100%);padding:26px;max-height:calc(var(--visible-height,100dvh) - 40px);overflow:auto;text-align:center;margin:auto;color:#f4f3df}
+.atlas-modern .card p{font:17px/1.5 Arial,sans-serif;margin:12px 0}
+.atlas-modern .game-info{text-align:left;margin:0 0 18px}
+.atlas-config{display:grid;grid-template-columns:1fr 1fr;gap:16px;text-align:left;margin:20px 0}
+.atlas-config label{display:grid;gap:8px;font-weight:bold;min-width:0}
+.atlas-modern select,.atlas-modern input{width:100%;min-width:0;min-height:52px;border:3px solid #879ba4;background:#121e27;color:#fff;padding:10px;border-radius:0}
+.atlas-curriculum{color:#ffe17b;font-weight:bold}
+.atlas-modern #goBtn,.atlas-modern #go{width:100%;margin:12px 0 0}
+#map-stage{position:fixed;left:0;right:0;top:132px;bottom:calc(160px + env(safe-area-inset-bottom) + var(--keyboard-inset,0px));overflow:hidden}
+#map-stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.atlas-hud{position:fixed;top:12px;left:12px;right:12px;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}
+.atlas-mission{padding:12px 18px;min-width:0}
+.atlas-mission strong{display:block;color:#ffe17b;font-size:22px;line-height:1.4}
+.atlas-mission span{font-size:16px}
+.atlas-score{padding:12px 18px;min-width:120px;text-align:center;font-size:16px}
+.atlas-score strong{display:block;font-size:24px;color:#ffe17b}
+.atlas-progress{height:8px;background:#0e171f;margin-top:8px}
+.atlas-progress span{display:block;height:100%;background:#a1db48;width:0;transition:width .2s}
+#atlas-feedback{position:fixed;top:132px;left:50%;transform:translateX(-50%);z-index:5;padding:8px 16px;max-width:90%;background:#14212bf0;border-left:4px solid #ffe17b;text-align:center;pointer-events:none}
+#atlas-feedback:empty{display:none}
+.atlas-zoom{position:absolute;right:12px;bottom:12px;display:flex;gap:6px;z-index:3}
+.atlas-zoom button{width:52px;padding:4px;font-size:24px}
+.atlas-footer{position:fixed;bottom:calc(12px + env(safe-area-inset-bottom) + var(--keyboard-inset,0px));left:12px;right:12px;display:grid;grid-template-columns:100px minmax(0,1fr) auto;align-items:center;gap:14px;padding:10px 16px;min-height:132px;z-index:4}
+#atlas-guide{width:100px;height:112px;display:block}
+.atlas-answer{display:flex;align-items:end;gap:8px;min-width:0;margin:0}
+.atlas-answer label{flex:1;min-width:0;font-size:15px;font-weight:bold}
+.atlas-answer input{display:block;margin-top:4px}
+.atlas-footer .atlas-instruction{margin:0;font-size:16px}
+.atlas-footer>a{min-width:88px}
+.atlas-result-points{font:24px/1.7 AtlasPixel,monospace!important;color:#ffe17b}
+.atlas-result-actions{display:grid;gap:12px;margin-top:20px}
+.atlas-modern .choices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.atlas-modern .choices button{margin:0}
+.atlas-modern #loading{position:fixed;inset:0;z-index:30;display:grid;place-content:center;background:#17232d;padding:24px;text-align:center}
+@media(max-width:599px){
+ .atlas-config{gap:12px;grid-template-columns:1fr}.atlas-modern .card{padding:18px}.atlas-hud{gap:8px;top:8px;left:8px;right:8px}.atlas-mission{padding:8px 10px}.atlas-mission strong{font-size:19px}.atlas-mission span{font-size:14px}.atlas-score{min-width:78px;padding:8px;font-size:14px}.atlas-score strong{font-size:20px}
+ #map-stage{top:146px;bottom:calc(176px + env(safe-area-inset-bottom) + var(--keyboard-inset,0px))}.atlas-footer{bottom:calc(8px + env(safe-area-inset-bottom) + var(--keyboard-inset,0px));left:8px;right:8px;grid-template-columns:64px minmax(0,1fr);gap:8px;padding:8px;min-height:144px}#atlas-guide{width:64px;height:86px}.atlas-footer>a{grid-column:1/-1;min-height:44px;padding:6px}.atlas-answer{gap:6px}.atlas-answer button{padding:10px}.atlas-footer .atlas-instruction{font-size:14px}.atlas-zoom{right:8px;bottom:8px}#atlas-feedback{top:146px;font-size:15px}.atlas-modern .choices{grid-template-columns:1fr}
+}
+@media(min-width:1100px){.atlas-hud,.atlas-footer{left:28px;right:28px}.atlas-modern .card{width:720px;padding:32px}}
+@media(max-height:540px) and (orientation:landscape){#map-stage{top:86px;bottom:90px}.atlas-mission strong{font-size:18px}.atlas-mission span{font-size:14px}.atlas-score{padding:6px}.atlas-score strong{font-size:20px}.atlas-hud{top:4px}.atlas-footer{min-height:72px;padding:6px;grid-template-columns:56px minmax(0,1fr) auto}#atlas-guide{height:60px;width:56px}.atlas-footer>a{grid-column:auto}#atlas-feedback{top:86px}.atlas-modern .card{max-height:calc(100dvh - 20px);margin:auto}.atlas-config{grid-template-columns:1fr 1fr}}
+@media(max-height:540px) and (orientation:landscape){.atlas-modern #start,.atlas-modern #overlay{padding:10px}.atlas-modern .card{padding:14px}.atlas-modern h1{font-size:18px;line-height:1.4;margin-bottom:4px}.atlas-modern .game-info{margin-bottom:8px}.atlas-config{margin:8px 0}.atlas-modern .card p{font-size:15px;margin:6px 0}.atlas-modern #goBtn,.atlas-modern #go{margin-top:8px}}
