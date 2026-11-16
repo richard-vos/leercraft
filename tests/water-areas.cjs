@@ -21,6 +21,18 @@ const assert=require('node:assert/strict'),fs=require('node:fs');
  assert.equal(evaluateWaterAreaLoop(solutions.markermeer,'ijsselmeer',mixed,data,{minDiameter:4}).kind,'wrong');
  assert.equal(evaluateWaterAreaLoop(loop(500,600,550),'noordzee',mixed,data).kind,'invalid');
  assert.equal(inWaterArea([750,700],sea.find(a=>a.id==='noordzee'),data),false,'Inland land is not the North Sea');
+ // Shore inside a circle is common at these narrow estuaries. It is not a
+ // second water: these circles previously produced a false "ambiguous" result.
+ for(const [id,lon,lat] of [['oosterschelde',3.95,51.63],['westerschelde',3.8,51.39]]){
+  const x=30+(lon-3.1)*Math.cos(52*Math.PI/180)*365,y=30+(53.7-lat)*365,pts=loop(x,y,12);
+  for(const pool of [sea,mixed])assert.equal(evaluateWaterAreaLoop(pts,id,pool,data).kind,'correct',id+' with shore included');
+  assert.equal(evaluateWaterAreaLoop(pts,id==='oosterschelde'?'westerschelde':'oosterschelde',sea,data).kind,'wrong','Wrong estuary remains wrong');
+ }
+ const divided=[{id:'a',polygons:[[[[50,50],[100,50],[100,150],[50,150],[50,50]]]]},
+  {id:'b',polygons:[[[[100,50],[150,50],[150,150],[100,150],[100,50]]]]}];
+ assert.equal(evaluateWaterAreaLoop(loop(100,100,30),'a',divided,data).kind,'ambiguous','Two actual water areas remain ambiguous');
+ const sliver=[{id:'a',polygons:[[[[99,50],[101,50],[101,150],[99,150],[99,50]]]]}];
+ assert.equal(evaluateWaterAreaLoop(loop(100,100,20),'a',sliver,data).kind,'shore','Mostly land is not confused with multiple waters');
  const calls=[];const account={email:'test@example.com',onChange(){},async refresh(){},async request(path,payload){calls.push(payload);return {saved:true,points:payload.score*10};}};
  for(const [slug,total] of [['zeeen-meren',8],['wateren-compleet',16]]){
   const progress=new WaterwaysProgress(account);progress.beginWaterways(slug);

@@ -1,4 +1,4 @@
-# Wateren en kanalen — hoofdstuk 2
+# Nederland en het water — hoofdstuk 2
 
 Het hoofdstuk bevat nu drie spellen: Wateren en kanalen (9 vragen),
 Zeeën en meren (`/spellen/topografie/groep-6/zeeen-meren/`, 8 vragen) en
@@ -7,9 +7,12 @@ Wateren: alles door elkaar (`/spellen/topografie/groep-6/wateren-compleet/`,
 De maxima zijn respectievelijk 140, 130 en 210 punten, inclusief 50 finishpunten.
 
 Zeeën en meren gebruikt IJsselmeer, Markermeer, Noordzee, Noordzeekanaal,
-Oosterschelde, Veluwemeer, Waddenzee en Westerschelde. Bij gebieden moet minstens
-65% van de getekende cirkel binnen hetzelfde watergebied vallen; land en de andere
-binnenwateren tellen niet als Noordzee. De gemengde ronde combineert deze controle
+Oosterschelde, Veluwemeer, Waddenzee en Westerschelde. Bij gebieden telt het duidelijk
+overheersende water: minimaal 25% van het rondje is water en dat water beslaat
+minstens 2,5 maal zoveel als een concurrerend watergebied (of dat andere gebied
+beslaat minder dan 10%). Zo mag ook oeverland in een rondje rond een smalle zeearm
+liggen. Veel land en meerdere echte wateren krijgen afzonderlijke feedback;
+land en de andere binnenwateren tellen niet als Noordzee. De gemengde ronde combineert deze controle
 met de bestaande lijncontrole voor rivieren en kanalen.
 
 De gebieden zijn vereenvoudigde [RWS KRW-oppervlaktewaterlichamen](https://data.overheid.nl/dataset/82c39ed4-6a08-410f-959a-79873ec2bf62).

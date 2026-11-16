@@ -124,7 +124,8 @@ $('#water-check').addEventListener('click',()=>{
     feedback(({small:'Maak je rondje wat groter.',large:'Deze cirkel is te groot. Kies een kleiner stuk van één waterweg.',open:'Ga met je rondje terug naar het stipje.'})[result.reason]||'Teken eerst een rondje om het water.');return;
   }
   if(result.kind==='empty'){feedback('Je rondje ligt naast het water. Probeer het nog eens!');return;}
-  if(result.kind==='ambiguous'){feedback('Je rondje raakt meer dan ??n water. Maak het wat kleiner.');return;}
+  if(result.kind==='shore'){feedback('Je rondje zit nog vooral op het land. Kies een stukje water.');return;}
+  if(result.kind==='ambiguous'){feedback('Er liggen twee wateren in je rondje. Kies een kleiner stukje.');return;}
   const answer=session.answer(result.kind==='correct');if(!answer)return;
   checkedDraft=true;$('#water-check').disabled=true;
   $('#water-drawing').classList.add(answer.correct?'good':'wrong');

@@ -1,6 +1,6 @@
 # LeerCraft
 
-Hoofdstuk 2 bevat Wateren en kanalen (9), Zeeën en meren (8) en Alles door elkaar (16 unieke wateren).
+Hoofdstuk 2, Nederland en het water, bevat Wateren en kanalen (9), Zeeën en meren (8) en Alles door elkaar (16 unieke wateren).
 Zie [de waterdocumentatie](docs/wateren-kanalen.md) voor kaartbronnen en spelregels.
 Hoofdstuk 3 (De Atlascode) ondersteunt groep 5–8, Europa 1/2, punten en outfits.
 Zie [de atlasdocumentatie](docs/atlas-games.md) voor de lesstof en het onderhoud.

@@ -21,10 +21,16 @@ export function evaluateWaterAreaLoop(points,targetId,pool,data,options={}){
   const samples=[];const step=Math.max(2,Math.max(x1-x0,y1-y0)/35);
   for(let y=y0+step/2;y<y1;y+=step)for(let x=x0+step/2;x<x1;x+=step)if(pointInPolygon([x,y],points))samples.push([x,y]);
   const scores=pool.filter(a=>a.polygons).map(a=>({id:a.id,ratio:samples.filter(p=>inWaterArea(p,a,data)).length/Math.max(1,samples.length)})).sort((a,b)=>b.ratio-a.ratio);
-  if(scores[0]?.ratio>=.65)return {kind:scores[0].id===targetId?'correct':'wrong',waterwayId:scores[0].id};
+  const best=scores[0],second=scores[1]?.ratio||0;
+  // Narrow estuaries naturally leave some shore inside a child's circle.
+  // Judge the dominant WATER, rather than treating land as a competing water.
+  if(best?.ratio>=.25&&(second<.1||best.ratio>=second*2.5)){
+    return {kind:best.id===targetId?'correct':'wrong',waterwayId:best.id};
+  }
+  if(best?.ratio>=.2&&second>=.12&&second>=best.ratio*.4)return {kind:'ambiguous'};
   const line=evaluateWaterLoop(points,targetId,pool.filter(w=>w.paths),options);
   if(['correct','wrong','ambiguous'].includes(line.kind))return line;
-  return scores[0]?.ratio>.2?{kind:'ambiguous'}:{kind:'empty'};
+  return best?.ratio>.05?{kind:'shore'}:{kind:'empty'};
 }
 export function polygonArea(points){return Math.abs(points.reduce((s,p,i)=>{const q=points[(i+1)%points.length];return s+p[0]*q[1]-q[0]*p[1];},0))/2;}
 export function closeWaterLoop(points,{closureTolerance=38,detectCrossings=true}={}){
