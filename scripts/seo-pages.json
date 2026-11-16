@@ -43,7 +43,38 @@
     "description": "Herken negen Nederlandse rivieren en kanalen voor groep 6. Omcirkel de gevraagde waterweg op de kaart met je vinger of muis. Gratis oefenen met LeerCraft.",
     "learn": "Je herkent het Amsterdam-Rijnkanaal, de IJssel, Lek, Maas, Nederrijn, Nieuwe Waterweg, het Noordzeekanaal, de Rijn en Waal op de kaart van Nederland. Je koppelt de naam aan de ligging en het verloop van de waterweg.",
     "play": "Teken een gesloten cirkel om een duidelijk stuk van de gevraagde waterweg en kies Controleer. Je hoeft niet de hele rivier te omcirkelen. Gebruik de zoomknoppen voor kleine stukken. Met het toetsenbord: focus de kaart, verplaats de cirkel met de pijltjestoetsen, wijzig de grootte met + of - en plaats hem met Enter. Een direct goed antwoord is 10 punten waard; de finish levert 50 extra op. Ingelogd worden je punten bewaard.",
-    "related": ["provincie-klik", "atlascode"]
+    "related": [
+      "provincie-klik",
+      "atlascode"
+    ]
+  },
+  {
+    "file": "spellen/topografie/groep-6/zeeen-meren/index.php",
+    "path": "/spellen/topografie/groep-6/zeeen-meren/",
+    "name": "Zeeën en meren",
+    "title": "Zeeën en meren oefenen op de kaart | LeerCraft",
+    "subject": "Topografie",
+    "description": "Oefen 8 Nederlandse wateren voor groep 6. Omcirkel het gevraagde water op de kaart met je vinger of muis. Gratis topografie oefenen bij LeerCraft.",
+    "learn": "Herken het IJsselmeer, Markermeer, de Noordzee, het Noordzeekanaal, de Oosterschelde, het Veluwemeer, de Waddenzee en Westerschelde.",
+    "play": "Omcirkel een duidelijk stukje binnen het gevraagde water. Voor een kanaal of rivier omsluit je een stuk van de lijn. Zoom in bij smalle wateren. Je krijgt 10 punten per direct goed antwoord en 50 bij de finish. Spelen kan ook zonder account.",
+    "related": [
+      "wateren-kanalen",
+      "wateren-compleet"
+    ]
+  },
+  {
+    "file": "spellen/topografie/groep-6/wateren-compleet/index.php",
+    "path": "/spellen/topografie/groep-6/wateren-compleet/",
+    "name": "Wateren: alles door elkaar",
+    "title": "Wateren: alles door elkaar oefenen op de kaart | LeerCraft",
+    "subject": "Topografie",
+    "description": "Oefen 16 Nederlandse wateren voor groep 6. Omcirkel het gevraagde water op de kaart met je vinger of muis. Gratis topografie oefenen bij LeerCraft.",
+    "learn": "Combineer alle rivieren, kanalen, zeeën en meren van hoofdstuk 2. Het Noordzeekanaal wordt eenmaal gevraagd.",
+    "play": "Omcirkel een duidelijk stukje binnen het gevraagde water. Voor een kanaal of rivier omsluit je een stuk van de lijn. Zoom in bij smalle wateren. Je krijgt 10 punten per direct goed antwoord en 50 bij de finish. Spelen kan ook zonder account.",
+    "related": [
+      "wateren-kanalen",
+      "zeeen-meren"
+    ]
   },
   {
     "file": "spellen/topografie/groep-6/atlascode/index.php",

@@ -1,4 +1,30 @@
 export const WATERWAY_IDS=['amsterdam-rijnkanaal','ijssel','lek','maas','nederrijn','nieuwe-waterweg','noordzeekanaal','rijn','waal'];
+export const WATER_GAMES={'wateren-kanalen':9,'zeeen-meren':8,'wateren-compleet':16};
+export function waterGamePool(data,slug){
+  if(slug==='zeeen-meren')return data.waterAreas;
+  if(slug==='wateren-compleet')return [...new Map([...data.waterways,...data.waterAreas].map(w=>[w.id,w])).values()];
+  if(slug==='wateren-kanalen')return data.waterways;
+  throw Error('Onbekend waterspel.');
+}
+export function inWaterArea(point,area,data){
+  const inside=polys=>polys.some(poly=>pointInPolygon(point,poly[0])&&!poly.slice(1).some(hole=>pointInPolygon(point,hole)));
+  if(!inside(area.polygons))return false;
+  if(area.sea&&(inside(data.landPolygons)||data.waterAreas.some(a=>a.polygons&&!a.sea&&inside(a.polygons))))return false;
+  return true;
+}
+export function evaluateWaterAreaLoop(points,targetId,pool,data,options={}){
+  // Reuse the same drawing validation before measuring area rather than line length.
+  const validation=evaluateWaterLoop(points,targetId,[],options);
+  if(validation.kind==='invalid')return validation;
+  const xs=points.map(p=>p[0]),ys=points.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  const samples=[];const step=Math.max(2,Math.max(x1-x0,y1-y0)/35);
+  for(let y=y0+step/2;y<y1;y+=step)for(let x=x0+step/2;x<x1;x+=step)if(pointInPolygon([x,y],points))samples.push([x,y]);
+  const scores=pool.filter(a=>a.polygons).map(a=>({id:a.id,ratio:samples.filter(p=>inWaterArea(p,a,data)).length/Math.max(1,samples.length)})).sort((a,b)=>b.ratio-a.ratio);
+  if(scores[0]?.ratio>=.65)return {kind:scores[0].id===targetId?'correct':'wrong',waterwayId:scores[0].id};
+  const line=evaluateWaterLoop(points,targetId,pool.filter(w=>w.paths),options);
+  if(['correct','wrong','ambiguous'].includes(line.kind))return line;
+  return scores[0]?.ratio>.2?{kind:'ambiguous'}:{kind:'empty'};
+}
 export function polygonArea(points){return Math.abs(points.reduce((s,p,i)=>{const q=points[(i+1)%points.length];return s+p[0]*q[1]-q[0]*p[1];},0))/2;}
 export function pointInPolygon(point,polygon){
   const [x,y]=point;let inside=false;

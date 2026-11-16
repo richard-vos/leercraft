@@ -1,8 +1,10 @@
-import {WaterwaysSession,evaluateWaterLoop} from './waterways-session.js';
+import {WaterwaysSession,evaluateWaterLoop,evaluateWaterAreaLoop,waterGamePool} from './waterways-session.js';
 import {WaterwaysProgress} from './waterways-progress.js';
 import {createAtlasGuide} from './atlas-guide.js';
 
 const $=selector=>document.querySelector(selector),svg=$('#water-map'),ns='http://www.w3.org/2000/svg';
+const slug=document.body.dataset.game||'wateren-kanalen';
+let pool=[];
 const progress=new WaterwaysProgress(window.LeerCraft,run=>{
   if(run!==progress.current)return;
   $('#water-save').textContent=({saving:'Punten bewaren…',saved:'Punten opgeslagen!',guest:'',error:'Bewaren lukt nog niet.',
@@ -21,6 +23,11 @@ function renderMap(){
   const provinces=element('g',{'clip-path':'url(#water-land-clip)'},base);
   for(const p of data.provinces)element('path',{d:p.d,fill:p.color,class:'water-province'},provinces);
   for(const d of data.lakes)element('path',{d,class:'water-lake'},base);
+  for(const area of data.waterAreas||[]){
+    if(!area.polygons||area.sea)continue;
+    const d=area.polygons.map(poly=>poly.map(r=>'M'+r.map(p=>p.join(',')).join('L')+'Z').join('')).join('');
+    element('path',{d,class:'water-area','data-waterway':area.id},base);
+  }
   element('path',{d:linePath(data.context),class:'water-context'},base);
   for(const water of data.waterways)element('path',{d:linePath(water.paths),class:'water-route','data-waterway':water.id},$('#water-lines'));
 }
@@ -45,12 +52,12 @@ function nextQuestion(){
   if(!session.current){finish();return;}
   clearDrawing();resetView();
   panMode=false;svg.classList.remove('pan-mode');$('#water-pan').setAttribute('aria-pressed','false');$('#water-pan').textContent='Kaart verplaatsen';
-  for(const path of svg.querySelectorAll('.water-route'))path.classList.remove('revealed');
+  for(const path of svg.querySelectorAll('[data-waterway]'))path.classList.remove('revealed');
   $('#water-mission').textContent=`Omcirkel: ${session.current.name}`;
-  $('#water-round').textContent=`${session.index+1} / 9`;$('#water-points').textContent=`${session.correct*10} punten`;
-  $('#water-fill').style.width=`${session.index/9*100}%`;
+  $('#water-round').textContent=`${session.index+1} / ${session.deck.length}`;$('#water-points').textContent=`${session.correct*10} punten`;
+  $('#water-fill').style.width=`${session.index/session.deck.length*100}%`;
   $('#water-next').hidden=true;$('#water-check').hidden=false;$('#water-pan').disabled=false;
-  feedback('Omsluit één duidelijk stuk. Je hoeft niet de hele rivier te omcirkelen.');
+  feedback(session.current.polygons?'Omcirkel een stukje water binnen de zee of het meer.':'Omsluit één duidelijk stuk van de waterweg.');
 }
 svg.addEventListener('pointerdown',event=>{
   if(!active||(session.locked&&!panMode)||pointer!==null||!event.isPrimary||event.button!==0)return;
@@ -110,7 +117,9 @@ $('#water-zoom-in').addEventListener('click',()=>setZoom(zoom*1.4));$('#water-zo
 $('#water-check').addEventListener('click',()=>{
   if(!active||session.locked||pointer||checkedDraft)return;
   const scale=svg.getScreenCTM().a;
-  const result=evaluateWaterLoop(points,session.current.id,data.waterways,{closureTolerance:18/scale,minDiameter:14/scale});
+  const evaluate=slug==='wateren-kanalen'?evaluateWaterLoop:evaluateWaterAreaLoop;
+  const options={closureTolerance:18/scale,minDiameter:14/scale};
+  const result=slug==='wateren-kanalen'?evaluate(points,session.current.id,pool,options):evaluate(points,session.current.id,pool,data,options);
   if(result.kind==='invalid'){
     feedback(({small:'Maak de cirkel iets groter.',large:'Deze cirkel is te groot. Kies een kleiner stuk van één waterweg.',open:'Maak de cirkel dicht: eindig bij je beginpunt.'})[result.reason]||'Teken eerst een gesloten cirkel.');return;
   }
@@ -123,24 +132,28 @@ $('#water-check').addEventListener('click',()=>{
   else if(answer.reveal){
     resetView();
     feedback(`Dit is ${session.current.name}. Bekijk de groene waterweg.`);
-    svg.querySelector(`[data-waterway="${session.current.id}"]`).classList.add('revealed');
-  }else feedback(`Dat is ${data.waterways.find(w=>w.id===result.waterwayId).name}. Nog ${3-session.attempts} ${session.attempts===2?'kans':'kansen'}.`);
+    if(session.current.sea){
+      let reveal=svg.querySelector('[data-waterway="noordzee"]');
+      if(!reveal)reveal=element('circle',{cx:120,cy:340,r:35,class:'water-area','data-waterway':'noordzee'},$('#water-lines'));
+      reveal.classList.add('revealed');
+    }else svg.querySelector(`[data-waterway="${session.current.id}"]`).classList.add('revealed');
+  }else feedback(`Dat is ${pool.find(w=>w.id===result.waterwayId).name}. Nog ${3-session.attempts} ${session.attempts===2?'kans':'kansen'}.`);
   $('#water-points').textContent=`${session.correct*10} punten`;
   if(answer.advance){
     progress.recordGate(session.index,answer.first);$('#water-check').hidden=true;$('#water-next').hidden=false;
-    $('#water-next').textContent=session.index===8?'Naar de finish':'Volgende';$('#water-clear').disabled=true;
+    $('#water-next').textContent=session.index===session.deck.length-1?'Naar de finish':'Volgende';$('#water-clear').disabled=true;
   }
 });
 $('#water-next').addEventListener('click',()=>{if(active&&session.locked){session.next();nextQuestion();}});
 async function start(){
   $('#water-start').disabled=true;await window.LeerCraft.ready;
-  session=new WaterwaysSession(data.waterways);progress.beginWaterways();active=true;panMode=false;
+  session=new WaterwaysSession(pool);progress.beginWaterways(slug);active=true;panMode=false;
   $('#water-pan').setAttribute('aria-pressed','false');$('#water-pan').textContent='Kaart verplaatsen';svg.classList.remove('pan-mode');
   $('#start').hidden=true;$('#overlay').hidden=true;$('#water-start').disabled=false;nextQuestion();
 }
 function finish(){
   active=false;$('#water-fill').style.width='100%';$('#overlay').hidden=false;
-  $('#water-result').textContent=`${session.correct} van de 9 waterwegen in één keer goed`;
+  $('#water-result').textContent=`${session.correct} van de ${session.deck.length} wateren in één keer goed`;
   $('#water-result-points').textContent=`+${(session.correct+5)*10} punten`;
   $('#water-save').textContent='';$('#water-retry').hidden=true;progress.finishWaterways();
 }
@@ -148,7 +161,7 @@ $('#water-start').addEventListener('click',start);$('#water-retry').addEventList
 $('#water-again').addEventListener('click',()=>{$('#overlay').hidden=true;$('#start').hidden=false;});
 if(guide){function animate(t){requestAnimationFrame(animate);if(!document.hidden)guide.update(t/1000);}requestAnimationFrame(animate);}
 fetch('/assets/data/nederland-waterwegen.json').then(response=>{if(!response.ok)throw Error();return response.json();}).then(map=>{
-  data=map;renderMap();$('#loading').hidden=true;$('#water-start').disabled=false;
+  data=map;pool=waterGamePool(data,slug);renderMap();$('#loading').hidden=true;$('#water-start').disabled=false;
 }).catch(()=>{
   $('#loading').replaceChildren(document.createTextNode('De waterkaart kon niet laden. '));const b=document.createElement('button');b.textContent='Opnieuw proberen';b.onclick=()=>location.reload();$('#loading').append(b);
 });

@@ -99,3 +99,15 @@ $summary=call_score_api('scores/summary.php',null,$token);
 $waterHistory=array_values(array_filter($summary['games'],static fn($g)=>$g['gameSlug']==='wateren-kanalen'));
 if($summary['totalPoints']!==$expectedTotal+140||$summary['wallet']['balance']!==$expectedTotal+140||count($waterHistory)!==1||$waterHistory[0]['plays']!==1)throw new RuntimeException('Waterways wallet/history/deduplication failed.');
 echo "Passed: Wateren en kanalen wallet, history, guest and duplicate upload.\n";
+$newExpected=$expectedTotal+140;
+foreach(['zeeen-meren'=>8,'wateren-compleet'=>16] as $slug=>$total){
+    $entry=['game_slug'=>$slug,'account_email'=>$user['email'],
+        'run_id'=>sprintf('cccc%04x-cccc-4ccc-8ccc-cccccccccccc',$total),'score'=>$total+5,'max_score'=>$total+5,
+        'meta'=>['total_questions'=>$total,'correct_answers'=>$total]];
+    foreach([1,2] as $_){$saved=call_score_api('scores/submit.php',$entry,$token);if(!($saved['saved']??false)||$saved['points']!==($total+5)*10)throw new RuntimeException('Sea/mixed save failed.');}
+    if(call_score_api('scores/submit.php',$entry,null)['saved']!==false)throw new RuntimeException('Guest sea result saved.');
+    $newExpected+=($total+5)*10;
+    $summary=call_score_api('scores/summary.php',null,$token);
+    $rows=array_values(array_filter($summary['games'],static fn($g)=>$g['gameSlug']===$slug));
+    if($summary['totalPoints']!==$newExpected||$summary['wallet']['balance']!==$newExpected||count($rows)!==1||$rows[0]['plays']!==1)throw new RuntimeException('Sea/mixed wallet or history failed.');
+}

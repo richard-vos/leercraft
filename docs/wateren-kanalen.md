@@ -1,5 +1,31 @@
 # Wateren en kanalen — hoofdstuk 2
 
+Het hoofdstuk bevat nu drie spellen: Wateren en kanalen (9 vragen),
+Zeeën en meren (`/spellen/topografie/groep-6/zeeen-meren/`, 8 vragen) en
+Wateren: alles door elkaar (`/spellen/topografie/groep-6/wateren-compleet/`,
+16 unieke vragen). Het Noordzeekanaal wordt in de gemengde ronde eenmaal gevraagd.
+De maxima zijn respectievelijk 140, 130 en 210 punten, inclusief 50 finishpunten.
+
+Zeeën en meren gebruikt IJsselmeer, Markermeer, Noordzee, Noordzeekanaal,
+Oosterschelde, Veluwemeer, Waddenzee en Westerschelde. Bij gebieden moet minstens
+65% van de getekende cirkel binnen hetzelfde watergebied vallen; land en de andere
+binnenwateren tellen niet als Noordzee. De gemengde ronde combineert deze controle
+met de bestaande lijncontrole voor rivieren en kanalen.
+
+De gebieden zijn vereenvoudigde [RWS KRW-oppervlaktewaterlichamen](https://data.overheid.nl/dataset/82c39ed4-6a08-410f-959a-79873ec2bf62).
+Het Veluwemeer is een educatieve uitsnede van Randmeren-oost bij Harderwijk–Elburg;
+Wolderwijd en Drontermeer worden niet als volledig Veluwemeer gebruikt. De zichtbare
+Noordzee gebruikt een vereenvoudigd offshoregebied met land en binnenwateren
+uitgesloten. Het Markermeer en IJsselmeer hebben eigen vlakken en een zichtbare grens.
+De bronvermelding van deze aanvullende RWS-gegevens staat in de kaartgegevens.
+
+Voor opnieuw bouwen: sla de RWS WFS `KRW_oppervlaktewaterlichamen_vlak`-features
+op als `areas.json` (GeoJSON, EPSG:4326) in dezelfde tijdelijke bronmap.
+Selecteer IJsselmeer, Markermeer, Oosterschelde, Westerschelde, Randmeren-oost,
+Waddenzee en Waddenzee vastelandskust. Voer na `build-waterways.py` ook
+`py -3 scripts/build-water-areas.py .tmp/water-qa` uit. Controleer aanvullend
+met `node tests/water-areas.cjs`.
+
 Spelroute: `/spellen/topografie/groep-6/wateren-kanalen/`.
 De Atlascode en de zes Europaspellen zijn nu hoofdstuk 3. Bestaande adressen
 blijven geldig. Hoofdstuk 1 bevat de twee provinciespellen.

@@ -65,6 +65,15 @@ foreach([['score'=>999],['max_score'=>15],['score'=>-1],
     throw new RuntimeException('Invalid waterway reward accepted.');
 }
 echo "Passed: Wateren en kanalen, nine questions, 50-point finish bonus and server bounds.\n";
+foreach(['zeeen-meren'=>8,'wateren-compleet'=>16] as $slug=>$total){
+    $body=['game_slug'=>$slug,'score'=>$total+5,'max_score'=>$total+5,'run_id'=>$valid['run_id'],
+        'meta'=>['total_questions'=>$total,'correct_answers'=>$total]];
+    if(validate_game_score($body)['score']!==$total+5)throw new RuntimeException('Sea/mixed result rejected.');
+    foreach([['score'=>999],['max_score'=>14],['meta'=>['total_questions'=>9,'correct_answers'=>9]]] as $change){
+        try{validate_game_score(array_replace($body,$change));}catch(InvalidArgumentException $expected){continue;}
+        throw new RuntimeException('Invalid sea/mixed score accepted.');
+    }
+}
 $sea=['game_slug'=>'getallenzee','score'=>8,'max_score'=>11,'run_id'=>$valid['run_id'],
     'meta'=>['rounds'=>6,'correct_answers'=>3,'mode'=>'all']];
 if(validate_game_score($sea)['score']!==8)throw new RuntimeException('Sea score rejected.');
