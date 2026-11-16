@@ -1,0 +1,39 @@
+.game-waters{background:#80c4e9}
+[data-world-theme="end"] .game-waters{background:#171024}
+[data-world-theme="end"] .game-waters .water-sources{color:#d2c9de}
+.water-layout{height:var(--visible-height,100dvh);padding:12px;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:12px;max-width:1500px;margin:auto}
+.water-header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;padding:14px;align-items:center}
+.water-mission{min-width:0}.water-eyebrow{font-size:12px;color:#becdd4;letter-spacing:.06em}
+.game-waters #water-mission{font:700 clamp(20px,2.7vw,29px)/1.3 Arial,sans-serif;color:#ffe17b;margin:4px 0;text-shadow:1px 2px #111}
+.water-mission p{margin:4px 0;font-size:16px;line-height:1.4}
+.water-score{display:grid;text-align:center;min-width:90px;font-size:15px}.water-score strong{font-size:25px;color:#ffe17b}
+.water-playfield{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:12px;min-height:0}
+.water-map-panel{position:relative;overflow:hidden;min-height:0;background:#7dc6f0;display:grid;place-items:center}
+#water-map{display:block;width:100%;height:100%;min-height:0;touch-action:none;user-select:none;cursor:crosshair}
+#water-map.pan-mode{cursor:grab}#water-map.pan-mode:active{cursor:grabbing}
+.water-sea{fill:#7dc6f0}.water-province{stroke:#a8b49b;stroke-width:.7;fill-rule:evenodd}
+.water-coast{fill:#e8dfad;stroke:#b1bca2;stroke-width:1.5;fill-rule:evenodd}
+.water-lake{fill:#7dc6f0;stroke:#7dc6f0;stroke-width:1.5;fill-rule:evenodd}
+.water-context{fill:none;stroke:#65b9e1;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.water-route{fill:none;stroke:#177fba;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;transition:stroke .15s}
+.water-route.revealed{stroke:#237820;stroke-width:6;filter:drop-shadow(0 0 3px #fff3a9)}
+#water-drawing{fill:#ffe17b13;stroke:#a06a05;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;pointer-events:none;filter:drop-shadow(0 1px 1px #fff)}
+#water-drawing.good{stroke:#277a23;fill:#77dd5529}#water-drawing.wrong{stroke:#a52d20;fill:#ee555515}
+#water-keyboard-circle{fill:none;stroke:#6e4d13;stroke-width:3;stroke-dasharray:8 6;vector-effect:non-scaling-stroke;pointer-events:none}
+.water-zoom{position:absolute;right:12px;top:12px;display:flex;gap:6px}.water-zoom button{width:48px;min-height:48px;padding:4px;font-size:24px}
+.water-map-badge{position:absolute;bottom:12px;right:16px;font:bold 18px/1 Arial;color:#284f65;pointer-events:none}
+.water-sidebar{display:flex;flex-direction:column;gap:12px;min-height:0;overflow:auto;touch-action:pan-y}
+.water-guide{height:180px;flex-shrink:0;display:grid;place-items:center}.water-guide canvas{width:100%;height:172px;display:block}.water-guide img{width:120px;height:120px}
+.water-task{padding:16px;font-size:16px;line-height:1.5}.water-task p{margin:0 0 12px}
+#water-feedback{min-height:64px;background:#101a22;border-left:3px solid #ffe17b;padding:10px;color:#fff0b0}
+.water-actions{display:grid;gap:10px}.water-actions button{width:100%}.water-actions button[aria-pressed=true]{border-color:#ffe17b;background:#5b4c2d}
+.water-sources{font:12px/1.4 Arial,sans-serif;color:#17384b}.water-sources summary{cursor:pointer;width:max-content;padding:2px 0}.water-sources p{margin:4px 0}.water-sources a{font:inherit;color:inherit;text-underline-offset:2px}
+.game-waters .game-info{text-align:left}.game-waters #water-start{width:100%;margin-top:12px}
+@media(max-width:700px){
+ .water-layout{padding:8px;gap:8px}.water-header{grid-template-columns:minmax(0,1fr) auto;padding:10px;gap:8px}.water-header>a{grid-column:2;grid-row:1;min-height:44px;padding:8px 12px}.water-mission{grid-column:1;grid-row:1/3}.water-score{grid-column:2;grid-row:2;min-width:78px;font-size:13px}.water-score strong{font-size:20px}.water-eyebrow{font-size:10px}.water-mission p{font-size:14px}.game-waters #water-mission{font-size:21px}
+ .water-playfield{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:8px}.water-sidebar{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px;overflow:visible}.water-guide{height:100%;min-height:100px}.water-guide canvas{height:112px}.water-guide img{width:64px;height:64px}.water-task{padding:10px;font-size:14px}.water-task #water-map-help{display:none}#water-feedback{min-height:40px;padding:7px;margin-bottom:8px}
+ .water-actions{grid-template-columns:1fr 1fr;gap:6px}.water-actions button{min-height:46px;padding:8px;font-size:14px}.water-actions #water-check,.water-actions #water-next{grid-column:1/-1}.water-zoom{right:8px;top:8px;gap:4px}.water-zoom button{width:44px;min-height:44px}.water-sources{font-size:11px}.water-map-badge{bottom:8px;right:8px}
+}
+@media(max-height:550px) and (orientation:landscape){
+ .water-layout{padding:6px;gap:6px}.water-header{padding:7px;grid-template-columns:auto minmax(0,1fr) auto;gap:10px}.water-header>a{grid-row:auto;grid-column:auto}.water-mission{grid-row:auto;grid-column:auto}.water-score{grid-row:auto;grid-column:auto}.water-eyebrow,.water-mission p{display:none}.game-waters #water-mission{font-size:20px;margin:0}.water-score strong{font-size:20px}.water-playfield{grid-template-columns:minmax(0,1fr) 210px;grid-template-rows:minmax(0,1fr);gap:6px}.water-sidebar{display:flex;gap:6px;overflow:auto}.water-guide{display:none}.water-task{padding:10px}.water-task #water-map-help{display:none}.water-actions{gap:6px}.water-actions button{min-height:44px;padding:6px;font-size:14px}#water-feedback{min-height:42px;margin-bottom:8px;padding:8px}.water-sources{font-size:10px}
+}

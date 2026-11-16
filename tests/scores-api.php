@@ -87,3 +87,15 @@ foreach($atlasSlugs as $slug){
     if(count($rows)!==1||$rows[0]['plays']!==1)throw new RuntimeException('Atlas history/deduplication failed.');
 }
 echo "Passed: all seven atlas games save once to the same wallet and history; guests remain playable.\n";
+$water=['game_slug'=>'wateren-kanalen','account_email'=>$user['email'],
+    'run_id'=>'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb','score'=>14,'max_score'=>14,
+    'meta'=>['total_questions'=>9,'correct_answers'=>9]];
+foreach([1,2] as $_){
+    $saved=call_score_api('scores/submit.php',$water,$token);
+    if(!($saved['saved']??false)||$saved['points']!==140)throw new RuntimeException('Waterways save failed.');
+}
+if(call_score_api('scores/submit.php',$water,null)['saved']!==false)throw new RuntimeException('Guest water result saved.');
+$summary=call_score_api('scores/summary.php',null,$token);
+$waterHistory=array_values(array_filter($summary['games'],static fn($g)=>$g['gameSlug']==='wateren-kanalen'));
+if($summary['totalPoints']!==$expectedTotal+140||$summary['wallet']['balance']!==$expectedTotal+140||count($waterHistory)!==1||$waterHistory[0]['plays']!==1)throw new RuntimeException('Waterways wallet/history/deduplication failed.');
+echo "Passed: Wateren en kanalen wallet, history, guest and duplicate upload.\n";

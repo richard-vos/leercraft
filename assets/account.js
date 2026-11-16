@@ -44,7 +44,7 @@
     if(!summary)return;
     if(!summary.games.length){games.textContent='Je hebt nog geen spellen afgerond.';return;}
     const names={'provincie-klikspel':'Provincieklikspel','provincie-schrijfspel':'Provincies schrijven',rekencraft:'RekenCraft',getallenzee:'Getallenzee','reken-race':'Reken Race',
-      atlascode:'De Atlascode','europa-landen-klik':'Europa: Zoek het Land','europa-landen-schrijf':'Europa: Schrijf het Land',
+      'wateren-kanalen':'Wateren en kanalen',atlascode:'De Atlascode','europa-landen-klik':'Europa: Zoek het Land','europa-landen-schrijf':'Europa: Schrijf het Land',
       'europa-hoofdsteden-klik':'Europa: Zoek de Hoofdstad','europa-hoofdsteden-schrijf':'Europa: Schrijf de Hoofdstad',
       'europa-raster-landen':'Europa: Raster Landen','europa-raster-hoofdsteden':'Europa: Raster Hoofdsteden'};
     for(const game of summary.games){

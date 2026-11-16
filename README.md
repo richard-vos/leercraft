@@ -1,11 +1,13 @@
 # LeerCraft
 
-Hoofdstuk 2 (De Atlascode) ondersteunt groep 5–8, Europa 1/2, punten en outfits.
+Hoofdstuk 2 is Wateren en kanalen: negen Nederlandse waterwegen omcirkelen.
+Zie [de waterdocumentatie](docs/wateren-kanalen.md) voor kaartbronnen en spelregels.
+Hoofdstuk 3 (De Atlascode) ondersteunt groep 5–8, Europa 1/2, punten en outfits.
 Zie [de atlasdocumentatie](docs/atlas-games.md) voor de lesstof en het onderhoud.
 
 ## Vindbaarheid (SEO)
 
-De startpagina en alle twaalf spellen hebben unieke titels, beschrijvingen,
+De startpagina en alle dertien spellen hebben unieke titels, beschrijvingen,
 canonical-links, Open Graph-gegevens en JSON-LD. Speluitleg en links naar verwante
 spellen staan direct in de HTML, achter **Over dit spel**. De sitemap bevat alleen
 publieke pagina's; accountweergaven, API's en redirect-aliases horen daar niet bij.
@@ -118,7 +120,7 @@ ruimt de deployment uitsluitend de bekende oude spelbestanden en de vervallen
 loader op de server op. De oude mappen worden alleen verwijderd als ze leeg zijn.
 
 De vakken zijn `rekenen`, `topografie` en `taal`, elk met groep 4 t/m 8.
-Alle 12 huidige spellen staan onder **groep 6**. De andere groepsmappen zijn
+Alle 13 huidige spellen staan onder **groep 6**. De andere groepsmappen zijn
 voorbereid, maar bevatten nog geen spellen. Spelinhoud wordt niet gedupliceerd
 om lege groepen op te vullen.
 

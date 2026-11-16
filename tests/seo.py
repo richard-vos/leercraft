@@ -75,4 +75,4 @@ image = (ROOT / 'assets/images/social/leercraft.png').read_bytes()
 assert image[:8] == b'\x89PNG\r\n\x1a\n' and struct.unpack('>II', image[16:24]) == (1200, 630)
 sea = (ROOT / 'spellen/rekenen/groep-6/getallenzee/index.php').read_text(encoding='utf-8')
 assert "const REVISION = '160'" not in sea and 'import * as THREE from "/assets/vendor/three-0.160.0.module.js"' in sea
-print('Passed: 13 unique SEO pages, structured data, internal links, sitemap, robots and 1200x630 share image.')
+print(f'Passed: {len(pages)} unique SEO pages, structured data, internal links, sitemap, robots and 1200x630 share image.')

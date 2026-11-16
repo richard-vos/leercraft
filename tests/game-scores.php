@@ -52,6 +52,19 @@ foreach (['atlascode','europa-landen-klik','europa-landen-schrijf','europa-hoofd
     }
 }
 echo "Passed: all seven atlas games, curricula, groups and reward bounds.\n";
+$water=['game_slug'=>'wateren-kanalen','score'=>14,'max_score'=>14,'run_id'=>$valid['run_id'],
+    'meta'=>['total_questions'=>9,'correct_answers'=>9]];
+foreach([0,9] as $correct){
+    $body=$water;$body['score']=$correct+5;$body['meta']['correct_answers']=$correct;
+    if(validate_game_score($body)['score']!==$correct+5)throw new RuntimeException('Water result rejected.');
+}
+foreach([['score'=>999],['max_score'=>15],['score'=>-1],
+    ['meta'=>['total_questions'=>10,'correct_answers'=>9]],['meta'=>['total_questions'=>9,'correct_answers'=>10]],
+    ['meta'=>['total_questions'=>9,'correct_answers'=>9.0]],['meta'=>null]] as $change){
+    try{validate_game_score(array_replace($water,$change));}catch(InvalidArgumentException $expected){continue;}
+    throw new RuntimeException('Invalid waterway reward accepted.');
+}
+echo "Passed: Wateren en kanalen, nine questions, 50-point finish bonus and server bounds.\n";
 $sea=['game_slug'=>'getallenzee','score'=>8,'max_score'=>11,'run_id'=>$valid['run_id'],
     'meta'=>['rounds'=>6,'correct_answers'=>3,'mode'=>'all']];
 if(validate_game_score($sea)['score']!==8)throw new RuntimeException('Sea score rejected.');

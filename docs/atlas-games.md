@@ -1,6 +1,6 @@
 # Atlascode en Europa
 
-Hoofdstuk 2 gebruikt zeven bestaande spelroutes. De groepskeuze staat op de
+Hoofdstuk 3 gebruikt zeven bestaande spelroutes. De groepskeuze staat op de
 startpagina en in ieder spel; `?groep=5`, `6`, `7` of `8` selecteert dezelfde
 gedeelde versie. Zo blijven bestaande links geldig en hoeven spellen niet te
 worden gekopieerd naar vier mappen. De keuze wordt lokaal onthouden.

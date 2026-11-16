@@ -8,7 +8,9 @@ foreach ($iterator as $file) {
         $entries[] = $file->getPathname();
     }
 }
-if (count($entries) !== 12) throw new RuntimeException('Expected 12 game routes.');
+$pages = json_decode(file_get_contents(__DIR__ . '/../scripts/seo-pages.json'), true, 512, JSON_THROW_ON_ERROR);
+$expected = count(array_filter($pages, static fn($page) => $page['path'] !== '/'));
+if (count($entries) !== $expected) throw new RuntimeException('Game routes must match the SEO catalogue.');
 foreach ($entries as $entry) {
     $source = file_get_contents($entry);
     if (strpos($source, '<!') === false || strpos($source, '<title>') === false) {
@@ -22,4 +24,4 @@ foreach ($entries as $entry) {
         throw new RuntimeException('Game entry point did not serve a complete page: ' . basename(dirname($entry)));
     }
 }
-echo "Passed: all 12 game folders contain and serve their complete game page.\n";
+echo 'Passed: all ' . count($entries) . " game folders contain and serve their complete game page.\n";
