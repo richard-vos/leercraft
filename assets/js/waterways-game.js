@@ -1,4 +1,4 @@
-import {WaterwaysSession,evaluateWaterLoop,evaluateWaterAreaLoop,waterGamePool} from './waterways-session.js';
+import {WaterwaysSession,evaluateWaterLoop,evaluateWaterAreaLoop,waterGamePool,closeWaterLoop} from './waterways-session.js';
 import {WaterwaysProgress} from './waterways-progress.js';
 import {createAtlasGuide} from './atlas-guide.js';
 
@@ -11,7 +11,7 @@ const progress=new WaterwaysProgress(window.LeerCraft,run=>{
     'needs-login':'Punten nog niet opgeslagen.','account-changed':'Je account is gewijzigd.'})[run.state]||'';
   $('#water-retry').hidden=!['error','needs-login'].includes(run.state);
 });
-let data=null,session=null,active=false,points=[],pointer=null,panMode=false,zoom=1,view=[0,0,1000,1200],checkedDraft=false;
+let data=null,session=null,active=false,points=[],pointer=null,focusPoint=[500,600],zoom=1,view=[0,0,1000,1200],checkedDraft=false;
 let keyboard={x:500,y:700,r:45},guide=null;
 try{guide=createAtlasGuide($('#water-steve'));}catch{$('#water-steve').hidden=true;$('#water-steve-fallback').hidden=false;}
 function element(tag,attrs,parent){const node=document.createElementNS(ns,tag);for(const [key,value] of Object.entries(attrs))node.setAttribute(key,String(value));parent.append(node);return node;}
@@ -34,55 +34,56 @@ function renderMap(){
 function feedback(text){$('#water-feedback').textContent=text;}
 function draw(){
   checkedDraft=false;
-  $('#water-drawing').setAttribute('d',points.length?'M'+points.map(p=>p.join(',')).join('L'):'');
+  const closed=closeWaterLoop(points,{closureTolerance:28/svg.getScreenCTM().a,detectCrossings:false});
+  $('#water-drawing').setAttribute('d',points.length?'M'+points.map(p=>p.join(',')).join('L')+(closed?'Z':''):'');
+  $('#water-drawing').classList.toggle('closed',!!closed);
+  const magnet=$('#water-magnet');magnet.toggleAttribute('hidden',!pointer||!points.length);
+  if(points.length){magnet.setAttribute('cx',points[0][0]);magnet.setAttribute('cy',points[0][1]);magnet.setAttribute('r',12/svg.getScreenCTM().a);}
   $('#water-drawing').classList.remove('good','wrong');
   $('#water-check').disabled=!active||!points.length||!!session?.locked;
   $('#water-clear').disabled=!points.length||!!session?.locked;
 }
-function clearDrawing(){points=[];draw();$('#water-keyboard-circle').hidden=true;}
+function clearDrawing(){points=[];draw();$('#water-keyboard-circle').setAttribute('hidden','');}
 function updateView(){svg.setAttribute('viewBox',view.join(' '));}
 function resetView(){zoom=1;view=[0,0,1000,1200];updateView();}
 function setZoom(next){
   if(pointer)return;
-  const cx=view[0]+view[2]/2,cy=view[1]+view[3]/2;zoom=Math.max(1,Math.min(4,next));
+  const [cx,cy]=next>zoom?focusPoint:[view[0]+view[2]/2,view[1]+view[3]/2];zoom=Math.max(1,Math.min(4,next));
   view=[cx-500/zoom,cy-600/zoom,1000/zoom,1200/zoom];updateView();
 }
 function localPoint(event){const p=new DOMPoint(event.clientX,event.clientY).matrixTransform(svg.getScreenCTM().inverse());return [p.x,p.y];}
 function nextQuestion(){
   if(!session.current){finish();return;}
   clearDrawing();resetView();
-  panMode=false;svg.classList.remove('pan-mode');$('#water-pan').setAttribute('aria-pressed','false');$('#water-pan').textContent='Kaart verplaatsen';
+  focusPoint=[500,600];
   for(const path of svg.querySelectorAll('[data-waterway]'))path.classList.remove('revealed');
   $('#water-mission').textContent=`Omcirkel: ${session.current.name}`;
   $('#water-round').textContent=`${session.index+1} / ${session.deck.length}`;$('#water-points').textContent=`${session.correct*10} punten`;
   $('#water-fill').style.width=`${session.index/session.deck.length*100}%`;
-  $('#water-next').hidden=true;$('#water-check').hidden=false;$('#water-pan').disabled=false;
-  feedback(session.current.polygons?'Omcirkel een stukje water binnen de zee of het meer.':'Omsluit één duidelijk stuk van de waterweg.');
+  $('#water-next').hidden=true;$('#water-check').hidden=false;
+  feedback(session.current.polygons?'Zoek het water. Zet er een rondje omheen!':'Omsluit één duidelijk stuk van de waterweg.');
 }
 svg.addEventListener('pointerdown',event=>{
-  if(!active||(session.locked&&!panMode)||pointer!==null||!event.isPrimary||event.button!==0)return;
+  if(!active||(session.locked)||pointer!==null||!event.isPrimary||event.button!==0)return;
   event.preventDefault();svg.setPointerCapture(event.pointerId);
-  pointer={id:event.pointerId,x:event.clientX,y:event.clientY,view:[...view],scale:svg.getScreenCTM().a};
-  if(!panMode){clearDrawing();points=[localPoint(event)];draw();}
+  pointer={id:event.pointerId};
+  clearDrawing();focusPoint=localPoint(event);points=[focusPoint];draw();
 });
 svg.addEventListener('pointermove',event=>{
-  if(pointer?.id!==event.pointerId)return;
-  if(panMode){
-    view=[Math.max(-500,Math.min(1500,pointer.view[0]-(event.clientX-pointer.x)/pointer.scale)),
-      Math.max(-500,Math.min(1800,pointer.view[1]-(event.clientY-pointer.y)/pointer.scale)),view[2],view[3]];updateView();
-  }else{
+  if(pointer?.id!==event.pointerId){if(pointer===null)focusPoint=localPoint(event);return;}
     const events=event.getCoalescedEvents?.();
     for(const e of events?.length?events:[event]){
       const p=localPoint(e),last=points.at(-1);if(!last||Math.hypot(p[0]-last[0],p[1]-last[1])>.8)points.push(p);
       if(points.length>1000)points=points.filter((_,i)=>i%2===0);
     }
     draw();
-  }
 });
 svg.addEventListener('pointerup',event=>{
   if(pointer?.id!==event.pointerId)return;
-  if(!panMode){points.push(localPoint(event));draw();feedback('Cirkel klaar? Kies Controleer.');}
-  pointer=null;
+  points.push(localPoint(event));
+  points=closeWaterLoop(points,{closureTolerance:28/svg.getScreenCTM().a})||points;
+  draw();feedback(closeWaterLoop(points,{closureTolerance:28/svg.getScreenCTM().a})?'Mooi rondje! Druk op Controleer.':'Maak je rondje af bij het stipje.');
+  pointer=null;$('#water-magnet').setAttribute('hidden','');
 });
 svg.addEventListener('pointercancel',()=>{pointer=null;clearDrawing();});
 svg.addEventListener('lostpointercapture',()=>{if(pointer){pointer=null;clearDrawing();}});
@@ -101,37 +102,33 @@ svg.addEventListener('keydown',event=>{
     view=[keyboard.x-view[2]/2,keyboard.y-view[3]/2,view[2],view[3]];updateView();
   }
   if(event.key==='Escape'){clearDrawing();return;}
-  const circle=$('#water-keyboard-circle');circle.hidden=false;
+  const circle=$('#water-keyboard-circle');circle.removeAttribute('hidden');
   circle.setAttribute('cx',keyboard.x);circle.setAttribute('cy',keyboard.y);circle.setAttribute('r',keyboard.r);
   if(event.key==='Enter'){
     points=Array.from({length:49},(_,i)=>[keyboard.x+Math.cos(i/48*Math.PI*2)*keyboard.r,keyboard.y+Math.sin(i/48*Math.PI*2)*keyboard.r]);
-    draw();feedback('Cirkel geplaatst. Kies Controleer.');
+    draw();feedback('Je rondje staat klaar. Druk op Controleer.');
   }
 });
-$('#water-pan').addEventListener('click',()=>{
-  if(pointer)return;panMode=!panMode;svg.classList.toggle('pan-mode',panMode);$('#water-pan').setAttribute('aria-pressed',String(panMode));
-  $('#water-pan').textContent=panMode?'Weer tekenen':'Kaart verplaatsen';feedback(panMode?'Sleep de kaart naar de juiste plek.':'Teken een cirkel om de waterweg.');
-});
-$('#water-clear').addEventListener('click',()=>{clearDrawing();feedback('Teken een nieuwe cirkel.');});
+$('#water-clear').addEventListener('click',()=>{clearDrawing();feedback('Probeer een nieuw rondje.');});
 $('#water-zoom-in').addEventListener('click',()=>setZoom(zoom*1.4));$('#water-zoom-out').addEventListener('click',()=>setZoom(zoom/1.4));$('#water-home').addEventListener('click',()=>{if(!pointer)resetView();});
 $('#water-check').addEventListener('click',()=>{
   if(!active||session.locked||pointer||checkedDraft)return;
   const scale=svg.getScreenCTM().a;
   const evaluate=slug==='wateren-kanalen'?evaluateWaterLoop:evaluateWaterAreaLoop;
-  const options={closureTolerance:18/scale,minDiameter:14/scale};
+  const options={closureTolerance:28/scale,minDiameter:14/scale};
   const result=slug==='wateren-kanalen'?evaluate(points,session.current.id,pool,options):evaluate(points,session.current.id,pool,data,options);
   if(result.kind==='invalid'){
-    feedback(({small:'Maak de cirkel iets groter.',large:'Deze cirkel is te groot. Kies een kleiner stuk van één waterweg.',open:'Maak de cirkel dicht: eindig bij je beginpunt.'})[result.reason]||'Teken eerst een gesloten cirkel.');return;
+    feedback(({small:'Maak je rondje wat groter.',large:'Deze cirkel is te groot. Kies een kleiner stuk van één waterweg.',open:'Ga met je rondje terug naar het stipje.'})[result.reason]||'Teken eerst een rondje om het water.');return;
   }
-  if(result.kind==='empty'){feedback('Ik zie geen duidelijke waterweg in je cirkel. Teken opnieuw.');return;}
-  if(result.kind==='ambiguous'){feedback('Er liggen meerdere waterwegen in deze cirkel. Kies een duidelijker stuk.');return;}
+  if(result.kind==='empty'){feedback('Je rondje ligt naast het water. Probeer het nog eens!');return;}
+  if(result.kind==='ambiguous'){feedback('Je rondje raakt meer dan ??n water. Maak het wat kleiner.');return;}
   const answer=session.answer(result.kind==='correct');if(!answer)return;
   checkedDraft=true;$('#water-check').disabled=true;
   $('#water-drawing').classList.add(answer.correct?'good':'wrong');
   if(answer.correct){feedback(answer.first?`Goed! ${session.current.name} · +10 punten`:`Goed gevonden: ${session.current.name}!`);guide?.celebrate();}
   else if(answer.reveal){
     resetView();
-    feedback(`Dit is ${session.current.name}. Bekijk de groene waterweg.`);
+    feedback(`Dit is ${session.current.name}. Kijk, het water is nu groen!`);
     if(session.current.sea){
       let reveal=svg.querySelector('[data-waterway="noordzee"]');
       if(!reveal)reveal=element('circle',{cx:120,cy:340,r:35,class:'water-area','data-waterway':'noordzee'},$('#water-lines'));
@@ -147,8 +144,7 @@ $('#water-check').addEventListener('click',()=>{
 $('#water-next').addEventListener('click',()=>{if(active&&session.locked){session.next();nextQuestion();}});
 async function start(){
   $('#water-start').disabled=true;await window.LeerCraft.ready;
-  session=new WaterwaysSession(pool);progress.beginWaterways(slug);active=true;panMode=false;
-  $('#water-pan').setAttribute('aria-pressed','false');$('#water-pan').textContent='Kaart verplaatsen';svg.classList.remove('pan-mode');
+  session=new WaterwaysSession(pool);progress.beginWaterways(slug);active=true;focusPoint=[500,600];
   $('#start').hidden=true;$('#overlay').hidden=true;$('#water-start').disabled=false;nextQuestion();
 }
 function finish(){

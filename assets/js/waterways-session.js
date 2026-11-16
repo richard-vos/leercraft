@@ -16,6 +16,7 @@ export function evaluateWaterAreaLoop(points,targetId,pool,data,options={}){
   // Reuse the same drawing validation before measuring area rather than line length.
   const validation=evaluateWaterLoop(points,targetId,[],options);
   if(validation.kind==='invalid')return validation;
+  points=closeWaterLoop(points,options);
   const xs=points.map(p=>p[0]),ys=points.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
   const samples=[];const step=Math.max(2,Math.max(x1-x0,y1-y0)/35);
   for(let y=y0+step/2;y<y1;y+=step)for(let x=x0+step/2;x<x1;x+=step)if(pointInPolygon([x,y],points))samples.push([x,y]);
@@ -26,6 +27,27 @@ export function evaluateWaterAreaLoop(points,targetId,pool,data,options={}){
   return scores[0]?.ratio>.2?{kind:'ambiguous'}:{kind:'empty'};
 }
 export function polygonArea(points){return Math.abs(points.reduce((s,p,i)=>{const q=points[(i+1)%points.length];return s+p[0]*q[1]-q[0]*p[1];},0))/2;}
+export function closeWaterLoop(points,{closureTolerance=38,detectCrossings=true}={}){
+  if(points.length<8||points.some(p=>!p.every(Number.isFinite)))return null;
+  const xs=points.map(p=>p[0]),ys=points.map(p=>p[1]),w=Math.max(...xs)-Math.min(...xs),h=Math.max(...ys)-Math.min(...ys),diagonal=Math.hypot(w,h);
+  if(!w||!h||polygonArea(points)<w*h*.12)return null;
+  const first=points[0],last=points.at(-1),gap=Math.hypot(first[0]-last[0],first[1]-last[1]);
+  if(gap<=Math.min(closureTolerance,diagonal*.35))return gap<1e-6?points:[...points,first];
+  if(!detectCrossings)return null;
+  // A child may cross the start and then draw a little further. Keep the closed
+  // loop at the crossing, instead of rejecting it because of the trailing line.
+  let best=null,bestArea=0;const separation=Math.max(6,Math.floor(points.length*.5));
+  for(let i=0;i<points.length-1;i++)for(let j=i+separation;j<points.length-1;j++){
+    const a=points[i],b=points[i+1],c=points[j],d=points[j+1];
+    const rx=b[0]-a[0],ry=b[1]-a[1],sx=d[0]-c[0],sy=d[1]-c[1],cross=rx*sy-ry*sx;
+    if(Math.abs(cross)<1e-8)continue;
+    const t=((c[0]-a[0])*sy-(c[1]-a[1])*sx)/cross,u=((c[0]-a[0])*ry-(c[1]-a[1])*rx)/cross;
+    if(t< -1e-7||t>1+1e-7||u< -1e-7||u>1+1e-7)continue;
+    const p=[a[0]+t*rx,a[1]+t*ry],loop=[p,...points.slice(i+1,j+1),p],area=polygonArea(loop);
+    if(loop.length>=8&&area>w*h*.35&&area>bestArea){best=loop;bestArea=area;}
+  }
+  return best;
+}
 export function pointInPolygon(point,polygon){
   const [x,y]=point;let inside=false;
   for(let i=0,j=polygon.length-1;i<polygon.length;j=i++){
@@ -50,12 +72,14 @@ function enclosedLength(paths,polygon,bounds){
 // All measurements use map coordinates, so zoom and device size do not change answers.
 export function evaluateWaterLoop(points,targetId,waterways,{closureTolerance=38,minDiameter=20}={}){
   if(!Array.isArray(points)||points.length<8||points.length>1200||points.some(p=>!Array.isArray(p)||p.length!==2||!p.every(Number.isFinite)))return {kind:'invalid',reason:'shape'};
+  const closed=closeWaterLoop(points,{closureTolerance});
+  if(!closed)return {kind:'invalid',reason:'open'};
+  points=closed;
   const xs=points.map(p=>p[0]),ys=points.map(p=>p[1]);
   const bounds={x0:Math.min(...xs),x1:Math.max(...xs),y0:Math.min(...ys),y1:Math.max(...ys)};
   const width=bounds.x1-bounds.x0,height=bounds.y1-bounds.y0,area=polygonArea(points),diagonal=Math.hypot(width,height);
   if(width<minDiameter||height<minDiameter||area<minDiameter*minDiameter*.3)return {kind:'invalid',reason:'small'};
   if(area>240000||diagonal>850)return {kind:'invalid',reason:'large'};
-  if(Math.hypot(points[0][0]-points.at(-1)[0],points[0][1]-points.at(-1)[1])>Math.max(closureTolerance,diagonal*.12))return {kind:'invalid',reason:'open'};
   const coverage=waterways.map(w=>({id:w.id,length:enclosedLength(w.paths,points,bounds)})).sort((a,b)=>b.length-a.length);
   if(!coverage.length||coverage[0].length<7)return {kind:'empty'};
   if(coverage[1]?.length>4&&coverage[0].length<coverage[1].length*1.4)return {kind:'ambiguous'};

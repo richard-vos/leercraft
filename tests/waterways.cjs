@@ -1,11 +1,17 @@
 const assert=require('node:assert/strict'),fs=require('node:fs');
 (async()=>{
- const {WATERWAY_IDS,evaluateWaterLoop,WaterwaysSession}=await import('../assets/js/waterways-session.js');
+ const {WATERWAY_IDS,evaluateWaterLoop,WaterwaysSession,closeWaterLoop}=await import('../assets/js/waterways-session.js');
  const {WaterwaysProgress}=await import('../assets/js/waterways-progress.js');
  const map=JSON.parse(fs.readFileSync('assets/data/nederland-waterwegen.json','utf8'));
  assert.deepEqual(map.waterways.map(w=>w.id),WATERWAY_IDS);assert.equal(map.provinces.length,12);
  assert.deepEqual(map.waterways.map(w=>w.name),['Amsterdam-Rijnkanaal','IJssel','Lek','Maas','Nederrijn','Nieuwe Waterweg','Noordzeekanaal','Rijn','Waal']);
  const circle=(x,y,r)=>Array.from({length:65},(_,i)=>[x+Math.cos(i/64*Math.PI*2)*r,y+Math.sin(i/64*Math.PI*2)*r]);
+ const almost=circle(100,100,40).slice(0,60);
+ const snapped=closeWaterLoop(almost);assert.ok(snapped);assert.deepEqual(snapped[0],snapped.at(-1));
+ const overshoot=[...circle(100,100,40),[180,110],[205,120]];
+ const trimmed=closeWaterLoop(overshoot);assert.ok(trimmed,'crossed start with a trailing line is still closed');assert.deepEqual(trimmed[0],trimmed.at(-1));
+ assert.equal(closeWaterLoop(circle(100,100,60).slice(0,44)),null,'a widely open arc must not snap');
+ assert.equal(closeWaterLoop(Array.from({length:10},(_,i)=>[i*10,0])),null,'a line must not become a circle');
  const solutions={};
  for(const water of map.waterways){
   for(const path of water.paths){

@@ -38,8 +38,9 @@ Noordzeekanaal, Rijn en Waal. De oefening is ingericht voor groep 6.
 
 Spelers omcirkelen met vinger, pen of muis een duidelijk deel van de gevraagde
 waterweg en kiezen **Controleer**. Een hele lange rivier omcirkelen is niet nodig.
-Zoomknoppen vergroten kleine stukken; **Kaart verplaatsen** wisselt tussen tekenen
-en slepen. Een toetsenbord kan ook: focus de kaart, verplaats de cirkel met de
+Bijna gesloten rondjes klikken vanzelf dicht. Ook een rondje met een uitlopend staartje
+wordt op het kruispunt gesloten. Het stipje toont waar je begon. Zoomknoppen vergroten
+de plek die je op de kaart aanwijst; er is geen aparte verplaatsknop. Een toetsenbord kan ook: focus de kaart, verplaats de cirkel met de
 pijltjestoetsen, wijzig de straal met +/− en plaats de cirkel met Enter.
 
 De beoordeling gebruikt de werkelijk omsloten lengte van alle negen waterwegen,
