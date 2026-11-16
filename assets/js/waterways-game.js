@@ -58,10 +58,11 @@ function nextQuestion(){
   celebration.clear();
   if(!session.current){finish();return;}
   clearDrawing();resetView();
+  $('#water-help').disabled=false;$('#water-help').textContent='Help \u2014 10 punten';
   focusPoint=[500,600];
   for(const path of svg.querySelectorAll('[data-waterway]'))path.classList.remove('revealed');
   $('#water-mission').textContent=`Omcirkel: ${session.current.name}`;
-  $('#water-round').textContent=`${session.index+1} / ${session.deck.length}`;$('#water-points').textContent=`${session.correct*10} punten`;
+  $('#water-round').textContent=`${session.index+1} / ${session.deck.length}`;$('#water-points').textContent=`${Math.max(0,(session.correct-progress.current.hints.size)*10)} punten`;
   $('#water-fill').style.width=`${session.index/session.deck.length*100}%`;
   $('#water-next').hidden=true;$('#water-check').hidden=false;
   feedback(session.current.polygons?'Zoek het water. Zet er een rondje omheen!':'Omsluit één duidelijk stuk van de waterweg.');
@@ -130,23 +131,34 @@ $('#water-check').addEventListener('click',()=>{
   checkedDraft=true;$('#water-check').disabled=true;
   $('#water-drawing').classList.add(answer.correct?'good':'wrong');
   if(answer.correct){
-    feedback(answer.first?`✓ Goed! ${session.current.name} · +10 punten`:`✓ Goed gevonden: ${session.current.name}!`);
-    $('#water-feedback').classList.add('success');celebration.show(answer.first);guide?.celebrate();
+    const earned=answer.first&&!progress.current.hints.has(session.index);
+    feedback(earned?`✓ Goed! ${session.current.name} · +10 punten`:`✓ Goed gevonden: ${session.current.name}!`);
+    $('#water-feedback').classList.add('success');celebration.show(earned);guide?.celebrate();
   }
   else if(answer.reveal){
     resetView();
     feedback(`Dit is ${session.current.name}. Kijk, het water is nu groen!`);
-    if(session.current.sea){
+    revealWater();
+  }else feedback(`Dat is ${pool.find(w=>w.id===result.waterwayId).name}. Nog ${3-session.attempts} ${session.attempts===2?'kans':'kansen'}.`);
+  $('#water-points').textContent=`${Math.max(0,(session.correct-progress.current.hints.size)*10)} punten`;
+  if(answer.advance){
+    progress.recordGate(session.index,answer.first);$('#water-help').disabled=true;$('#water-check').hidden=true;$('#water-next').hidden=false;
+    $('#water-next').textContent=session.index===session.deck.length-1?'Naar de finish':'Volgende';$('#water-clear').disabled=true;
+  }
+});
+function revealWater(){
+  if(session.current.sea){
       let reveal=svg.querySelector('[data-waterway="noordzee"]');
       if(!reveal)reveal=element('circle',{cx:120,cy:340,r:35,class:'water-area','data-waterway':'noordzee'},$('#water-lines'));
       reveal.classList.add('revealed');
     }else svg.querySelector(`[data-waterway="${session.current.id}"]`).classList.add('revealed');
-  }else feedback(`Dat is ${pool.find(w=>w.id===result.waterwayId).name}. Nog ${3-session.attempts} ${session.attempts===2?'kans':'kansen'}.`);
-  $('#water-points').textContent=`${session.correct*10} punten`;
-  if(answer.advance){
-    progress.recordGate(session.index,answer.first);$('#water-check').hidden=true;$('#water-next').hidden=false;
-    $('#water-next').textContent=session.index===session.deck.length-1?'Naar de finish':'Volgende';$('#water-clear').disabled=true;
-  }
+}
+$('#water-help').addEventListener('click',()=>{
+  if(!active||session.locked||pointer||!progress.useHint(session.index))return;
+  clearDrawing();resetView();revealWater();
+  $('#water-help').disabled=true;$('#water-help').textContent='Help gebruikt';
+  $('#water-points').textContent=`${Math.max(0,(session.correct-progress.current.hints.size)*10)} punten`;
+  feedback('Kijk naar het groene water! Er gaan 10 punten van je eindscore af.');
 });
 $('#water-next').addEventListener('click',()=>{if(active&&session.locked){session.next();nextQuestion();}});
 async function start(){
@@ -156,8 +168,8 @@ async function start(){
 }
 function finish(){
   active=false;$('#water-fill').style.width='100%';$('#overlay').hidden=false;
-  $('#water-result').textContent=`${session.correct} van de ${session.deck.length} wateren in één keer goed`;
-  $('#water-result-points').textContent=`+${(session.correct+5)*10} punten`;
+  $('#water-result').textContent=`${session.correct} van de ${session.deck.length} wateren in één keer goed${progress.current.hints.size?` \u00b7 ${progress.current.hints.size} keer hulp`:""}`;
+  $('#water-result-points').textContent=`+${Math.max(0,(session.correct+5-progress.current.hints.size)*10)} punten`;
   $('#water-save').textContent='';$('#water-retry').hidden=true;progress.finishWaterways();
 }
 $('#water-start').addEventListener('click',start);$('#water-retry').addEventListener('click',()=>progress.retryPending());

@@ -65,6 +65,20 @@ foreach([['score'=>999],['max_score'=>15],['score'=>-1],
     throw new RuntimeException('Invalid waterway reward accepted.');
 }
 echo "Passed: Wateren en kanalen, nine questions, 50-point finish bonus and server bounds.\n";
+foreach(['wateren-kanalen'=>9,'zeeen-meren'=>8,'wateren-compleet'=>16] as $slug=>$total){
+    $body=['game_slug'=>$slug,'score'=>$total+4,'max_score'=>$total+5,'run_id'=>$valid['run_id'],
+        'meta'=>['total_questions'=>$total,'correct_answers'=>$total,'hints_used'=>1]];
+    if(validate_game_score($body)['score']!==$total+4)throw new RuntimeException('Hint deduction rejected.');
+    foreach([-1,1.0,$total+1] as $hints){
+        $bad=$body;$bad['meta']['hints_used']=$hints;
+        try{validate_game_score($bad);}catch(InvalidArgumentException $expected){continue;}
+        throw new RuntimeException('Invalid hint count accepted.');
+    }
+    $body['score']=0;$body['meta']['correct_answers']=0;$body['meta']['hints_used']=$total;
+    if(validate_game_score($body)['score']!==0)throw new RuntimeException('Zero floor rejected.');
+    $body['score']=50;
+    try{validate_game_score($body);throw new RuntimeException('Forged hinted score accepted.');}catch(InvalidArgumentException $expected){}
+}
 foreach(['zeeen-meren'=>8,'wateren-compleet'=>16] as $slug=>$total){
     $body=['game_slug'=>$slug,'score'=>$total+5,'max_score'=>$total+5,'run_id'=>$valid['run_id'],
         'meta'=>['total_questions'=>$total,'correct_answers'=>$total]];

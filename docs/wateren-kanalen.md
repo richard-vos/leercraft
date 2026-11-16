@@ -59,6 +59,10 @@ bepalen wanneer de volgende vraag begint. Zo blijft er tijd om de feedback en
 kaart te bekijken. Na een vraag keert de kaart terug naar het hele land.
 
 Een direct goed antwoord geeft 10 punten, de finish 50 extra: maximaal 140.
+In alle drie de spellen toont **Help — 10 punten** het gevraagde water groen.
+Hulp kost eenmaal per vraag 10 punten van de eindscore, inclusief de finishbonus;
+de eindscore wordt nooit negatief. De server valideert `hints_used` en de netto
+score. Zonder hulp blijft de bestaande puntentelling gelijk.
 Een hersteld antwoord helpt bij het leren maar geeft geen antwoordpunten.
 De bestaande score-, geschiedenis- en winkelportemonnee worden gebruikt.
 Herhaalde uploads gebruiken dezelfde run-ID en geven geen dubbele beloning.

@@ -54,6 +54,7 @@ jobs:
           node --experimental-default-type=module tests/atlas-games.cjs
           node --experimental-default-type=module tests/waterways.cjs
           node --experimental-default-type=module tests/water-areas.cjs
+          node --experimental-default-type=module tests/water-hints.cjs
           node --experimental-default-type=module tests/shop-catalog.cjs
           node --experimental-default-type=module tests/item-preview.cjs
       - name: Puntentoekenning controleren

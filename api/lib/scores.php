@@ -18,12 +18,14 @@ function validate_game_score(array $body): array
     } elseif (in_array($slug, ['wateren-kanalen', 'zeeen-meren', 'wateren-compleet'], true)) {
         $questions = ['wateren-kanalen' => 9, 'zeeen-meren' => 8, 'wateren-compleet' => 16][$slug];
         $meta = $body['meta'] ?? null;
+        $hints = is_array($meta) ? ($meta['hints_used'] ?? 0) : 0;
         if (!is_array($meta) || ($meta['total_questions'] ?? null) !== $questions
             || !is_int($meta['correct_answers'] ?? null) || $meta['correct_answers'] < 0 || $meta['correct_answers'] > $questions
-            || $score !== $meta['correct_answers'] + 5 || $max !== $questions + 5) {
+            || !is_int($hints) || $hints < 0 || $hints > $questions
+            || $score !== max(0, $meta['correct_answers'] + 5 - $hints) || $max !== $questions + 5) {
             throw new InvalidArgumentException('Ongeldig resultaat voor dit waterspel.');
         }
-        $meta = ['total_questions' => $questions, 'correct_answers' => $meta['correct_answers']];
+        $meta = ['total_questions' => $questions, 'correct_answers' => $meta['correct_answers'], 'hints_used' => $hints];
     } elseif (in_array($slug, ['atlascode', 'europa-landen-klik', 'europa-landen-schrijf',
         'europa-hoofdsteden-klik', 'europa-hoofdsteden-schrijf', 'europa-raster-landen', 'europa-raster-hoofdsteden'], true)) {
         $meta = $body['meta'] ?? null;
