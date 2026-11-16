@@ -117,6 +117,16 @@ html[data-world-theme=end] .site-home .footer-donate{border-top-color:#c9a7e2;bo
 @media(min-width:700px){.site-home .site-footer{grid-template-columns:minmax(0,1fr) minmax(130px,auto);gap:20px 24px;padding:24px}.footer-donate{grid-column:1/-1}}
 @media(min-width:1000px){.site-home .site-footer{grid-template-columns:minmax(0,1fr) minmax(150px,auto) minmax(250px,auto)}.footer-donate{grid-column:auto}}
 @media(max-width:360px){.site-home .site-footer{padding:18px 12px}.site-home .footer-brand{font-size:16px}.site-home .footer-donate{font-size:16px;padding:12px 10px;gap:8px}}
-.atlas-hub-config{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:12px 16px;margin-bottom:16px;background:#25313b;border:3px solid;border-color:#93a4ad #121b22 #121b22 #93a4ad;font:700 16px/1.5 Arial,sans-serif}
-.atlas-hub-config select{min-height:48px;padding:8px 12px;font:700 16px Arial;background:#17232b;color:#fff;border:2px solid #81959e;border-radius:0}
-.atlas-hub-config span{color:#ffe17b}
+.site-home .atlas-chapter{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px 24px;align-items:center;margin:18px 0 14px;padding:18px 20px;background:linear-gradient(#34434ecc,#263440ed),var(--hub-stone);border:3px solid;border-color:#a0b1bc #2b3945 #22313d #8da0ad;box-shadow:inset 0 0 0 2px #17222a}
+.site-home .atlas-chapter .chapter-title{margin:0;padding:0;border:0;background:none;box-shadow:none;font-size:clamp(15px,1.65vw,19px);line-height:1.7}
+.atlas-chapter-heading{min-width:0}
+.site-home #chapter-atlas-curriculum{margin:8px 0 0;color:#ffe39a;font:700 15px/1.5 Arial,sans-serif}
+.site-home .atlas-hub-config{display:grid;grid-template-columns:repeat(4,minmax(48px,1fr));gap:8px;min-width:0;margin:0;padding:0;border:0;color:#e3edf3;font:700 15px/1.4 Arial,sans-serif}
+.atlas-hub-config legend{padding:0 0 8px;color:#d7e3eb}
+.atlas-hub-config label{position:relative;cursor:pointer;min-width:0}
+.atlas-hub-config input{position:absolute;width:1px;height:1px;opacity:0}
+.site-home .atlas-hub-config span{display:flex;align-items:center;justify-content:center;min-height:48px;min-width:48px;padding:8px;color:#ecf2f6;background:linear-gradient(#546674,#354653);border:3px solid;border-color:#95a9b7 #182834 #182834 #95a9b7;box-shadow:inset 1px 1px #ffffff15,0 2px #101d27;font:700 19px/1 Arial,sans-serif}
+.site-home .atlas-hub-config input:checked+span{color:#fff3ba;background:linear-gradient(#6b9842,#426629);border-color:#d4e79b #2d4b21 #2d4b21 #d4e79b}
+.atlas-hub-config label:hover span{filter:brightness(1.12)}
+.atlas-hub-config input:focus-visible+span{outline:3px solid #ffe17b;outline-offset:3px}
+@media(max-width:700px){.site-home .atlas-chapter{grid-template-columns:minmax(0,1fr);gap:14px;padding:16px}.site-home .atlas-hub-config{width:100%}}

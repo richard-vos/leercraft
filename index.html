@@ -343,8 +343,15 @@ body{font-family:'Press Start 2P',monospace;min-height:100vh;overflow-x:hidden;b
         </div>
       </a>
     </div>
-    <h3 class="chapter-title">Hoofdstuk 3 · De Atlascode</h3>
-    <div class="atlas-hub-config"><label for="chapter-atlas-group">Mijn groep</label><select id="chapter-atlas-group"><option value="5">Groep 5</option><option value="6" selected>Groep 6</option><option value="7">Groep 7</option><option value="8">Groep 8</option></select><span id="chapter-atlas-curriculum">Europa 1 · 19 landen</span></div>
+    <div class="atlas-chapter" aria-labelledby="atlas-chapter-title">
+      <div class="atlas-chapter-heading"><h3 class="chapter-title" id="atlas-chapter-title">Hoofdstuk 3 · De Atlascode</h3><p id="chapter-atlas-curriculum" aria-live="polite">Europa 1 · 19 landen</p></div>
+      <fieldset class="atlas-hub-config" id="chapter-atlas-group"><legend>Kies je groep</legend>
+        <label><input type="radio" name="atlas-group" value="5"><span>5</span></label>
+        <label><input type="radio" name="atlas-group" value="6" checked><span>6</span></label>
+        <label><input type="radio" name="atlas-group" value="7"><span>7</span></label>
+        <label><input type="radio" name="atlas-group" value="8"><span>8</span></label>
+      </fieldset>
+    </div>
     <div class="cards-grid">
       <a class="card" href="/spellen/topografie/groep-6/atlascode/">
         <div class="card-banner" style="background:linear-gradient(90deg,#6bbf79,#ffe275);"></div>
