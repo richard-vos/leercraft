@@ -24,6 +24,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: sudo apt-get update && sudo apt-get install -y php-cli php-mysql
+      - name: Node.js 22 installeren voor de speltests
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Node-versie controleren
+        run: node --version
       - name: PHP-syntax controleren
         run: find api tests spellen winkel -name '*.php' -print0 | xargs -0 -n1 php -l
       - name: Spel-startpaginas controleren
