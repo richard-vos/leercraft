@@ -29,6 +29,12 @@
 .water-guide{height:180px;flex-shrink:0;display:grid;place-items:center}.water-guide canvas{width:100%;height:172px;display:block}.water-guide img{width:120px;height:120px}
 .water-task{padding:16px;font-size:16px;line-height:1.5}.water-task p{margin:0 0 12px}
 #water-feedback{min-height:64px;background:#101a22;border-left:3px solid #ffe17b;padding:10px;color:#fff0b0}
+#water-feedback.success{background:#24451d;border:3px solid #a6da63;color:#f0ffd3;font-weight:bold}
+.water-celebration{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding:clamp(70px,22%,180px) 14px 14px}
+.water-celebration canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.water-celebration-badge{position:relative;display:grid;gap:12px;max-width:100%;padding:22px 24px;text-align:center;background:#233d20f5;border:4px solid;border-color:#ffe59c #725b22 #725b22 #ffe59c;box-shadow:inset 0 0 0 3px #142712,0 6px #18251188;color:#ffe17b;text-shadow:2px 3px #1b280d}
+.water-celebration-badge strong{font:clamp(15px,2.5vw,24px)/1.7 AtlasPixel,monospace}
+.water-celebration-badge span{font:700 clamp(22px,3vw,32px)/1.3 Arial,sans-serif;color:#efffc5}
 .water-actions{display:grid;gap:10px}.water-actions button{width:100%}
 .water-sources{font:12px/1.4 Arial,sans-serif;color:#17384b}.water-sources summary{cursor:pointer;width:max-content;padding:2px 0}.water-sources p{margin:4px 0}.water-sources a{font:inherit;color:inherit;text-underline-offset:2px}
 .game-waters .game-info{text-align:left}.game-waters #water-start{width:100%;margin-top:12px}

@@ -1,10 +1,12 @@
 import {WaterwaysSession,evaluateWaterLoop,evaluateWaterAreaLoop,waterGamePool,closeWaterLoop} from './waterways-session.js';
 import {WaterwaysProgress} from './waterways-progress.js';
 import {createAtlasGuide} from './atlas-guide.js';
+import {createWaterCelebration} from './water-celebration.js';
 
 const $=selector=>document.querySelector(selector),svg=$('#water-map'),ns='http://www.w3.org/2000/svg';
 const slug=document.body.dataset.game||'wateren-kanalen';
 let pool=[];
+const celebration=createWaterCelebration(document.querySelector('.water-map-panel'));
 const progress=new WaterwaysProgress(window.LeerCraft,run=>{
   if(run!==progress.current)return;
   $('#water-save').textContent=({saving:'Punten bewaren…',saved:'Punten opgeslagen!',guest:'',error:'Bewaren lukt nog niet.',
@@ -31,7 +33,7 @@ function renderMap(){
   element('path',{d:linePath(data.context),class:'water-context'},base);
   for(const water of data.waterways)element('path',{d:linePath(water.paths),class:'water-route','data-waterway':water.id},$('#water-lines'));
 }
-function feedback(text){$('#water-feedback').textContent=text;}
+function feedback(text){$('#water-feedback').textContent=text;$('#water-feedback').classList.remove('success');}
 function draw(){
   checkedDraft=false;
   const closed=closeWaterLoop(points,{closureTolerance:28/svg.getScreenCTM().a,detectCrossings:false});
@@ -53,6 +55,7 @@ function setZoom(next){
 }
 function localPoint(event){const p=new DOMPoint(event.clientX,event.clientY).matrixTransform(svg.getScreenCTM().inverse());return [p.x,p.y];}
 function nextQuestion(){
+  celebration.clear();
   if(!session.current){finish();return;}
   clearDrawing();resetView();
   focusPoint=[500,600];
@@ -125,7 +128,10 @@ $('#water-check').addEventListener('click',()=>{
   const answer=session.answer(result.kind==='correct');if(!answer)return;
   checkedDraft=true;$('#water-check').disabled=true;
   $('#water-drawing').classList.add(answer.correct?'good':'wrong');
-  if(answer.correct){feedback(answer.first?`Goed! ${session.current.name} · +10 punten`:`Goed gevonden: ${session.current.name}!`);guide?.celebrate();}
+  if(answer.correct){
+    feedback(answer.first?`✓ Goed! ${session.current.name} · +10 punten`:`✓ Goed gevonden: ${session.current.name}!`);
+    $('#water-feedback').classList.add('success');celebration.show(answer.first);guide?.celebrate();
+  }
   else if(answer.reveal){
     resetView();
     feedback(`Dit is ${session.current.name}. Kijk, het water is nu groen!`);
